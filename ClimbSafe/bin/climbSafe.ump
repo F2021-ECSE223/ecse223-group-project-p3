@@ -1,0 +1,101 @@
+//Unable to update umple code due to error at [51,2]
+class ClimbSafe{
+  
+}
+
+
+class NMC
+{
+  isA ClimbSafe;
+  Integer weekCostGuide;
+  Date seasonStartDate;
+  Date seasonEndDate;
+  1 nmc -- * Hotel hotels;
+  1 nmc -- * Bundle bundles;
+  1 nmc -- * Equipment equipments;
+  1 nmc -- 1 Administrator administrator;
+  1 nmc -- * ClimbingWeek weeks;
+}
+
+class Account
+{
+  abstract;
+  password;
+}
+
+class Administrator
+{
+  isA Account;
+  defaulted password = "admin";
+  defaulted username = "admin@nmc.nt";
+}
+
+class Member
+{
+  Integer climbStartWeek;
+  Integer climbEndWeek;
+  unique email;
+  name;
+  Integer emergencyContact;
+  Boolean stayBeforeClimb;
+  Boolean stayAfterClimb;
+  Integer lengthOfStay;
+  //these two are derived attributes
+  Integer totalBundleCost;
+  Integer totalCost;
+  isA Account;
+  username = email;
+  * members-- * ClimbingWeek climbingWeek;
+}
+
+class Guide
+{
+  isA Account;
+  0..1 guide -- 0..1 Member member;
+  unique email;
+  name;
+  Integer emergencyContact;
+  username = email;
+  password;
+  * guides -- * ClimbingWeek assignedWeeks;
+}
+
+class Hotel
+{
+  name;
+  address;
+  Integer rating;
+}
+
+class Equipment
+{
+  name;
+  Float weight;
+  Integer price;
+  0..* piecesOfEquipment -- 1 Member member;
+}
+
+class Bundle
+{
+  Integer price;
+  Float weight;
+  const Float DISCOUNT = 0.75;
+  name;
+  * bundles -- 2..* Equipment;
+  * bundles -- * Member member;
+}
+
+class Booking
+{
+  Date startDate;
+  Date endDate;
+  * bookings -- 1 Member member;
+  * bookings -- 1 Hotel ho;
+}
+
+class ClimbingWeek
+{
+  Boolean safeOrNot;
+  Integer number;
+}
+
