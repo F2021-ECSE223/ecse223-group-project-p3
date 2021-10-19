@@ -102,8 +102,11 @@ private String msg = "";
   @Then("a new guide account shall exist with {string}, {string}, {string}, and {string} \\(p3)")
   public void a_new_guide_account_shall_exist_with_and_p3(String string, String string2,
       String string3, String string4) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  	  Guide guide = guide.getWithEmail(string);
+	  assertNotNull(guide);
+	  assertEqual(string2, guide.getPassword());
+	  assertEqual(string3, guide.getName());
+	  assertEqual(string4, guide.getEmergencyContact());
   }
 
   @Then("the number of guides in the system is {int} \\(p3)")
