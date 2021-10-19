@@ -4,7 +4,14 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import ca.mcgill.ecse.climbsafe.model.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
 public class P3StepDefinitions {
+	
+private String msg = "";
+	
   @Given("the following ClimbSafe system exists: \\(p3)")
   public void the_following_climb_safe_system_exists_p3(io.cucumber.datatable.DataTable dataTable) {
     // Write code here that turns the phrase above into concrete actions
@@ -55,11 +62,41 @@ public class P3StepDefinitions {
     //throw new io.cucumber.java.PendingException();
   }
 
+  //author Sebastien
   @When("a new guide attempts to register with {string}, {string}, {string}, and {string} \\(p3)")
   public void a_new_guide_attempts_to_register_with_and_p3(String string, String string2,
       String string3, String string4) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+
+    if (string.equals("admin@nmc.nt")) msg = "Email cannot be admin@nmc.nt";
+
+
+    for (Guide g: climbsafe.getGuides()){
+      if (string.equals(g.getEmail())) {
+        msg = "Email already linked to a guide account";
+        break;
+      }
+    }
+
+    for (Member m: climbsafe.getMembers()){
+      if (string.equals(m.getEmail())) {
+        msg = "Email already linked to a member account";
+        break;
+      }
+    }
+
+    if (string.contains(" ")) msg = "Email must not contain any spaces";
+
+    if (string==null  || string.equals("")) msg = "Email cannot be empty";
+    if (string2==null || string2.equals("")) msg = "Password cannot be empty";
+    if (string3==null || string3.equals("")) msg = "Name cannot be empty";
+    if (string4==null || string4.equals("")) msg = "Emergency contact cannot be empty";
+
+    if      (string.indexOf("@") > 0 ||
+            string.indexOf("@") == string.lastIndexOf("@") ||
+            string.indexOf("@") < string.lastIndexOf(".") - 1 ||
+            string.lastIndexOf(".") < string.length() - 1) msg = "Invalid email";
+
   }
 
   @Then("a new guide account shall exist with {string}, {string}, {string}, and {string} \\(p3)")
@@ -75,9 +112,10 @@ public class P3StepDefinitions {
     assertEquals(int1, climbSafe.numberOfGuides());
   }
 
+  //author Sebastien
   @Then("the following {string} shall be raised \\(p3)")
   public void the_following_shall_be_raised_p3(String string) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    assertEquals(string, msg);
   }
 }
