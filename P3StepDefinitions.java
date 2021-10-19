@@ -3,7 +3,6 @@ package ca.mcgill.ecse.climbsafe.features;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class P3StepDefinitions {
   @Given("the following ClimbSafe system exists: \\(p3)")
@@ -17,10 +16,22 @@ public class P3StepDefinitions {
     // For other transformations you can register a DataTableType.
     throw new io.cucumber.java.PendingException();
   }
-
+  //Author Edward Habelrih
   @Given("the following guides exist in the system: \\(p3)")
   public void the_following_guides_exist_in_the_system_p3(
       io.cucumber.datatable.DataTable dataTable) {
+	  List<List<String>> guideList = dataTable.asList();
+	  //traverse through list of guides
+	  for(int i = 1; i < guideList.size(); i++) {
+		//retrieve information
+		String guideEmail = guideList.get(i).get(0);
+		String guidePassword = guideList.get(i).get(1);
+		String guideName = guideList.get(i).get(2);
+		String guideEmergencyContact = guideList.get(i).get(3);
+		//Create guide with given information
+		Guide  guide = new Guide(guideEmail, guidePassword, guideName, guideEmergencyContact); //refer to instance of climbSafe application
+		climbSafe.addGuide(guide);
+	  }
     // Write code here that turns the phrase above into concrete actions
     // For automatic transformation, change DataTable to one of
     // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
@@ -30,10 +41,10 @@ public class P3StepDefinitions {
     // For other transformations you can register a DataTableType.
     throw new io.cucumber.java.PendingException();
   }
-
+  
   @Given("the following members exist in the system: \\(p3)")
-  public void the_following_members_exist_in_the_system_p3(
-      io.cucumber.datatable.DataTable dataTable) {
+  public void the_following_members_exist_in_the_system_p3( io.cucumber.datatable.DataTable dataTable) throws InvalidInputException {
+
     // Write code here that turns the phrase above into concrete actions
     // For automatic transformation, change DataTable to one of
     // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
@@ -41,7 +52,7 @@ public class P3StepDefinitions {
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    //throw new io.cucumber.java.PendingException();
   }
 
   @When("a new guide attempts to register with {string}, {string}, {string}, and {string} \\(p3)")
@@ -61,7 +72,7 @@ public class P3StepDefinitions {
   @Then("the number of guides in the system is {int} \\(p3)")
   public void the_number_of_guides_in_the_system_is_p3(Integer int1) {
     // Write code here that turns the phrase above into concrete actions
-    assertEquals(int1, climbSafe.numberOfGuides());
+    throw new io.cucumber.java.PendingException();
   }
 
   @Then("the following {string} shall be raised \\(p3)")
