@@ -6,12 +6,23 @@ import io.cucumber.java.en.When;
 
 import ca.mcgill.ecse.climbsafe.model.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.List;
+import java.sql.Date;
+
 
 
 public class P3StepDefinitions {
 	
 private String msg = "";
+private ClimbSafe climbSafe;
 	
+/*
+  @author Abhijeet Praveen
+
+  Given that the following system exists, here the system is given through the dataTable
+  Then the three elements of dataTable (Date, number of weeks, Guide price/week) are coded to be
+  associated with the system
+   */
   @Given("the following ClimbSafe system exists: \\(p3)")
   public void the_following_climb_safe_system_exists_p3(io.cucumber.datatable.DataTable dataTable) {
     // Write code here that turns the phrase above into concrete actions
@@ -21,7 +32,11 @@ private String msg = "";
     // Double, Byte, Short, Long, BigInteger or BigDecimal.
     //
     // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    List<String> system = dataTable.asList();
+    climbSafe = ClimbSafeApplication.getClimbSafe();
+    climbSafe.setStartDate(Date.valueOf(system.get(0)));
+    climbSafe.setNrWeeks(Integer.parseInt(system.get(1)));
+    climbSafe.setPriceOfGuidePerWeek(Integer.parseInt(system.get(2)));
   }
   //Author Edward Habelrih
   @Given("the following guides exist in the system: \\(p3)")
