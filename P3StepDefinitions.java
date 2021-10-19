@@ -51,7 +51,20 @@ private String msg = "";
   
   @Given("the following members exist in the system: \\(p3)")
   public void the_following_members_exist_in_the_system_p3( io.cucumber.datatable.DataTable dataTable) throws InvalidInputException {
-
+ // Neel
+  public void the_following_members_exist_in_the_system_p3(io.cucumber.datatable.DataTable dataTable) {
+  List<List<String>> memberList = dataTable.asLists(String.class);
+  for(int i = 0; i < memberList.size() - 1; i++) {
+	    	climbSafe.addMember(memberList.get(i).get(0),
+	    						memberList.get(i).get(1), 
+	    			            memberList.get(i).get(2),
+	    			            memberList.get(i).get(3),
+	    			            memberList.get(i).get(4),
+	    			            memberList.get(i).get(5),
+	    			            memberList.get(i).get(6))
+	    }
+	    throw new io.cucumber.java.PendingException();
+	  }
     // Write code here that turns the phrase above into concrete actions
     // For automatic transformation, change DataTable to one of
     // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
