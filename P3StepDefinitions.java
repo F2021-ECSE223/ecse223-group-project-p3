@@ -99,14 +99,14 @@ private ClimbSafe climbSafe;
     if (string.equals("admin@nmc.nt")) msg = "Email cannot be admin@nmc.nt";
 
 
-    for (Guide g: climbsafe.getGuides()){
+    for (Guide g: climbSafe.getGuides()){
       if (string.equals(g.getEmail())) {
         msg = "Email already linked to a guide account";
         break;
       }
     }
 
-    for (Member m: climbsafe.getMembers()){
+    for (Member m: climbSafe.getMembers()){
       if (string.equals(m.getEmail())) {
         msg = "Email already linked to a member account";
         break;
