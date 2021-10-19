@@ -16,21 +16,21 @@ public class P3StepDefinitions {
     // For other transformations you can register a DataTableType.
     throw new io.cucumber.java.PendingException();
   }
-
+  //Author Edward Habelrih
   @Given("the following guides exist in the system: \\(p3)")
   public void the_following_guides_exist_in_the_system_p3(
-      io.cucumber.datatable.DataTable dataTable) throws InvalidInputException {
+      io.cucumber.datatable.DataTable dataTable) {
 	  List<List<String>> guideList = dataTable.asList();
 	  //traverse through list of guides
-	  for(int i = 0; i < guideList.size(); i++) {
+	  for(int i = 1; i < guideList.size(); i++) {
 		//retrieve information
 		String guideEmail = guideList.get(i).get(0);
 		String guidePassword = guideList.get(i).get(1);
 		String guideName = guideList.get(i).get(2);
 		String guideEmergencyContact = guideList.get(i).get(3);
 		//Create guide with given information
-		Guide  guide = new Guide(guideEmail, guidePassword, guideName, guideEmergencyContact, climbSafe); //refer to instance of climbSafe application
-		
+		Guide  guide = new Guide(guideEmail, guidePassword, guideName, guideEmergencyContact); //refer to instance of climbSafe application
+		climbSafe.addGuide(guide);
 	  }
     // Write code here that turns the phrase above into concrete actions
     // For automatic transformation, change DataTable to one of
@@ -41,21 +41,10 @@ public class P3StepDefinitions {
     // For other transformations you can register a DataTableType.
     throw new io.cucumber.java.PendingException();
   }
-  //Author Edward Habelrih
+  
   @Given("the following members exist in the system: \\(p3)")
   public void the_following_members_exist_in_the_system_p3( io.cucumber.datatable.DataTable dataTable) throws InvalidInputException {
-	//Convert into List containing guides
-	  List<List<String>> guideList = dataTable.asList(); 
-	  
-	  for (int i = 0; i < guideList.size(); i++) {
-		//retrieve each guides information 
-		  String guideEmail = guideList.get(i).get(0); 
-		  String guidePassword = guideList.get(i).get(1);
-		  String guideName = guideList.get(i).get(2);
-		  String guideEmergencyContact = guideList.get(i).get(3);  
-		  
-		  Guide guide = new Guide()
-	  }
+
     // Write code here that turns the phrase above into concrete actions
     // For automatic transformation, change DataTable to one of
     // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
