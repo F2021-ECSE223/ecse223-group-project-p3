@@ -1,10 +1,14 @@
 package ca.mcgill.ecse.climbsafe.features;
 
+import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import ca.mcgill.ecse.climbsafe.model.*;
+
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.Integer.parseInt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 import java.sql.Date;
@@ -12,17 +16,19 @@ import java.sql.Date;
 
 
 public class P3StepDefinitions {
-	
-private String msg = "";
-private ClimbSafe climbSafe;
-	
-/*
-  @author Abhijeet Praveen
 
-  Given that the following system exists, here the system is given through the dataTable
-  Then the three elements of dataTable (Date, number of weeks, Guide price/week) are coded to be
-  associated with the system
-   */
+  private String msg = "";
+  private ClimbSafe climbSafe;
+  private List<Guide> guideList;
+  private List<Member> memberList;
+
+  /*
+    @author Abhijeet Praveen
+
+    Given that the following system exists, here the system is given through the dataTable
+    Then the three elements of dataTable (Date, number of weeks, Guide price/week) are coded to be
+    associated with the system
+     */
   @Given("the following ClimbSafe system exists: \\(p3)")
   public void the_following_climb_safe_system_exists_p3(io.cucumber.datatable.DataTable dataTable) {
     // Write code here that turns the phrase above into concrete actions
@@ -35,25 +41,25 @@ private ClimbSafe climbSafe;
     List<String> system = dataTable.asList();
     climbSafe = ClimbSafeApplication.getClimbSafe();
     climbSafe.setStartDate(Date.valueOf(system.get(0)));
-    climbSafe.setNrWeeks(Integer.parseInt(system.get(1)));
-    climbSafe.setPriceOfGuidePerWeek(Integer.parseInt(system.get(2)));
+    climbSafe.setNrWeeks(parseInt(system.get(1)));
+    climbSafe.setPriceOfGuidePerWeek(parseInt(system.get(2)));
   }
   //Author Edward Habelrih
   @Given("the following guides exist in the system: \\(p3)")
   public void the_following_guides_exist_in_the_system_p3(
-      io.cucumber.datatable.DataTable dataTable) {
-	  List<List<String>> guideList = dataTable.asList();
-	  //traverse through list of guides
-	  for(int i = 1; i < guideList.size(); i++) {
-		//retrieve information
-		String guideEmail = guideList.get(i).get(0);
-		String guidePassword = guideList.get(i).get(1);
-		String guideName = guideList.get(i).get(2);
-		String guideEmergencyContact = guideList.get(i).get(3);
-		//Create guide with given information
-		Guide  guide = new Guide(guideEmail, guidePassword, guideName, guideEmergencyContact); //refer to instance of climbSafe application
-		climbSafe.addGuide(guide);
-	  }
+          io.cucumber.datatable.DataTable dataTable) {
+    List<List<String>> guideList = dataTable.asLists();
+    //traverse through list of guides
+    for(int i = 1; i < guideList.size(); i++) {
+      //retrieve information
+      String guideEmail = guideList.get(i).get(0);
+      String guidePassword = guideList.get(i).get(1);
+      String guideName = guideList.get(i).get(2);
+      String guideEmergencyContact = guideList.get(i).get(3);
+      //Create guide with given information
+      Guide  guide = new Guide(guideEmail, guidePassword, guideName, guideEmergencyContact, climbSafe); //refer to instance of climbSafe application
+      climbSafe.addGuide(guide);
+    }
     // Write code here that turns the phrase above into concrete actions
     // For automatic transformation, change DataTable to one of
     // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
@@ -63,23 +69,22 @@ private ClimbSafe climbSafe;
     // For other transformations you can register a DataTableType.
     throw new io.cucumber.java.PendingException();
   }
-  
+
   @Given("the following members exist in the system: \\(p3)")
-  public void the_following_members_exist_in_the_system_p3( io.cucumber.datatable.DataTable dataTable) throws InvalidInputException {
- // Neel
-  public void the_following_members_exist_in_the_system_p3(io.cucumber.datatable.DataTable dataTable) {
-  List<List<String>> memberList = dataTable.asLists(String.class);
-  for(int i = 0; i < memberList.size() - 1; i++) {
-	    	climbSafe.addMember(memberList.get(i).get(0),
-	    						memberList.get(i).get(1), 
-	    			            memberList.get(i).get(2),
-	    			            memberList.get(i).get(3),
-	    			            memberList.get(i).get(4),
-	    			            memberList.get(i).get(5),
-	    			            memberList.get(i).get(6))
-	    }
-	    throw new io.cucumber.java.PendingException();
-	  }
+    // Neel
+    public void the_following_members_exist_in_the_system_p3(io.cucumber.datatable.DataTable dataTable) {
+      List<List<String>> memberList = dataTable.asLists(String.class);
+      for(int i = 0; i < memberList.size() - 1; i++) {
+        climbSafe.addMember(memberList.get(i).get(0),
+                memberList.get(i).get(1),
+                memberList.get(i).get(2),
+                memberList.get(i).get(3),
+                parseInt(memberList.get(i).get(4)),
+                parseBoolean(memberList.get(i).get(5)),
+                parseBoolean(memberList.get(i).get(6))) ;
+      }
+      throw new io.cucumber.java.PendingException();
+    }
     // Write code here that turns the phrase above into concrete actions
     // For automatic transformation, change DataTable to one of
     // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
@@ -88,12 +93,12 @@ private ClimbSafe climbSafe;
     //
     // For other transformations you can register a DataTableType.
     //throw new io.cucumber.java.PendingException();
-  }
+
 
   //author Sebastien
   @When("a new guide attempts to register with {string}, {string}, {string}, and {string} \\(p3)")
   public void a_new_guide_attempts_to_register_with_and_p3(String string, String string2,
-      String string3, String string4) {
+                                                           String string3, String string4) {
     // Write code here that turns the phrase above into concrete actions
 
     if (string.equals("admin@nmc.nt")) msg = "Email cannot be admin@nmc.nt";
@@ -129,12 +134,15 @@ private ClimbSafe climbSafe;
 
   @Then("a new guide account shall exist with {string}, {string}, {string}, and {string} \\(p3)")
   public void a_new_guide_account_shall_exist_with_and_p3(String string, String string2,
-      String string3, String string4) {
-  	  Guide guide = guide.getWithEmail(string);
-	  assertNotNull(guide);
-	  assertEqual(string2, guide.getPassword());
-	  assertEqual(string3, guide.getName());
-	  assertEqual(string4, guide.getEmergencyContact());
+                                                          String string3, String string4) {
+    for (Guide g: climbSafe.getGuides()){
+      if (string.equals(g.getEmail())) {
+        assertEquals(string, g.getEmail());
+        assertEquals(string2, g.getPassword());
+        assertEquals(string3, g.getName());
+        assertEquals(string4, g.getEmergencyContact());
+      }
+    }
   }
 
   @Then("the number of guides in the system is {int} \\(p3)")
