@@ -132,17 +132,30 @@ public class P3StepDefinitions {
 
   }
 
+ /**
+   * @Author: Rooshnie Velautham
+   * This function verifies if the object Guide has been created properly if it is not the case it will return an error
+   * @param  string this is the email of the guide
+   * @param  string2 this is the password that the guide should use
+   * @param  string3 this is the name of the guide
+   * @param  string4 this is the guide's emergency contact
+   * 
+   */
   @Then("a new guide account shall exist with {string}, {string}, {string}, and {string} \\(p3)")
-  public void a_new_guide_account_shall_exist_with_and_p3(String string, String string2,
-                                                          String string3, String string4) {
-    for (Guide g: climbSafe.getGuides()){
-      if (string.equals(g.getEmail())) {
-        assertEquals(string, g.getEmail());
-        assertEquals(string2, g.getPassword());
-        assertEquals(string3, g.getName());
-        assertEquals(string4, g.getEmergencyContact());
-      }
-    }
+ public void a_new_guide_account_shall_exist_with_and_p3(String string, String string2,
+      String string3, String string4) {
+	  Guide guide=null; 
+	  for (Guide g: climbSafe.getGuides()){  
+	      if (string.equals(g.getEmail())) {
+	    	  guide = g;
+	      }
+	      	
+	    }
+	  		assertNotNull(guide);
+	  		assertEquals(string, guide.getEmail());
+	      assertEquals(string2, guide.getPassword());
+	      assertEquals(string3, guide.getName());
+	      assertEquals(string4, guide.getEmergencyContact());
   }
 
   @Then("the number of guides in the system is {int} \\(p3)")
