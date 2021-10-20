@@ -127,7 +127,6 @@ public class P3StepDefinitions {
         guide = g;
         break;
       }
-
     }
     assertNotNull(guide);
     assertEquals(email, guide.getEmail());
@@ -135,10 +134,10 @@ public class P3StepDefinitions {
     assertEquals(name, guide.getName());
     assertEquals(emergencyContact, guide.getEmergencyContact());
   }
-  /**
+
+/**
    * @author Romen Poirier Taksev
    * @param int1, the number of guides supposed to be in the system.
-   * @throws Assertion error
    * This method checks whether the number of guides in the system is equal to the number it is expected to be.
    */
   @Then("the number of guides in the system is {int} \\(p3)")
