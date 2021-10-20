@@ -45,15 +45,8 @@ public class P3StepDefinitions {
    * Given that the following guide exists, the guides are given through the dataTable
    * @param dataTable contains the required data regarding each guide (email, password, name and emergency contact) that
    * are coded to be associated with the system.
-
-
-  /**
-   * @author Edward Habelrih
-   *Given that the following guide exists, the guides are given through the dataTable
-   *The relevant data of @param dataTable regarding each guide (email, password, name and emergency contact) are coded to be
-   *associated with the system.
-
    */
+  
   @Given("the following guides exist in the system: \\(p3)")
   public void the_following_guides_exist_in_the_system_p3(
           io.cucumber.datatable.DataTable dataTable) {
