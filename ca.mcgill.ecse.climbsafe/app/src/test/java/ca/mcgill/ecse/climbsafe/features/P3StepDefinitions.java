@@ -40,6 +40,11 @@ public class P3StepDefinitions {
     climbSafe.setNrWeeks(parseInt(system.get(0).get("nrWeeks")));
     climbSafe.setPriceOfGuidePerWeek(parseInt(system.get(0).get("priceOfGuidePerWeek")));
   }
+  /**
+   * @author Edward Habelrih
+   * Given that the following guide exists, the guides are given through the dataTable
+   * @param dataTable contains the required data regarding each guide (email, password, name and emergency contact) that
+   * are coded to be associated with the system.
 
 
   /**
@@ -47,21 +52,23 @@ public class P3StepDefinitions {
    *Given that the following guide exists, the guides are given through the dataTable
    *The relevant data of @param dataTable regarding each guide (email, password, name and emergency contact) are coded to be
    *associated with the system.
+
    */
   @Given("the following guides exist in the system: \\(p3)")
   public void the_following_guides_exist_in_the_system_p3(
           io.cucumber.datatable.DataTable dataTable) {
-    List<List<String>> guideList = dataTable.asLists();
-    //traverse through list of guides
-    for(int i = 1; i < guideList.size(); i++) {
-      //retrieve information
-      String guideEmail = guideList.get(i).get(0);
-      String guidePassword = guideList.get(i).get(1);
-      String guideName = guideList.get(i).get(2);
-      String guideEmergencyContact = guideList.get(i).get(3);
-      //Create guide with given information
-      Guide  guide = new Guide(guideEmail, guidePassword, guideName, guideEmergencyContact, climbSafe); //refer to instance of climbSafe application
-      climbSafe.addGuide(guide);
+
+    List<Map<String, String>> guideList = dataTable.asMaps();
+    //Traverse through list of guides
+    for(int i = 0; i < guideList.size()-1; i++) {
+      //Retrieve information
+      String guideEmail = guideList.get(i).get("email");
+      String guidePassword = guideList.get(i).get("password");
+      String guideName = guideList.get(i).get("name");
+      String guideEmergencyContact = guideList.get(i).get("emergencyContact");
+      //Add guide with given information
+      climbSafe.addGuide(guideEmail, guidePassword, guideName, guideEmergencyContact);
+
     }
 
   }
