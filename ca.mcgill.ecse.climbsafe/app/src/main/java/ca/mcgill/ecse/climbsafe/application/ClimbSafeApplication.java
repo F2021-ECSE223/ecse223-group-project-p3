@@ -15,6 +15,7 @@ public class ClimbSafeApplication {
 
   public static void main(String[] args) {
     System.out.println(new ClimbSafeApplication().getGreeting());
+
   }
 
   public static ClimbSafe getClimbSafe() {
@@ -22,7 +23,6 @@ public class ClimbSafeApplication {
       // these attributes are default, you should set them later with the setters
       climbSafe = new ClimbSafe(new Date(0), 0, 0);
     }
-    
     return climbSafe;
   }
 }
