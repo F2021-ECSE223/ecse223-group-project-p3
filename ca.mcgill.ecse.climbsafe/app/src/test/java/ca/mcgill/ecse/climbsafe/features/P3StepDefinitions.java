@@ -57,10 +57,15 @@ public class P3StepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+  /**
+   * @author Romen Poirier Taksev
+   * @param int1, the number of guides supposed to be in the system.
+   * This method checks whether the number of guides in the system is equal to the number it is expected to be.
+   */
   @Then("the number of guides in the system is {int} \\(p3)")
   public void the_number_of_guides_in_the_system_is_p3(Integer int1) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    assertEquals(int1, climbSafe.numberOfGuides());
   }
 
   @Then("the following {string} shall be raised \\(p3)")
