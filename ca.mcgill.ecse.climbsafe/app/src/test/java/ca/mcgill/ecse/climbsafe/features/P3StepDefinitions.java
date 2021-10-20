@@ -16,18 +16,28 @@ public class P3StepDefinitions {
     // For other transformations you can register a DataTableType.
     throw new io.cucumber.java.PendingException();
   }
+  /**
+   * @author Edward Habelrih
+   * Given that the following guide exists, the guides are given through the dataTable
+   * @param dataTable contains the required data regarding each guide (email, password, name and emergency contact) that
+   * are coded to be associated with the system.
 
+   */
   @Given("the following guides exist in the system: \\(p3)")
   public void the_following_guides_exist_in_the_system_p3(
-      io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+          io.cucumber.datatable.DataTable dataTable) {
+    List<Map<String, String>> guideList = dataTable.asMaps();
+    //Traverse through list of guides
+    for(int i = 0; i < guideList.size()-1; i++) {
+      //Retrieve information
+      String guideEmail = guideList.get(i).get("email");
+      String guidePassword = guideList.get(i).get("password");
+      String guideName = guideList.get(i).get("name");
+      String guideEmergencyContact = guideList.get(i).get("emergencyContact");
+      //Add guide with given information
+      climbSafe.addGuide(guideEmail, guidePassword, guideName, guideEmergencyContact);
+    }
+
   }
 
   @Given("the following members exist in the system: \\(p3)")
