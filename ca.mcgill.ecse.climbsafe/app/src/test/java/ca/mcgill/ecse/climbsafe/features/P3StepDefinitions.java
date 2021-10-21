@@ -54,7 +54,7 @@ public class P3StepDefinitions {
 
     List<Map<String, String>> guideList = dataTable.asMaps();
     //Traverse through list of guides
-    for(int i = 0; i < guideList.size()-1; i++) {
+    for(int i = 0; i < guideList.size(); i++) {
       //Retrieve information
       String guideEmail = guideList.get(i).get("email");
       String guidePassword = guideList.get(i).get("password");
