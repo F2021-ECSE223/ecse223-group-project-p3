@@ -3,7 +3,6 @@ package ca.mcgill.ecse.climbsafe.controller;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.ClimbSafe;
 import ca.mcgill.ecse.climbsafe.model.Guide;
-import ca.mcgill.ecse.climbsafe.model.Member;
 import ca.mcgill.ecse.climbsafe.model.User;
 
 public class ClimbSafeFeatureSet3Controller {
@@ -49,18 +48,10 @@ public class ClimbSafeFeatureSet3Controller {
     catch (RuntimeException e) {
       error = e.getMessage();
       if (error.equals("Cannot create due to duplicate email. See http://manual.umple.org?RE003ViolationofUniqueness.html")) {
-        for (Guide g: c.getGuides()){
-          if (email.equals(g.getEmail())) {
-            error = "Email already linked to a guide account";
-            break;
-          }
-        }
-        for (Member m: c.getMembers()){
-          if (email.equals(m.getEmail())) {
-            error = "Email already linked to a member account";
-            break;
-          }
-        }
+        
+        User u = Guide.getWithEmail(email);
+        if (u instanceof Guide) error = "Email already linked to a guide account";
+        else error = "Email already linked to a member account";
       }
       throw new InvalidInputException(error);
     }
@@ -81,10 +72,10 @@ public class ClimbSafeFeatureSet3Controller {
   public static void updateGuide(String email, String newPassword, String newName,
       String newEmergencyContact) throws InvalidInputException {
     String error = "";
-    if (email==null) error = "An email must be specified.";
-    if (newPassword==null) error = "A new password must be specified.";
-    if (newName == null) error = "A new name must be specified.";
-    if (newEmergencyContact==null) error = "A new emergency contact must be specified";
+    if (email==null || email.equals("")) error = "An email must be specified.";
+    if (newPassword==null || newPassword.equals("")) error = "A newPassword must be specified.";
+    if (newName == null || newName.equals("")) error = "A newName must be specified.";
+    if (newEmergencyContact==null || newEmergencyContact.equals("")) error = "A newEmergencyContact must be specified";
 
     if (!error.isEmpty()) {
       throw new InvalidInputException(error.trim());
