@@ -26,15 +26,15 @@ public class ClimbSafeFeatureSet3Controller {
 
     if (email.contains(" ")) error = "Email must not contain any spaces";
 
-    if (email==null  || email.equals("")) error = "Email cannot be empty";
-    if (password==null || password.equals("")) error = "Password cannot be empty";
-    if (name==null || name.equals("")) error = "Name cannot be empty";
-    if (emergencyContact==null || emergencyContact.equals("")) error = "Emergency contact cannot be empty";
-
     if      (email.indexOf("@") <= 0 ||
             email.indexOf("@") != email.lastIndexOf("@") ||
             email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
             email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
+    
+    if (email==null  || email.equals("")) error = "Email cannot be empty";
+    if (password==null || password.equals("")) error = "Password cannot be empty";
+    if (name==null || name.equals("")) error = "Name cannot be empty";
+    if (emergencyContact==null || emergencyContact.equals("")) error = "Emergency contact cannot be empty";
 
     if (error.length() > 0) {
       throw new InvalidInputException(error.trim());
