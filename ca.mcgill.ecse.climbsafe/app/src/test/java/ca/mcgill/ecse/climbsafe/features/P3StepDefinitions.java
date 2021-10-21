@@ -21,14 +21,14 @@ public class P3StepDefinitions {
 
   private String msg = "";
   private ClimbSafe climbSafe;
-
+  
   /**
    *
    * @author Abhijeet Praveen
    * Implenting Given that the following system exists
    * @param dataTable this is the input to the method, which represents the application
    * Then the three elements of dataTable (Date, number of weeks, Guide price/week) will be
-   * associated with the ClimbSafe system by transforming dataTable to a list of strings
+   * associated with the ClimbSafe system by transforming dataTable into a list of maps
    *
    */
   @Given("the following ClimbSafe system exists: \\(p3)")
