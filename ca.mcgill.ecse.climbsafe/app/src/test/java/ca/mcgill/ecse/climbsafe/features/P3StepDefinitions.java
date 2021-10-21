@@ -23,6 +23,7 @@ public class P3StepDefinitions {
   private String msg = "";
   private ClimbSafe climbSafe;
 
+
   /**
    *
    * @author Abhijeet Praveen
@@ -71,14 +72,14 @@ public class P3StepDefinitions {
    * @author Neel Faucher
    * Given that the following members exist in the system, members are given through the dataTable
    * @param dataTable is the input for the method
-   * There are seven elements of dataTable (email, password, name, emergencycontact, nrWeeks, guideRequired, hotelRequired) coded to be
+   * There are seven elements of dataTable (email, password, name, emergencyContact, nrWeeks, guideRequired, hotelRequired) coded to be
    * associated with the system.
    */
 
   @Given("the following members exist in the system: \\(p3)")
   public void the_following_members_exist_in_the_system_p3(io.cucumber.datatable.DataTable dataTable) {
     List<Map<String, String>> memberList = dataTable.asMaps();
-    for(int i = 0; i < memberList.size() - 1; i++) {
+    for(int i = 0; i < memberList.size(); i++) {
       climbSafe.addMember(memberList.get(i).get("email"),
               memberList.get(i).get("password"),
               memberList.get(i).get("name"),
