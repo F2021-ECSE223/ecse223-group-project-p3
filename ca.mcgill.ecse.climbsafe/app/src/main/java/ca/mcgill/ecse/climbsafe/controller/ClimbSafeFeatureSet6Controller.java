@@ -9,6 +9,6 @@ public class ClimbSafeFeatureSet6Controller {
   // this method does not need to be implemented by a team with five team members
   public static void deleteEquipmentBundle(String name) {}
 
-  public static List<TOAssignment> getAssignments() {}
+  public static void getAssignments() {}
 
 }
