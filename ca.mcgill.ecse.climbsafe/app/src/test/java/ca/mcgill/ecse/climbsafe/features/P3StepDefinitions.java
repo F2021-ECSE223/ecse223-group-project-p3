@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.climbsafe.features;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -21,7 +22,7 @@ public class P3StepDefinitions {
 
   private String msg = "";
   private ClimbSafe climbSafe;
-  
+
   /**
    *
    * @author Abhijeet Praveen
@@ -46,7 +47,7 @@ public class P3StepDefinitions {
    * @param dataTable contains the required data regarding each guide (email, password, name and emergency contact) that
    * are coded to be associated with the system.
    */
-  
+
   @Given("the following guides exist in the system: \\(p3)")
   public void the_following_guides_exist_in_the_system_p3(
           io.cucumber.datatable.DataTable dataTable) {
@@ -110,7 +111,7 @@ public class P3StepDefinitions {
 
   }
   /**
-   * @Author: Rooshnie Velautham
+   * @author Rooshnie Velautham
    * This function verifies if the object Guide has been created properly if it is not the case it will return an error
    * @param  email this is the email of the guide
    * @param  password this is the password that the guide should use
@@ -123,7 +124,7 @@ public class P3StepDefinitions {
                                                           String name, String emergencyContact) {
     Guide guide=null;
     for (Guide g: climbSafe.getGuides()){
-      if (String.equals(g.getEmail())) {
+      if (email.equals(g.getEmail())) {
         guide = g;
         break;
       }
@@ -135,7 +136,7 @@ public class P3StepDefinitions {
     assertEquals(emergencyContact, guide.getEmergencyContact());
   }
 
-/**
+  /**
    * @author Romen Poirier Taksev
    * @param int1, the number of guides supposed to be in the system.
    * This method checks whether the number of guides in the system is equal to the number it is expected to be.
