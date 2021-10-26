@@ -1,48 +1,47 @@
 package ca.mcgill.ecse.climbsafe.controller;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-
-import ca.mcgill.ecse.climbsafe.model.ClimbSafe;
 import ca.mcgill.ecse.climbsafe.model.Member;
 import ca.mcgill.ecse.climbsafe.model.Guide;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
+import ca.mcgill.ecse.climbsafe.model.User;
 
 public class ClimbSafeFeatureSet1Controller {
 
   public static void setup(Date startDate, int nrWeeks, int priceOfGuidePerWeek) throws InvalidInputException {
-    if(nrWeeks >= 0 && priceOfGuidePerWeek >= 0) {
-      ClimbSafeApplication.getClimbSafe().setNrWeeks(nrWeeks);
-      ClimbSafeApplication.getClimbSafe().setStartDate(startDate);
-      ClimbSafeApplication.getClimbSafe().setPriceOfGuidePerWeek(priceOfGuidePerWeek);
+    if(startDate.getMonth() > 11 || startDate.getMonth() < 0) {
+      throw new InvalidInputException("Invalid Date");
     }
-    else {
-      throw new InvalidInputException("The value of both nrWeeks and priceOfGuidePerWeek need to be greater or equal to 0");
+    if (startDate.getDate() < 1 || startDate.getDay() > 31) {
+      throw new InvalidInputException("Invalid Date");
+    }
+    if (priceOfGuidePerWeek < 0) {
+      throw new InvalidInputException("The price of guide per week must be greater than or equal to zero");
+    }
+    if (nrWeeks < 0) {
+      throw new InvalidInputException("The number of climbing weeks must be greater than or equal to zero");
+    }
+    ClimbSafeApplication.getClimbSafe().setNrWeeks(nrWeeks);
+    ClimbSafeApplication.getClimbSafe().setStartDate(startDate);
+    ClimbSafeApplication.getClimbSafe().setPriceOfGuidePerWeek(priceOfGuidePerWeek);
+  }
+
+  public static void deleteGuide(String email) {
+      User user = User.getWithEmail(email);
+      if (user instanceof Guide) {
+        user.delete();
+      }
+  }
+
+  public static void deleteMember(String email) {
+    User user = User.getWithEmail(email);
+    if (user instanceof Member) {
+      user.delete();
     }
   }
 
-  public static void deleteMember(String email) throws InvalidInputException {
-    List<Member> members = ClimbSafeApplication.getClimbSafe().getMembers();
-    for (Member member: members) {
-     if (email.equals("") || email == null) {
-       throw new InvalidInputException("Email can't be empty!");
-     }
-     else if (member.getEmail().equals(email)) {
-       deleteMember(email);
-      }
-    }
+  // this method needs to be implemented only by teams with seven team members
+  public static void deleteHotel(String name) {
   }
 
-  public static void deleteGuide(String email) throws InvalidInputException {
-    List<Guide> guides = ClimbSafeApplication.getClimbSafe().getGuides();
-    for (Guide guide: guides) {
-      if (email.equals("") || email == null) {
-        throw new InvalidInputException("Email can't be empty!");
-      }
-      else if (guide.getEmail().equals(email)) {
-        deleteMember(email);
-      }
-    }
-  }
 }
