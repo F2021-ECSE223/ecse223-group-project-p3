@@ -4,7 +4,6 @@ import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.Equipment;
 import ca.mcgill.ecse.climbsafe.model.EquipmentBundle;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ClimbSafeFeatureSet4Controller {
@@ -13,7 +12,7 @@ public class ClimbSafeFeatureSet4Controller {
       throws InvalidInputException {
     if(name.equals("")){throw new InvalidInputException("The name must not be empty");}
     if(weight <= 0){throw new InvalidInputException("The weight must be greater than 0");}
-    if(pricePerWeek <= 0){throw new InvalidInputException("The price per week must be greater than or equal to 0");}
+    if(pricePerWeek < 0){throw new InvalidInputException("The price per week must be greater than or equal to 0");}
     List<Equipment> allEquipment = ClimbSafeApplication.getClimbSafe().getEquipment();
     List<EquipmentBundle> allBundles = ClimbSafeApplication.getClimbSafe().getBundles();
     for(Equipment e: allEquipment){
@@ -36,12 +35,10 @@ public class ClimbSafeFeatureSet4Controller {
     if(newPricePerWeek < 0){throw new InvalidInputException("The price per week must be greater than or equal to 0");}
     List<Equipment> allEquipment = ClimbSafeApplication.getClimbSafe().getEquipment();
     List<EquipmentBundle> allBundles = ClimbSafeApplication.getClimbSafe().getBundles();
-    //System.out.println(Arrays.toString(allEquipment.toArray()));
 
     Equipment updatedEquipment = null;
     if(newName.equals(oldName)){
       for (Equipment e:allEquipment) {
-        //System.out.println(e);
         if(e.getName().equals(oldName) ){
           updatedEquipment = e;
         }
@@ -62,8 +59,6 @@ public class ClimbSafeFeatureSet4Controller {
       }
       updatedEquipment = oldEquipment;
     }
-
-    //System.out.println(updatedEquipment);
     for(EquipmentBundle b: allBundles){
       if(b.getName().equals(newName)){
         throw new InvalidInputException("An equipment bundle with the same name already exists");
