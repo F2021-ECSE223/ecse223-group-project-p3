@@ -12,7 +12,7 @@ public class ClimbSafeFeatureSet4Controller {
       throws InvalidInputException {
     if(name.equals("")){throw new InvalidInputException("The name must not be empty");}
     if(weight <= 0){throw new InvalidInputException("The weight must be greater than 0");}
-    if(pricePerWeek <= 0){throw new InvalidInputException("The price per week must be greater than or equal to 0");}
+    if(pricePerWeek < 0){throw new InvalidInputException("The price per week must be greater than or equal to 0");}
     List<Equipment> allEquipment = ClimbSafeApplication.getClimbSafe().getEquipment();
     List<EquipmentBundle> allBundles = ClimbSafeApplication.getClimbSafe().getBundles();
     for(Equipment e: allEquipment){
@@ -32,7 +32,7 @@ public class ClimbSafeFeatureSet4Controller {
       int newPricePerWeek) throws InvalidInputException {
     if(newName.equals("")){throw new InvalidInputException("The name must not be empty");}
     if(newWeight <= 0){throw new InvalidInputException("The weight must be greater than 0");}
-    if(newPricePerWeek <= 0){throw new InvalidInputException("The price per week must be greater than or equal to 0");}
+    if(newPricePerWeek < 0){throw new InvalidInputException("The price per week must be greater than or equal to 0");}
     List<Equipment> allEquipment = ClimbSafeApplication.getClimbSafe().getEquipment();
     List<EquipmentBundle> allBundles = ClimbSafeApplication.getClimbSafe().getBundles();
     Equipment newEquipment = null;
