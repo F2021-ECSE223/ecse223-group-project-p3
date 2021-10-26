@@ -10,20 +10,19 @@ import ca.mcgill.ecse.climbsafe.model.Assignment;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClimbSafeFeatureSet6Controller {
 
 
-  /**
+ /**
    * @author Abhijeet Praveen
    * @param name this is the input to the method which represents the name of the equipment we need to delete
-   *        This method will delete equipment specified by the given input (name)
    *
-   *        We will find the equipment with the given name, and use the delete method from the Equipment class to delete
-   *        it. If the equipment specified is in a bundle then it cannot be deleted, and therefore the method
+   *        We will find the equipment with the given name using the getWithName method from the BookableItem class,
+   *        and use the delete method from the Equipment class to delete it.
+   *        If the equipment specified is in a bundle then it cannot be deleted, and therefore the method
    *        will throw an InvalidInputException with the corresponding error message.
    */
   public static void deleteEquipment(String name) throws InvalidInputException {
@@ -52,7 +51,7 @@ public class ClimbSafeFeatureSet6Controller {
    *        we need to delete.
    *
    *        We will find the equipmentBundle with the given name by using the getWithName method from the
-   *        EquipmentBundle class from the model, then we use the delete method from the EquipmentBundle
+   *        BookableItem class from the model, then we use the delete method from the EquipmentBundle
    *        class to delete it.
    */
   public static void deleteEquipmentBundle(String name) {
@@ -63,14 +62,17 @@ public class ClimbSafeFeatureSet6Controller {
     }
   }
 
-  /**
+/**
    * @author Abhijeet Praveen
    *
    *         This function implements the ViewAssignments feature
    *         We use the TOAssignment class which has been created in this package using the Umple file
    *         We use getters from the corresponding classes to obtain the various inputs
-   *         we will need for the constructor of our TOAssignment object
-   *         Helper methods which have been implemented below are also used inside this method
+   *         we will need for the constructor of our TOAssignment object.
+   *         However, if a guide or hotel is not required in the assignment, we then pass
+   *         null in the constructor for the TOAssignment object for guide's name, guide's email
+   *         and hotel's name.
+   *         This method uses helper methods that have been added to this Controller file.
    *
    * @return this method returns the list of assignments we have in our system
    */
