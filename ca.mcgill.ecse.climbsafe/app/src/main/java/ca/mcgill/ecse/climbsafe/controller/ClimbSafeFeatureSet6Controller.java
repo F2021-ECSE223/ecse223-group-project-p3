@@ -10,13 +10,14 @@ import ca.mcgill.ecse.climbsafe.model.Assignment;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClimbSafeFeatureSet6Controller {
 
 
- /**
+  /**
    * @author Abhijeet Praveen
    * @param name this is the input to the method which represents the name of the equipment we need to delete
    *
@@ -36,15 +37,14 @@ public class ClimbSafeFeatureSet6Controller {
       }
 
     }
-    BookableItem b = BookableItem.getWithName(name);
-    if(b instanceof Equipment){
+    BookableItem bookableItem = BookableItem.getWithName(name);
+    if(bookableItem instanceof Equipment){
       Equipment equipment = (Equipment) Equipment.getWithName(name);
       equipment.delete();
     }
   }
-
-
-
+  
+  
   /**
    * @author Abhijeet Praveen
    * @param name This is the input to the method which represents the name of the equipment bundle
@@ -55,14 +55,15 @@ public class ClimbSafeFeatureSet6Controller {
    *        class to delete it.
    */
   public static void deleteEquipmentBundle(String name) {
-    BookableItem b = BookableItem.getWithName(name);
-    if(b instanceof EquipmentBundle){
+    BookableItem bookableItem = BookableItem.getWithName(name);
+    if(bookableItem instanceof EquipmentBundle){
       EquipmentBundle equipmentBundle = (EquipmentBundle) EquipmentBundle.getWithName(name);
       equipmentBundle.delete();
     }
   }
 
-/**
+  
+  /**
    * @author Abhijeet Praveen
    *
    *         This function implements the ViewAssignments feature
@@ -104,6 +105,7 @@ public class ClimbSafeFeatureSet6Controller {
     return assignments;
   }
 
+  
   /**
    * @author Abhijeet Praveen
    *
@@ -121,6 +123,7 @@ public class ClimbSafeFeatureSet6Controller {
     return assignment.getClimbSafe().getPriceOfGuidePerWeek()*assignment.getMember().getNrWeeks();
   }
 
+  
   /**
    * @author Abhijeet Praveen
    *         Using helper method to find the total equipment cost for an assignment which is needed for
