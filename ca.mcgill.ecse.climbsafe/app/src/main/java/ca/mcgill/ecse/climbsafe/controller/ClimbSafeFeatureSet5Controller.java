@@ -7,7 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClimbSafeFeatureSet5Controller {
-
+  /**
+     * @author Rooshnie Velautham
+     * This function creates an object EquipmentBundle with the corresponding name, discount, equipment. The function also checks
+     * if the user makes any errors and gives the message to the user according to the error met during the checks in this controller.
+     *
+     * @param name is the name of the bundle that the user wishes to add
+     * @param discount is the discount for that bundle
+     * @param equipmentNames a list of the equipment of names that the user wish to add to the bundle
+     * @param equipmentQuantities the quantity of equipment for each equipement
+     * @throws InvalidInputException this would throw the error message which correspond to the mistake seen in this function
+     */
     public static void addEquipmentBundle(String name, int discount, List<String> equipmentNames,
                                           List<Integer> equipmentQuantities) throws InvalidInputException {
 
@@ -82,7 +92,20 @@ public class ClimbSafeFeatureSet5Controller {
 
         }
     }
-
+/**
+     * @author Rooshnie Velautham
+     * In this function, the EquipmentBundle will go into a temporary object in which we will be updating the information
+     * that the user would like to change such as : name, discount, equipment and the quantities of those.
+     * This function will essentially check if the user has put valid parameters in order to properly update that specific bundle.
+     * If any errors has been met, the user will get the right error message.
+     *
+     * @param oldName is the old name of the bundle in order to get the EquipmentBundle object that corresponds to it
+     * @param newName is the new name of the bundle that the user would like to change to
+     * @param newDiscount is the new dicount of the bundle that the user would like to change to
+     * @param newEquipmentNames is the new list of the equipment names that the updated bundle should have
+     * @param newEquipmentQuantities is the new list of the equipment quantities corresponding to the list of equipment names
+     * @throws InvalidInputException it throws this error if and error is met during the update of EquipmentBundle
+     */
 
     public static void updateEquipmentBundle(String oldName, String newName, int newDiscount,
                                              List<String> newEquipmentNames, List<Integer> newEquipmentQuantities) throws InvalidInputException {
