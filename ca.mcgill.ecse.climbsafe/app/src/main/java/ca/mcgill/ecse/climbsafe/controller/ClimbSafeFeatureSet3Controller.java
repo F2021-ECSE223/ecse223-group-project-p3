@@ -30,7 +30,7 @@ public class ClimbSafeFeatureSet3Controller {
             email.indexOf("@") != email.lastIndexOf("@") ||
             email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
             email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
-    
+
     if (email==null  || email.equals("")) error = "Email cannot be empty";
     if (password==null || password.equals("")) error = "Password cannot be empty";
     if (name==null || name.equals("")) error = "Name cannot be empty";
@@ -48,7 +48,7 @@ public class ClimbSafeFeatureSet3Controller {
     catch (RuntimeException e) {
       error = e.getMessage();
       if (error.equals("Cannot create due to duplicate email. See http://manual.umple.org?RE003ViolationofUniqueness.html")) {
-        
+
         User u = Guide.getWithEmail(email);
         if (u instanceof Guide) error = "Email already linked to a guide account";
         else error = "Email already linked to a member account";
@@ -70,22 +70,22 @@ public class ClimbSafeFeatureSet3Controller {
    * @throws InvalidInputException
    */
   public static void updateGuide(String email, String newPassword, String newName,
-      String newEmergencyContact) throws InvalidInputException {
+                                 String newEmergencyContact) throws InvalidInputException {
     String error = "";
-    if (email==null || email.equals("")) error = "An email must be specified.";
-    if (newPassword==null || newPassword.equals("")) error = "A newPassword must be specified.";
-    if (newName == null || newName.equals("")) error = "A newName must be specified.";
-    if (newEmergencyContact==null || newEmergencyContact.equals("")) error = "A newEmergencyContact must be specified";
+    if (email==null || email.equals("")) error = "Email cannot be empty";
+    if (newPassword==null || newPassword.equals("")) error = "Password cannot be empty";
+    if (newName == null || newName.equals("")) error = "Name cannot be empty";
+    if (newEmergencyContact==null || newEmergencyContact.equals("")) error = "Emergency contact cannot be empty";
 
     if (!error.isEmpty()) {
       throw new InvalidInputException(error.trim());
     }
 
     try{
-       User u = Guide.getWithEmail(email);
-       if (u==null){
-         registerGuide(email, newPassword, newName, newEmergencyContact);
-       }
+      User u = Guide.getWithEmail(email);
+      if (u==null){
+        registerGuide(email, newPassword, newName, newEmergencyContact);
+      }
       else if (u instanceof Guide ){
         Guide g = (Guide) Guide.getWithEmail(email);
         g.setPassword(newPassword);
