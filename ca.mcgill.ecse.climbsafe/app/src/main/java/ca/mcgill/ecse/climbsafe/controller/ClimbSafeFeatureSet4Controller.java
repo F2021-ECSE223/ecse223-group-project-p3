@@ -8,6 +8,13 @@ import java.util.List;
 
 public class ClimbSafeFeatureSet4Controller {
 
+  /**
+   * @author Romen Poirier Taksev
+   * @param name the name of the added equipment
+   * @param weight  the weight of the added equipment
+   * @param pricePerWeek  the price per week of the added equipment
+   * @throws InvalidInputException if any of the parameters aren't entered correctly
+   */
   public static void addEquipment(String name, int weight, int pricePerWeek)
       throws InvalidInputException {
     if(name.equals("")){throw new InvalidInputException("The name must not be empty");}
@@ -28,6 +35,15 @@ public class ClimbSafeFeatureSet4Controller {
     new Equipment(name, weight, pricePerWeek, ClimbSafeApplication.getClimbSafe());
   }
 
+  /**
+   *
+   * @author Romen Poirier Taksev
+   * @param oldName the old name of the equipment
+   * @param newName the new name of the equipment
+   * @param newWeight the new weight of the equipment
+   * @param newPricePerWeek the new price per week of the equipment
+   * @throws InvalidInputException if any of the parameters aren't entered correctly
+   */
   public static void updateEquipment(String oldName, String newName, int newWeight,
       int newPricePerWeek) throws InvalidInputException {
     if(newName.equals("")){throw new InvalidInputException("The name must not be empty");}
@@ -35,23 +51,12 @@ public class ClimbSafeFeatureSet4Controller {
     if(newPricePerWeek < 0){throw new InvalidInputException("The price per week must be greater than or equal to 0");}
     List<Equipment> allEquipment = ClimbSafeApplication.getClimbSafe().getEquipment();
     List<EquipmentBundle> allBundles = ClimbSafeApplication.getClimbSafe().getBundles();
-
     Equipment updatedEquipment = null;
     if(newName.equals(oldName)){
-      for (Equipment e:allEquipment) {
-        if(e.getName().equals(oldName) ){
-          updatedEquipment = e;
-        }
-      }
+      updatedEquipment = (Equipment) Equipment.getWithName(oldName);
     }
     else{
-      Equipment oldEquipment = null;
-      for (Equipment e:allEquipment) {
-        if (e.getName().equals(oldName)) {
-          oldEquipment = e;
-          break;
-        }
-      }
+      Equipment oldEquipment = (Equipment) Equipment.getWithName(oldName);
       for (Equipment e:allEquipment) {
         if(e.getName().equals(newName) && e != oldEquipment){
           throw new InvalidInputException("The piece of equipment already exists");
