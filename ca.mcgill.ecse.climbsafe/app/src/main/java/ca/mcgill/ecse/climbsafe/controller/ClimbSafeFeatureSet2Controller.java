@@ -8,21 +8,21 @@ import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.*;
 import java.util.List;
 /**
-  * Controller method that creates a member in the climbsafe object in the application
-  * Checks all the input parameters to guarantee it is all in the correct format and returns
-  * an appropriate error code.
-  * @author Edward Habelrih
-  * @param email
-  * @param password
-  * @param name
-  * @param emergencyContact
-  * @param nrWeeks
-  * @param guideRequired
-  * @param hotelRequired
-  * @param itemNames
-  * @paramitemQuantities
-  * @throws InvalidInputException
-  */
+ * Controller method that creates a member in the climbsafe object in the application
+ * Checks all the input parameters to guarantee it is all in the correct format and returns
+ * an appropriate error code.
+ * @author Edward Habelrih
+ * @param email
+ * @param password
+ * @param name
+ * @param emergencyContact
+ * @param nrWeeks
+ * @param guideRequired
+ * @param hotelRequired
+ * @param itemNames
+ * @paramitemQuantities
+ * @throws InvalidInputException
+ */
 
 public class ClimbSafeFeatureSet2Controller {
 
@@ -35,6 +35,11 @@ public class ClimbSafeFeatureSet2Controller {
     if (email.equals("admin@nmc.nt")) error = "Email cannot be admin@nmc.nt";
 
     if (email.contains(" ")) error = "Email must not contain any spaces";
+
+    if (email.indexOf("@") <= 0 ||
+            email.indexOf("@") != email.lastIndexOf("@") ||
+            email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
+            email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
 
     if (email==null  || email.equals("")) error = "Email cannot be empty";
     if (password==null || password.equals("")) error = "Password cannot be empty";
@@ -55,10 +60,7 @@ public class ClimbSafeFeatureSet2Controller {
     }
 
 
-    if (email.indexOf("@") <= 0 ||
-            email.indexOf("@") != email.lastIndexOf("@") ||
-            email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
-            email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
+
 
     if (error.length() > 0) {
       throw new InvalidInputException(error.trim());
@@ -114,6 +116,11 @@ public class ClimbSafeFeatureSet2Controller {
 
     if (email.contains(" ")) error = "Email must not contain any spaces";
 
+    if (email.indexOf("@") <= 0 ||
+            email.indexOf("@") != email.lastIndexOf("@") ||
+            email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
+            email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
+
     if (email==null  || email.equals("")) error = "Email cannot be empty";
     if (newPassword==null || newPassword.equals("")) error = "Password cannot be empty";
     if (newName==null || newName.equals("")) error = "Name cannot be empty";
@@ -131,12 +138,6 @@ public class ClimbSafeFeatureSet2Controller {
       if(number == null)
         error = "Item quantity cannot be null and must be specified";
     }
-
-
-    if (email.indexOf("@") <= 0 ||
-            email.indexOf("@") != email.lastIndexOf("@") ||
-            email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
-            email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
 
     if (error.length() > 0) {
       throw new InvalidInputException(error.trim());
