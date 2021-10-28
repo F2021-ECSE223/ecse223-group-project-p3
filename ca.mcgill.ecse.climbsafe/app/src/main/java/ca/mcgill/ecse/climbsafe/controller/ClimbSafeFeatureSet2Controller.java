@@ -71,8 +71,6 @@ public class ClimbSafeFeatureSet2Controller {
     }
 
 
-
-
     if (error.length() > 0) {
       throw new InvalidInputException(error.trim());
     }
@@ -90,7 +88,6 @@ public class ClimbSafeFeatureSet2Controller {
       error = e.getMessage();
       throw new InvalidInputException(error);
     }
-
   }
 
   /**
@@ -158,10 +155,6 @@ public class ClimbSafeFeatureSet2Controller {
       error = e.getMessage();
       throw new InvalidInputException(error);
     }
-
-
-
   }
-
 }
 
