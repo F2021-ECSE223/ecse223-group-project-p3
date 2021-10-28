@@ -1,45 +1,66 @@
-
-
-
-
 package ca.mcgill.ecse.climbsafe.controller;
 
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.*;
+import org.checkerframework.framework.qual.EnsuresQualifierIf;
+
+import java.awt.print.Book;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-/**
-  * Controller method that creates a member in the climbsafe object in the application
-  * Checks all the input parameters to guarantee it is all in the correct format and returns
-  * an appropriate error code.
-  * @author Edward Habelrih
-  * @param email
-  * @param password
-  * @param name
-  * @param emergencyContact
-  * @param nrWeeks
-  * @param guideRequired
-  * @param hotelRequired
-  * @param itemNames
-  * @paramitemQuantities
-  * @throws InvalidInputException
-  */
+
 
 public class ClimbSafeFeatureSet2Controller {
 
+  /**
+   * Controller method that creates a member in the climbsafe object in the application
+   * Checks all the input parameters to guarantee it is all in the correct format and returns
+   * an appropriate error code.
+   * @author Edward Habelrih
+   * @param email
+   * @param password
+   * @param name
+   * @param emergencyContact
+   * @param nrWeeks
+   * @param guideRequired
+   * @param hotelRequired
+   * @param itemNames
+   * @paramitemQuantities
+   * @throws InvalidInputException
+   */
   public static void registerMember(String email, String password, String name,
                                     String emergencyContact, int nrWeeks, boolean guideRequired, boolean hotelRequired,
                                     List<String> itemNames, List<Integer> itemQuantities) throws InvalidInputException {
 
     String error = "";
 
-    if (email.equals("admin@nmc.nt")) error = "Email cannot be admin@nmc.nt";
+    if(nrWeeks <= 0 || nrWeeks > ClimbSafeApplication.getClimbSafe().getNrWeeks()) {
+      error = "The number of weeks must be greater than zero and less than or equal to the number of climbing weeks in the climbing season";
+    }
 
-    if (email.contains(" ")) error = "Email must not contain any spaces";
+    User user = User.getWithEmail(email);
+    if (user instanceof Guide) error = "A guide with this email already exists";
+    if (user instanceof Member) error = "A member with this email already exists";
+
+    for (String itemName:itemNames){
+      BookableItem bookableItem = BookableItem.getWithName(itemName);
+      if(bookableItem==null) error = "Requested item not found";
+    }
+
+
+    if (email.equals("admin@nmc.nt")) error = "The email entered is not allowed for members";
+
+    if (email.contains(" ")) error = "The email must not contain any spaces";
+
+    if (email.indexOf("@") <= 0 ||
+            email.indexOf("@") != email.lastIndexOf("@") ||
+            email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
+            email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
 
     if (email==null  || email.equals("")) error = "Email cannot be empty";
-    if (password==null || password.equals("")) error = "Password cannot be empty";
-    if (name==null || name.equals("")) error = "Name cannot be empty";
-    if (emergencyContact==null || emergencyContact.equals("")) error = "Emergency contact cannot be empty";
+    if (password==null || password.equals("")) error = "The password cannot be empty";
+    if (name==null || name.equals("")) error = "The name cannot be empty";
+    if (emergencyContact==null || emergencyContact.equals("")) error = "The emergency contact cannot be empty";
     if(itemNames == null) error = "Item names list cannot be null";
     //iterate over item names to make sure there are no empty strings
     for(String itemName : itemNames){
@@ -55,10 +76,7 @@ public class ClimbSafeFeatureSet2Controller {
     }
 
 
-    if (email.indexOf("@") <= 0 ||
-            email.indexOf("@") != email.lastIndexOf("@") ||
-            email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
-            email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
+
 
     if (error.length() > 0) {
       throw new InvalidInputException(error.trim());
@@ -75,12 +93,6 @@ public class ClimbSafeFeatureSet2Controller {
     }
     catch (RuntimeException e) {
       error = e.getMessage();
-      if (error.equals("Cannot create due to duplicate email. See http://manual.umple.org?RE003ViolationofUniqueness.html")) {
-
-        User u = Member.getWithEmail(email);
-        if(u instanceof Member) error = "Email already linked to a member account";
-        else error = "Email already linked to a guide account";
-      }
       throw new InvalidInputException(error);
     }
 
@@ -109,71 +121,52 @@ public class ClimbSafeFeatureSet2Controller {
                                   boolean newHotelRequired, List<String> newItemNames, List<Integer> newItemQuantities)
           throws InvalidInputException {
     String error = "";
-
-    if (email.equals("admin@nmc.nt")) error = "Email cannot be admin@nmc.nt";
-
-    if (email.contains(" ")) error = "Email must not contain any spaces";
-
-    if (email==null  || email.equals("")) error = "Email cannot be empty";
-    if (newPassword==null || newPassword.equals("")) error = "Password cannot be empty";
-    if (newName==null || newName.equals("")) error = "Name cannot be empty";
-    if (newEmergencyContact==null || newEmergencyContact.equals("")) error = "Emergency contact cannot be empty";
-    if(newItemNames == null) error = "Item names list cannot be null";
-    //iterate over item names to make sure none is an empty string
-    for(String itemName : newItemNames){
-      if(itemName.equals(""))
-        error = "Item has a blank name";
+    if (newPassword==null || newPassword.equals("")) error = "The password cannot be empty";
+    if (newName==null || newName.equals("")) error = "The name cannot be empty";
+    if (newEmergencyContact==null || newEmergencyContact.equals("")) error = "The emergency contact cannot be empty";
+    if(newNrWeeks <= 0 || newNrWeeks > ClimbSafeApplication.getClimbSafe().getNrWeeks()) {
+      error = "The number of weeks must be greater than zero and less than or equal to the number of climbing weeks in the climbing season";
+    }
+    for (String itemName:newItemNames){
+      BookableItem bookableItem = BookableItem.getWithName(itemName);
+      if(bookableItem==null) error = "Requested item not found";
     }
 
-    if(newItemQuantities == null) error = "Item quantities cannot be null";
-    //iterate over item quantities to make sure none is empty
-    for(Integer number: newItemQuantities){
-      if(number == null)
-        error = "Item quantity cannot be null and must be specified";
+    User user = User.getWithEmail(email);
+    if(user == null) {
+      error = "Member not found";
     }
-
-
-    if (email.indexOf("@") <= 0 ||
-            email.indexOf("@") != email.lastIndexOf("@") ||
-            email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
-            email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
-
+    ClimbSafe c = ClimbSafeApplication.getClimbSafe();
     if (error.length() > 0) {
       throw new InvalidInputException(error.trim());
     }
+       try {
+      Member member = (Member) User.getWithEmail(email);
+      member.setName(newName);
+      member.setPassword(newPassword);
+      member.setEmergencyContact(newEmergencyContact);
+      member.setNrWeeks(newNrWeeks);
+      member.setGuideRequired(newGuideRequired);
+      member.setHotelRequired(newHotelRequired);
 
-    try{
-      User u = Member.getWithEmail(email);
-      if (u==null){
-        registerMember(email, newPassword, newName, newEmergencyContact, newNrWeeks, newGuideRequired, newHotelRequired, newItemNames, newItemQuantities);
+      int size = member.getBookedItems().size();
+      for (int i = 0; i< size; i++) {
+       member.getBookedItem(0).delete();
+         }
+
+      for (int i = 0; i< newItemNames.size(); i++) {
+        BookableItem item = BookableItem.getWithName(newItemNames.get(i));
+        member.addBookedItem(member.addBookedItem(newItemQuantities.get(i), c, item));
       }
-      else if (u instanceof Member ){
-        Member m = (Member) Member.getWithEmail(email);
-        m.setPassword(newPassword);
-        m.setName(newName);
-        m.setEmergencyContact(newEmergencyContact);
-        m.setGuideRequired(newGuideRequired);
-        m.setHotelRequired(newHotelRequired);
-        m.getBookedItems().clear(); //clear the list to then replace it
-        for (int i = 0; i< newItemNames.size(); i++) {
-          BookableItem item = BookableItem.getWithName(newItemNames.get(i));
-          m.addBookedItem(newItemQuantities.get(i), ClimbSafeApplication.getClimbSafe(), item);
-        }
-
-
-      }
-      else{
-        error = "Email is already associated to an account that is not a member";
-        throw new InvalidInputException(error.trim());
-      }
-
     }
-    catch (RuntimeException e ){
-      throw new InvalidInputException(e.getMessage());
+    catch (RuntimeException e) {
+      error = e.getMessage();
+      throw new InvalidInputException(error);
     }
+
+
 
   }
 
 }
-
 
