@@ -2,20 +2,21 @@ package ca.mcgill.ecse.climbsafe.controller;
 
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClimbSafeFeatureSet5Controller {
-  /**
+
+    /**
      * @author Rooshnie Velautham
+     * 
      * This function creates an object EquipmentBundle with the corresponding name, discount, equipment. The function also checks
      * if the user makes any errors and gives the message to the user according to the error met during the checks in this controller.
      *
      * @param name is the name of the bundle that the user wishes to add
      * @param discount is the discount for that bundle
      * @param equipmentNames a list of the equipment of names that the user wish to add to the bundle
-     * @param equipmentQuantities the quantity of equipment for each equipement
+     * @param equipmentQuantities the quantity of equipment for each equipment
      * @throws InvalidInputException this would throw the error message which correspond to the mistake seen in this function
      */
     public static void addEquipmentBundle(String name, int discount, List<String> equipmentNames,
@@ -92,8 +93,10 @@ public class ClimbSafeFeatureSet5Controller {
 
         }
     }
-/**
+
+    /**
      * @author Rooshnie Velautham
+     * 
      * In this function, the EquipmentBundle will go into a temporary object in which we will be updating the information
      * that the user would like to change such as : name, discount, equipment and the quantities of those.
      * This function will essentially check if the user has put valid parameters in order to properly update that specific bundle.
@@ -106,7 +109,6 @@ public class ClimbSafeFeatureSet5Controller {
      * @param newEquipmentQuantities is the new list of the equipment quantities corresponding to the list of equipment names
      * @throws InvalidInputException it throws this error if and error is met during the update of EquipmentBundle
      */
-
     public static void updateEquipmentBundle(String oldName, String newName, int newDiscount,
                                              List<String> newEquipmentNames, List<Integer> newEquipmentQuantities) throws InvalidInputException {
         String error = "";
@@ -205,3 +207,4 @@ public class ClimbSafeFeatureSet5Controller {
 
         }
     }
+	
