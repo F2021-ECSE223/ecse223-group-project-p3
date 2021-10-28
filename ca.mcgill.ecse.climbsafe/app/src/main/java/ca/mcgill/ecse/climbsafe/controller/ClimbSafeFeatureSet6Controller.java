@@ -43,8 +43,8 @@ public class ClimbSafeFeatureSet6Controller {
       equipment.delete();
     }
   }
-  
-  
+
+
   /**
    * @author Abhijeet Praveen
    * @param name This is the input to the method which represents the name of the equipment bundle
@@ -62,7 +62,7 @@ public class ClimbSafeFeatureSet6Controller {
     }
   }
 
-  
+
   /**
    * @author Abhijeet Praveen
    *
@@ -105,7 +105,7 @@ public class ClimbSafeFeatureSet6Controller {
     return assignments;
   }
 
-  
+
   /**
    * @author Abhijeet Praveen
    *
@@ -123,7 +123,7 @@ public class ClimbSafeFeatureSet6Controller {
     return assignment.getClimbSafe().getPriceOfGuidePerWeek()*assignment.getMember().getNrWeeks();
   }
 
-  
+
   /**
    * @author Abhijeet Praveen
    *         Using helper method to find the total equipment cost for an assignment which is needed for
