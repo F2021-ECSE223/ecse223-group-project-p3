@@ -2,11 +2,6 @@ package ca.mcgill.ecse.climbsafe.controller;
 
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.*;
-import org.checkerframework.framework.qual.EnsuresQualifierIf;
-
-import java.awt.print.Book;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
