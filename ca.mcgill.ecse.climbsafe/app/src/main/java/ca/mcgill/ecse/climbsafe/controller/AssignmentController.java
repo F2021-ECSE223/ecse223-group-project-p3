@@ -15,10 +15,10 @@ public class AssignmentController {
     public boolean initiateAllAssignments(List<Member> allMembers){
         return true;
     }
-    public boolean payTrip(Member payer, String authCode){
+    public boolean payMemberTrip(Member payer, String authCode){
         return true;
     }
-    public boolean startAllTrips(){
+    public boolean startAllTrips(int weekNumber){
         return true;
     }
     public boolean finishMemberTrip(Member member){
