@@ -1,7 +1,7 @@
 Feature: Setup NMC program information (p10)
   As the administrator, I want to setup the NMC program information
 
-  Background: 
+  Background:
     Given a ClimbSafe system exists with defaults values "2020-12-31" as start date, "0" for number of weeks, and "0" for price of guide per week. (p10)
 
   Scenario Outline: Setup NMC program information successfully
@@ -12,8 +12,8 @@ Feature: Setup NMC program information (p10)
     When the admin attempts to setup the NMC program inforamtion with the start date "<startDate>", number of climbing weeks "<nrWeeks>", and price of guide per week "<priceOfGuidePerWeek>" (p10)
     Then the following "<error>" shall be raised. (p10)
 
-    Examples: 
+    Examples:
       | startDate  | nrWeeks | priceOfGuidePerWeek | error                                                              |
-      | 2022-01-13 |       0 |                  50 | The number of climbing weeks must be greater than or equal to zero |
-      | 2022-01-13 |      20 |                   0 | The price of guide per week must be greater than or equal to zero  |
+      | 2022-01-13 |      -1 |                  50 | The number of climbing weeks must be greater than or equal to zero |
+      | 2022-01-13 |      20 |                  -1 | The price of guide per week must be greater than or equal to zero  |
       | 2021-31-31 |      20 |                  50 | Invalid date                                                       |

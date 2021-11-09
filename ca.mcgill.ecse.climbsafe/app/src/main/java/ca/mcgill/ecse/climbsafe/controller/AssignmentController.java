@@ -1,5 +1,4 @@
 package ca.mcgill.ecse.climbsafe.controller;
-import ca.mcgill.ecse.climbsafe.application.*;
 import ca.mcgill.ecse.climbsafe.model.*;
 
 import java.util.List;
@@ -18,12 +17,8 @@ public class AssignmentController {
     public boolean payMemberTrip(Member payer, String authCode){
         return true;
     }
-    public boolean startAllTrips(int weekNumber){
-        return true;
-    }
-    public boolean finishMemberTrip(Member member){
-        return true;
-    }
+    public static void startAllTrips(int weekNumber) throws InvalidInputException {}
+    public static void finishMemberTrip(String email) throws InvalidInputException {}
     public boolean cancelMemberTrip(Member member){
         return true;
     }

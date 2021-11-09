@@ -200,7 +200,8 @@ public class P4StepDefinitions {
 
     // Checking that it's either null, that it's a bundle, or that one of the attributes do not
     // match
-    if (item != null && item instanceof Equipment equipmentItem) {
+    if (item != null && item instanceof Equipment) {
+      Equipment equipmentItem = (Equipment) item;
       assertTrue(
           Integer.parseInt(weight) != equipmentItem.getWeight()
               || Integer.parseInt(pricePerWeek) != equipmentItem.getPricePerWeek(),

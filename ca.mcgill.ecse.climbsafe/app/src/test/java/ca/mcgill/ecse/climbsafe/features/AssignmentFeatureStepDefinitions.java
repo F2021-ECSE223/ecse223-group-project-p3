@@ -1,10 +1,17 @@
 package ca.mcgill.ecse.climbsafe.features;
 
+import ca.mcgill.ecse.climbsafe.controller.AssignmentController;
+import ca.mcgill.ecse.climbsafe.controller.InvalidInputException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import ca.mcgill.ecse.climbsafe.model.User;
+import ca.mcgill.ecse.climbsafe.model.Member;
+import static java.lang.Integer.parseInt;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AssignmentFeatureStepDefinitions {
+  String error = "";
   @Given("the following ClimbSafe system exists:")
   public void the_following_climb_safe_system_exists(io.cucumber.datatable.DataTable dataTable) {
     // Write code here that turns the phrase above into concrete actions
@@ -174,29 +181,67 @@ public class AssignmentFeatureStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
+  /**
+   * @author Abhijeet Praveen
+   * @param email represents the email of the member we intend to finish the trip for
+   * The implementation for this step definition is done through calling the finishMemberTrip
+   * from the controller API.
+   */
   @When("the administrator attempts to finish the trip for the member with email {string}")
   public void the_administrator_attempts_to_finish_the_trip_for_the_member_with_email(
-      String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+      String email) {
+    try{
+      AssignmentController.finishMemberTrip(email);
+    }
+    catch(InvalidInputException e){
+      error = e.getMessage();
+    }
   }
 
+  /**
+   * @author Abhijeet Praveen
+   * @param email represents the email of the user we need to ban
+   * The implementation for this step definition is done through calling the banMember() function in the
+   * model for the application
+   */
   @Given("the member with {string} is banned")
-  public void the_member_with_is_banned(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  public void the_member_with_is_banned(String email) {
+    User user = User.getWithEmail(email);
+    if(user instanceof Member){
+      Member member = (Member) user;
+      member.banMember();
+    }
   }
 
+  /**
+   * @author Abhijeet Praveen
+   * @param email represents the email of the user whose state we are interested in
+   * @param status represents the ban status of the member
+   * The implementation for this step definition is done through ensuring that the member with the given
+   * email has the same status as the given status
+   */
   @Then("the member with email {string} shall be {string}")
-  public void the_member_with_email_shall_be(String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  public void the_member_with_email_shall_be(String email, String status) {
+    User user = User.getWithEmail(email);
+    if (user instanceof Member) {
+      Member member = (Member) user;
+      assertTrue(member.getBanStatus().name().equals(status));
+    }
   }
 
+  /**
+   * @author Abhijeet Praveen
+   * @param weekNumber represents the week that we want to start the trips for
+   * The implementation of this step defintion is done through calling the startAllTrips method
+   * from the controller API
+   */
   @When("the administrator attempts to start the trips for week {string}")
-  public void the_administrator_attempts_to_start_the_trips_for_week(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  public void the_administrator_attempts_to_start_the_trips_for_week(String weekNumber) {
+    try{
+      AssignmentController.startAllTrips(parseInt(weekNumber));
+    } catch (InvalidInputException e) {
+      error = e.getMessage();
+    }
   }
 
   @Given("the member with {string} has cancelled their trip")
