@@ -2,9 +2,10 @@
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
 
 package ca.mcgill.ecse.climbsafe.model;
+import ca.mcgill.ecse.climbsafe.model.Assignment;
 
-// line 82 "../../../../../../model.ump"
-// line 159 "../../../../../../model.ump"
+// line 1 "../../../../../ClimbSafeStates.ump"
+// line 82 "../../../../../climbSafe.ump"
 public class Assignment
 {
 
@@ -13,8 +14,13 @@ public class Assignment
   //------------------------
 
   //Assignment Attributes
+  private String authCode;
   private int startWeek;
   private int endWeek;
+
+  //Assignment State Machines
+  public enum AssignmentStatus { Assigned, Paid, Started, Finished, Cancelled }
+  private AssignmentStatus assignmentStatus;
 
   //Assignment Associations
   private Member member;
@@ -22,12 +28,16 @@ public class Assignment
   private Hotel hotel;
   private ClimbSafe climbSafe;
 
+  //Helper Variables
+  private boolean canSetAuthCode;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public Assignment(int aStartWeek, int aEndWeek, Member aMember, ClimbSafe aClimbSafe)
   {
+    canSetAuthCode = true;
     startWeek = aStartWeek;
     endWeek = aEndWeek;
     boolean didAddMember = setMember(aMember);
@@ -40,11 +50,22 @@ public class Assignment
     {
       throw new RuntimeException("Unable to create assignment due to climbSafe. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
+    setAssignmentStatus(AssignmentStatus.Assigned);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+  /* Code from template attribute_SetImmutable */
+  public boolean setAuthCode(String aAuthCode)
+  {
+    boolean wasSet = false;
+    if (!canSetAuthCode) { return false; }
+    canSetAuthCode = false;
+    authCode = aAuthCode;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setStartWeek(int aStartWeek)
   {
@@ -62,6 +83,11 @@ public class Assignment
     return wasSet;
   }
 
+  public String getAuthCode()
+  {
+    return authCode;
+  }
+
   public int getStartWeek()
   {
     return startWeek;
@@ -70,6 +96,133 @@ public class Assignment
   public int getEndWeek()
   {
     return endWeek;
+  }
+
+  public String getAssignmentStatusFullName()
+  {
+    String answer = assignmentStatus.toString();
+    return answer;
+  }
+
+  public AssignmentStatus getAssignmentStatus()
+  {
+    return assignmentStatus;
+  }
+
+  public boolean pay()
+  {
+    boolean wasEventProcessed = false;
+    
+    AssignmentStatus aAssignmentStatus = assignmentStatus;
+    switch (aAssignmentStatus)
+    {
+      case Assigned:
+        if (verifyPay(getAuthCode()))
+        {
+          setAssignmentStatus(AssignmentStatus.Paid);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean cancel()
+  {
+    boolean wasEventProcessed = false;
+    
+    AssignmentStatus aAssignmentStatus = assignmentStatus;
+    switch (aAssignmentStatus)
+    {
+      case Assigned:
+        setAssignmentStatus(AssignmentStatus.Cancelled);
+        wasEventProcessed = true;
+        break;
+      case Paid:
+        // line 14 "../../../../../ClimbSafeStates.ump"
+        refund(50);
+        setAssignmentStatus(AssignmentStatus.Cancelled);
+        wasEventProcessed = true;
+        break;
+      case Started:
+        // line 17 "../../../../../ClimbSafeStates.ump"
+        refund(10);
+        setAssignmentStatus(AssignmentStatus.Cancelled);
+        wasEventProcessed = true;
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean startWeek(int week)
+  {
+    boolean wasEventProcessed = false;
+    
+    AssignmentStatus aAssignmentStatus = assignmentStatus;
+    switch (aAssignmentStatus)
+    {
+      case Assigned:
+        if (correctWeek(week))
+        {
+        // line 10 "../../../../../ClimbSafeStates.ump"
+          banMember();
+          setAssignmentStatus(AssignmentStatus.Cancelled);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      case Paid:
+        if (correctWeek(week))
+        {
+          setAssignmentStatus(AssignmentStatus.Started);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean finishTrip()
+  {
+    boolean wasEventProcessed = false;
+    
+    AssignmentStatus aAssignmentStatus = assignmentStatus;
+    switch (aAssignmentStatus)
+    {
+      case Started:
+        setAssignmentStatus(AssignmentStatus.Finished);
+        wasEventProcessed = true;
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  private void setAssignmentStatus(AssignmentStatus aAssignmentStatus)
+  {
+    assignmentStatus = aAssignmentStatus;
+
+    // entry actions and do activities
+    switch(assignmentStatus)
+    {
+      case Assigned:
+        // line 7 "../../../../../ClimbSafeStates.ump"
+        assign(member);
+        break;
+    }
   }
   /* Code from template association_GetOne */
   public Member getMember()
@@ -213,10 +366,38 @@ public class Assignment
     }
   }
 
+  // line 27 "../../../../../ClimbSafeStates.ump"
+   private boolean verifyPay(String authCode){
+    if (authCode.isEmpty() || authCode == null ) return false;
+        setAuthCode(authCode);
+        return true;
+  }
+
+  // line 32 "../../../../../ClimbSafeStates.ump"
+   private boolean correctWeek(int week){
+    return week == this.getStartWeek();
+  }
+
+  // line 35 "../../../../../ClimbSafeStates.ump"
+   private boolean banMember(){
+    return this.getMember().banMember();
+  }
+
+  // line 38 "../../../../../ClimbSafeStates.ump"
+   private boolean refund(int percentage){
+    return this.getMember().setRefund(percentage);
+  }
+
+  // line 41 "../../../../../ClimbSafeStates.ump"
+   private boolean assign(Member member){
+    return this.setMember(member);
+  }
+
 
   public String toString()
   {
     return super.toString() + "["+
+            "authCode" + ":" + getAuthCode()+ "," +
             "startWeek" + ":" + getStartWeek()+ "," +
             "endWeek" + ":" + getEndWeek()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "member = "+(getMember()!=null?Integer.toHexString(System.identityHashCode(getMember())):"null") + System.getProperties().getProperty("line.separator") +

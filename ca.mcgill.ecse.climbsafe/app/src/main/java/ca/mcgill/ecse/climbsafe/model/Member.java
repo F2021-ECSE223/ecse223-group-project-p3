@@ -2,10 +2,11 @@
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
 
 package ca.mcgill.ecse.climbsafe.model;
+import ca.mcgill.ecse.climbsafe.model.Member;
 import java.util.*;
 
-// line 40 "../../../../../../model.ump"
-// line 124 "../../../../../../model.ump"
+// line 45 "../../../../../ClimbSafeStates.ump"
+// line 40 "../../../../../climbSafe.ump"
 public class Member extends NamedUser
 {
 
@@ -14,14 +15,22 @@ public class Member extends NamedUser
   //------------------------
 
   //Member Attributes
+  private int refund;
   private int nrWeeks;
   private boolean guideRequired;
   private boolean hotelRequired;
+
+  //Member State Machines
+  public enum BanStatus { Unbanned, Banned }
+  private BanStatus banStatus;
 
   //Member Associations
   private ClimbSafe climbSafe;
   private Assignment assignment;
   private List<BookedItem> bookedItems;
+
+  //Helper Variables
+  private boolean canSetRefund;
 
   //------------------------
   // CONSTRUCTOR
@@ -30,6 +39,7 @@ public class Member extends NamedUser
   public Member(String aEmail, String aPassword, String aName, String aEmergencyContact, int aNrWeeks, boolean aGuideRequired, boolean aHotelRequired, ClimbSafe aClimbSafe)
   {
     super(aEmail, aPassword, aName, aEmergencyContact);
+    canSetRefund = true;
     nrWeeks = aNrWeeks;
     guideRequired = aGuideRequired;
     hotelRequired = aHotelRequired;
@@ -39,11 +49,22 @@ public class Member extends NamedUser
       throw new RuntimeException("Unable to create member due to climbSafe. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     bookedItems = new ArrayList<BookedItem>();
+    setBanStatus(BanStatus.Unbanned);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+  /* Code from template attribute_SetImmutable */
+  public boolean setRefund(int aRefund)
+  {
+    boolean wasSet = false;
+    if (!canSetRefund) { return false; }
+    canSetRefund = false;
+    refund = aRefund;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setNrWeeks(int aNrWeeks)
   {
@@ -69,6 +90,11 @@ public class Member extends NamedUser
     return wasSet;
   }
 
+  public int getRefund()
+  {
+    return refund;
+  }
+
   public int getNrWeeks()
   {
     return nrWeeks;
@@ -92,6 +118,40 @@ public class Member extends NamedUser
   public boolean isHotelRequired()
   {
     return hotelRequired;
+  }
+
+  public String getBanStatusFullName()
+  {
+    String answer = banStatus.toString();
+    return answer;
+  }
+
+  public BanStatus getBanStatus()
+  {
+    return banStatus;
+  }
+
+  public boolean banMember()
+  {
+    boolean wasEventProcessed = false;
+    
+    BanStatus aBanStatus = banStatus;
+    switch (aBanStatus)
+    {
+      case Unbanned:
+        setBanStatus(BanStatus.Banned);
+        wasEventProcessed = true;
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  private void setBanStatus(BanStatus aBanStatus)
+  {
+    banStatus = aBanStatus;
   }
   /* Code from template association_GetOne */
   public ClimbSafe getClimbSafe()
@@ -284,6 +344,7 @@ public class Member extends NamedUser
   public String toString()
   {
     return super.toString() + "["+
+            "refund" + ":" + getRefund()+ "," +
             "nrWeeks" + ":" + getNrWeeks()+ "," +
             "guideRequired" + ":" + getGuideRequired()+ "," +
             "hotelRequired" + ":" + getHotelRequired()+ "]" + System.getProperties().getProperty("line.separator") +

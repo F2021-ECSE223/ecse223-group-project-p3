@@ -4,8 +4,7 @@
 package ca.mcgill.ecse.climbsafe.model;
 import java.util.*;
 
-// line 25 "../../../../../../model.ump"
-// line 109 "../../../../../../model.ump"
+// line 25 "../../../../../climbSafe.ump"
 public class Administrator extends User
 {
 
@@ -26,7 +25,7 @@ public class Administrator extends User
     boolean didAddClimbSafe = setClimbSafe(aClimbSafe);
     if (!didAddClimbSafe)
     {
-      throw new RuntimeException("Unable to create adminstrator due to climbSafe. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create administrator due to climbSafe. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -44,24 +43,24 @@ public class Administrator extends User
     boolean wasSet = false;
     if (aNewClimbSafe == null)
     {
-      //Unable to setClimbSafe to null, as adminstrator must always be associated to a climbSafe
+      //Unable to setClimbSafe to null, as administrator must always be associated to a climbSafe
       return wasSet;
     }
     
-    Administrator existingAdminstrator = aNewClimbSafe.getAdminstrator();
-    if (existingAdminstrator != null && !equals(existingAdminstrator))
+    Administrator existingAdministrator = aNewClimbSafe.getAdministrator();
+    if (existingAdministrator != null && !equals(existingAdministrator))
     {
-      //Unable to setClimbSafe, the current climbSafe already has a adminstrator, which would be orphaned if it were re-assigned
+      //Unable to setClimbSafe, the current climbSafe already has a administrator, which would be orphaned if it were re-assigned
       return wasSet;
     }
     
     ClimbSafe anOldClimbSafe = climbSafe;
     climbSafe = aNewClimbSafe;
-    climbSafe.setAdminstrator(this);
+    climbSafe.setAdministrator(this);
 
     if (anOldClimbSafe != null)
     {
-      anOldClimbSafe.setAdminstrator(null);
+      anOldClimbSafe.setAdministrator(null);
     }
     wasSet = true;
     return wasSet;
@@ -73,7 +72,7 @@ public class Administrator extends User
     climbSafe = null;
     if (existingClimbSafe != null)
     {
-      existingClimbSafe.setAdminstrator(null);
+      existingClimbSafe.setAdministrator(null);
     }
     super.delete();
   }

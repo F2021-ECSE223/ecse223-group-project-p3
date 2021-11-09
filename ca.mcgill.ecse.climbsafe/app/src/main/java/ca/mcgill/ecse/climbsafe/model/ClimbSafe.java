@@ -5,8 +5,7 @@ package ca.mcgill.ecse.climbsafe.model;
 import java.sql.Date;
 import java.util.*;
 
-// line 4 "../../../../../../model.ump"
-// line 93 "../../../../../../model.ump"
+// line 4 "../../../../../climbSafe.ump"
 public class ClimbSafe
 {
 
@@ -20,7 +19,7 @@ public class ClimbSafe
   private int priceOfGuidePerWeek;
 
   //ClimbSafe Associations
-  private Administrator adminstrator;
+  private Administrator administrator;
   private List<Guide> guides;
   private List<Member> members;
   private List<BookedItem> bookedItems;
@@ -92,14 +91,14 @@ public class ClimbSafe
     return priceOfGuidePerWeek;
   }
   /* Code from template association_GetOne */
-  public Administrator getAdminstrator()
+  public Administrator getAdministrator()
   {
-    return adminstrator;
+    return administrator;
   }
 
-  public boolean hasAdminstrator()
+  public boolean hasAdministrator()
   {
-    boolean has = adminstrator != null;
+    boolean has = administrator != null;
     return has;
   }
   /* Code from template association_GetMany */
@@ -343,27 +342,27 @@ public class ClimbSafe
     return index;
   }
   /* Code from template association_SetOptionalOneToOne */
-  public boolean setAdminstrator(Administrator aNewAdminstrator)
+  public boolean setAdministrator(Administrator aNewAdministrator)
   {
     boolean wasSet = false;
-    if (adminstrator != null && !adminstrator.equals(aNewAdminstrator) && equals(adminstrator.getClimbSafe()))
+    if (administrator != null && !administrator.equals(aNewAdministrator) && equals(administrator.getClimbSafe()))
     {
-      //Unable to setAdminstrator, as existing adminstrator would become an orphan
+      //Unable to setAdministrator, as existing administrator would become an orphan
       return wasSet;
     }
 
-    adminstrator = aNewAdminstrator;
-    ClimbSafe anOldClimbSafe = aNewAdminstrator != null ? aNewAdminstrator.getClimbSafe() : null;
+    administrator = aNewAdministrator;
+    ClimbSafe anOldClimbSafe = aNewAdministrator != null ? aNewAdministrator.getClimbSafe() : null;
 
     if (!this.equals(anOldClimbSafe))
     {
       if (anOldClimbSafe != null)
       {
-        anOldClimbSafe.adminstrator = null;
+        anOldClimbSafe.administrator = null;
       }
-      if (adminstrator != null)
+      if (administrator != null)
       {
-        adminstrator.setClimbSafe(this);
+        administrator.setClimbSafe(this);
       }
     }
     wasSet = true;
@@ -948,12 +947,12 @@ public class ClimbSafe
 
   public void delete()
   {
-    Administrator existingAdminstrator = adminstrator;
-    adminstrator = null;
-    if (existingAdminstrator != null)
+    Administrator existingAdministrator = administrator;
+    administrator = null;
+    if (existingAdministrator != null)
     {
-      existingAdminstrator.delete();
-      existingAdminstrator.setClimbSafe(null);
+      existingAdministrator.delete();
+      existingAdministrator.setClimbSafe(null);
     }
     while (guides.size() > 0)
     {
@@ -1020,6 +1019,6 @@ public class ClimbSafe
             "nrWeeks" + ":" + getNrWeeks()+ "," +
             "priceOfGuidePerWeek" + ":" + getPriceOfGuidePerWeek()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "startDate" + "=" + (getStartDate() != null ? !getStartDate().equals(this)  ? getStartDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "adminstrator = "+(getAdminstrator()!=null?Integer.toHexString(System.identityHashCode(getAdminstrator())):"null");
+            "  " + "administrator = "+(getAdministrator()!=null?Integer.toHexString(System.identityHashCode(getAdministrator())):"null");
   }
 }

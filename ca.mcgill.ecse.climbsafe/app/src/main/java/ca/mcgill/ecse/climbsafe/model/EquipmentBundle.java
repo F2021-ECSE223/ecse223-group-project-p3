@@ -4,8 +4,7 @@
 package ca.mcgill.ecse.climbsafe.model;
 import java.util.*;
 
-// line 64 "../../../../../../model.ump"
-// line 144 "../../../../../../model.ump"
+// line 64 "../../../../../climbSafe.ump"
 public class EquipmentBundle extends BookableItem
 {
 
