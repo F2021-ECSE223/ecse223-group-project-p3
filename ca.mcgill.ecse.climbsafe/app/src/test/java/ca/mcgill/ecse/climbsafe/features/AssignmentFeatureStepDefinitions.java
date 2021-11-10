@@ -156,29 +156,38 @@ public class AssignmentFeatureStepDefinitions {
     assertEquals(a.getAssignmentStatusFullName(), assignmentStatus);
   }
 
+  /**
+   * @author Edward Habelrih
+   * @param numberOfAssignments: a string containing what the number of assignments in the system shall be
+   */
   @Then("the number of assignments in the system shall be {string}")
-  public void the_number_of_assignments_in_the_system_shall_be(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  public void the_number_of_assignments_in_the_system_shall_be(String numberOfAssignments) {
+    assertEquals(Integer.parseInt(numberOfAssignments), this.climbSafe.getAssignments.size());
   }
-
+  /**
+   * @author Edward Habelrih
+   * @param givenError: a string containtinng the error that shall be raised
+   */
   @Then("the system shall raise the error {string}")
-  public void the_system_shall_raise_the_error(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  public void the_system_shall_raise_the_error(String givenError) {
+    assertEquals(error, givenError);
   }
-
+  /**
+   * @author Edward Habelrih
+   * @param dataTable: A dataTable containing the assignment's start week, end week, member associated to it
+   * that ought to be in the climbsafe system
+   */
   @Given("the following assignments exist in the system:")
   public void the_following_assignments_exist_in_the_system(
-      io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+          io.cucumber.datatable.DataTable dataTable) {
+    List<Map><String, String>> assignmentList = dataTable.asMaps();
+    for(int i = 0; i < assignmentList.size(); i++){
+    int startWeek = assignmentList.get(i).getStartWeek();
+    int endWeek = assignmentList.get(i).getEndWeek();
+    Member member = assignmentList.get(i).getMember();
+    climbSafe.addAssignment(startWeek, endWeek, member, climbSafe);
+    }
+
   }
 
   @When("the administrator attempts to confirm payment for {string} using authorization code {string}")
