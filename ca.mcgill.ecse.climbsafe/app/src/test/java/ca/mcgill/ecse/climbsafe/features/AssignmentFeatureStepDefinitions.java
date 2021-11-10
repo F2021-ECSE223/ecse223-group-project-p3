@@ -185,29 +185,46 @@ public class AssignmentFeatureStepDefinitions {
     throw new io.cucumber.java.PendingException();
   }
 
-  @When("the administrator attempts to cancel the trip for {string}")
-  public void the_administrator_attempts_to_cancel_the_trip_for(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+ @When("the administrator attempts to cancel the trip for {email}")
+  public void the_administrator_attempts_to_cancel_the_trip_for(String email) {
+    try{
+      AssignmentController.cancelMemberTrip(email);
+    }catch(InvalidInputException e){
+      error = e.getMessage();
+    }
   }
 
-  @Given("the member with {string} has paid for their trip")
-  public void the_member_with_has_paid_for_their_trip(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  @Given("the member with {email} has paid for their trip")
+  public void the_member_with_has_paid_for_their_trip(String email) {
+    User user =  User.getWithEmail(email);
+    if(user instanceof Member){
+      Member member = (Member) user;
+      member.getAssignment().pay();
+    }
+
   }
 
-  @Then("the member with email address {string} shall receive a refund of {string} percent")
-  public void the_member_with_email_address_shall_receive_a_refund_of_percent(String string,
-      String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  @Then("the member with email address {email} shall receive a refund of {amount} percent")
+  public void the_member_with_email_address_shall_receive_a_refund_of_percent(String email,
+      String amount) {
+    User user =  User.getWithEmail(email);
+    if(user instanceof Member){
+      Member member = (Member) user;
+      assertEquals(member.getRefund(),parseInt(amount));
+    }
+
   }
 
-  @Given("the member with {string} has started their trip")
-  public void the_member_with_has_started_their_trip(String string) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+  @Given("the member with {email} has started their trip")
+  public void the_member_with_has_started_their_trip(String email) {
+    User user =  User.getWithEmail(email);
+    if(user instanceof Member){
+      Member member = (Member) user;
+      Assignment a = member.getAssignment();
+      a.setAuthCode("GG");
+      a.pay();
+      a.startWeek(a.getStartWeek());
+   }
   }
 
   /**
