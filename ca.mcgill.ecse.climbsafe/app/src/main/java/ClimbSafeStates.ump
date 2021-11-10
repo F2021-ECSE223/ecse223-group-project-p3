@@ -15,7 +15,7 @@ class Assignment{
     }
     Started{
       cancel / {refund(10);} -> Cancelled;
-      finishTrip -> Finished;
+      finishTrip/ {refund(0)} -> Finished;
     }
     Finished{
       
@@ -43,7 +43,7 @@ class Assignment{
 }
 
 class Member{
-  lazy immutable int refund;
+   lazy immutable int refund;
     depend ca.mcgill.ecse.climbsafe.model.Member;
   banStatus{
     Unbanned{
