@@ -197,7 +197,11 @@ public class AssignmentFeatureStepDefinitions {
   public void the_error_shall_be_raised(String errorMessage) {
     assertEquals(error, errorMessage);
   }
-
+  /**
+   * @author Rooshnie Velautham
+   * @param email this is the email of the member that the admin attempts to cancel the trip
+   * This function will call the cancelMemberTrip from the model.
+   */
  @When("the administrator attempts to cancel the trip for {string}")
   public void the_administrator_attempts_to_cancel_the_trip_for(String email) {
     try{
@@ -206,7 +210,11 @@ public class AssignmentFeatureStepDefinitions {
       error = e.getMessage();
     }
   }
-
+  /**
+   * @author Rooshnie Velautham
+   * @param email this is the email of the member that paid their trip
+   * This function sets the status of the assignment to paid
+   */
   @Given("the member with {email} has paid for their trip")
   public void the_member_with_has_paid_for_their_trip(String email) {
     User user =  User.getWithEmail(email);
@@ -216,7 +224,12 @@ public class AssignmentFeatureStepDefinitions {
     }
 
   }
-
+   /**
+   * @author Rooshnie Velautham
+   * @param email this is the email of the member that paid their trip
+   * @param percentage it is the percentage of the refund
+   * This function checks if the right amount of the percentage has been given depending of their states
+   */
   @Then("the member with email address {email} shall receive a refund of {amount} percent")
   public void the_member_with_email_address_shall_receive_a_refund_of_percent(String email,
       String amount) {
@@ -227,7 +240,11 @@ public class AssignmentFeatureStepDefinitions {
     }
 
   }
-
+  /**
+   * @author Rooshnie Velautham
+   * @param email this is the email of the member that wants to start the trip
+   * This function puts the member in the start state like they have started their trip
+   */
   @Given("the member with {email} has started their trip")
   public void the_member_with_has_started_their_trip(String email) {
     User user =  User.getWithEmail(email);
