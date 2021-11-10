@@ -12,9 +12,39 @@ import java.util.List;
  * 5. Cancel a member’s trip
  */
 public class AssignmentController {
-    public boolean initiateAllAssignments(List<Member> allMembers){
-        return true;
+    
+    public static void initiateAllAssignments(List<Member> allMembers) {
+        List<Guide> allGuides = ClimbSafeApplication.getClimbSafe().getGuides();
+
+        for (Guide guide : allGuides) {
+            for (Member member : allMembers) {
+                if (!member.hasAssignment()) {
+                    int startWeek = 1;
+                    if (guide.hasAssignments() && member.isGuideRequired()) {
+                        int currentStart = 1;
+                        for (Assignment a : guide.getAssignments()) {
+                            if (a.getEndWeek() > currentStart) {
+                                currentStart = a.getEndWeek();
+                            }
+                        }
+                        startWeek = currentStart;
+                    }
+                    if (member.isGuideRequired()) {
+
+                        if (ClimbSafeApplication.getClimbSafe().getNrWeeks() - startWeek >= member.getNrWeeks()) {
+                            int endWeek = startWeek + member.getNrWeeks();
+                            Assignment newA = new Assignment(startWeek, endWeek, member, ClimbSafeApplication.getClimbSafe());
+                            newA.setGuide(guide);
+                        }
+                    } else if (!member.isGuideRequired()) {
+                        int endWeek = member.getNrWeeks();
+                        new Assignment(startWeek, endWeek, member, ClimbSafeApplication.getClimbSafe());
+                    }
+                }
+            }
+        }
     }
+    
     public boolean payMemberTrip(Member payer, String authCode){
         return true;
     }
