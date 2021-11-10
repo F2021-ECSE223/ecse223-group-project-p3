@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.climbsafe.controller;
 import ca.mcgill.ecse.climbsafe.model.*;
+import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 
 import java.util.List;
 
@@ -38,10 +39,10 @@ public class AssignmentController {
     }
     /**
      * @author Rooshnie Velautham
-     * 
+     *
      * This function finishes the trip of that specific member by checking all the edge cases in order to 
      * do the finish trip properly.
-     * 
+     *
      * @param email this is the email of the member that has finished the trip
      * @throws InvalidInputException if any error happens it will throw this exception
      */
@@ -52,20 +53,42 @@ public class AssignmentController {
         if(user instanceof Member){
             member = (Member) user;
 
-        String memberAssignmentStatus = member.getAssignment().getAssignmentStatusFullName();
-        if(member.getBanStatusFullName().equals("Banned")){
-            throw new InvalidInputException("Cannot finish the trip due to a ban");
+            String memberAssignmentStatus = member.getAssignment().getAssignmentStatusFullName();
+            if(member.getBanStatusFullName().equals("Banned")){
+                throw new InvalidInputException("Cannot finish the trip due to a ban");
+            }
+            if(memberAssignmentStatus.equals("Paid") || memberAssignmentStatus.equals("Assigned")){
+                throw new InvalidInputException("Cannot finish a trip which has not started");
+            }
+            if(memberAssignmentStatus.equals("Cancelled")){
+                throw new InvalidInputException("Cannot finish a trip which has been cancelled");
+            }
+            member.getAssignment().finishTrip();
         }
-        if(memberAssignmentStatus.equals("Paid") || memberAssignmentStatus.equals("Assigned")){
-            throw new InvalidInputException("Cannot finish a trip which has not started");
-        }
-        if(memberAssignmentStatus.equals("Cancelled")){
-            throw new InvalidInputException("Cannot finish a trip which has been cancelled");
-        }
-        member.getAssignment().finishTrip();
-         }
     }
-    public boolean cancelMemberTrip(Member member){
-        return true;
+    /**
+     * @author Abhijeet Praveen
+     * @param email represents the email of the member for which we wish to cancel the trip
+     * @throws InvalidInputException, the method throws a different InvalidInputException based on
+     * different types of errors.
+     * We throw an error if we are cancelling a trip for a banned member
+     * We throw an error if no member with the given email exists
+     * We throw an error if the trip has already cancelled
+     * Otherwise, no errors are thrown and we just cancel the trip by calling the cancel method
+     * from the Assignment class in the model
+     */
+    public static void cancelMemberTrip(String email) throws InvalidInputException {
+        Member member = (Member) User.getWithEmail(email);
+        if (member==null) {
+            String error = "Member with email address" + email + "does not exist";
+            throw new InvalidInputException(error);
+        }
+        if(member.getBanStatusFullName().equals("Banned")) {
+            throw new InvalidInputException("Cannot cancel the trip due to a ban");
+        }
+        if(member.getAssignment().getAssignmentStatusFullName().equals("Finished")) {
+            throw new InvalidInputException("Cannot cancel a trip which has finished");
+        }
+        member.getAssignment().cancel();
     }
 }
