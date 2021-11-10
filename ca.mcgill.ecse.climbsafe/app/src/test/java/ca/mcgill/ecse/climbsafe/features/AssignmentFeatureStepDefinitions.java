@@ -91,41 +91,69 @@ public class AssignmentFeatureStepDefinitions {
     }
   }
 
+  /**
+  * @author Sebastien Cantin
+  * @param dataTable represents the table which contains input data provided in the feature file
+  * email, password, name, emergency contact will be associated with ClimbSafe system by transforming dataTable into a list of maps
+  */
   @Given("the following members exist in the system:")
   public void the_following_members_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+      List<Map<String, String>> memberList = dataTable.asMaps();
+      for (int i = 0; i < memberList.size(); i++) {
+          climbSafe.addMember(memberList.get(i).get("email"), memberList.get(i).get("password"),
+                  memberList.get(i).get("name"), memberList.get(i).get("emergencyContact"),
+                  parseInt(memberList.get(i).get("nrWeeks")),
+                  parseBoolean(memberList.get(i).get("guideRequired")),
+                  parseBoolean(memberList.get(i).get("hotelRequired")));
+      }
   }
 
+  /**
+  * @author Sebastien Cantin
+  */
   @When("the administrator attempts to initiate the assignment process")
   public void the_administrator_attempts_to_initiate_the_assignment_process() {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+      try {
+          AssignmentController.initiateAllAssignments(climbSafe.getMembers());
+      }catch(Exception e){
+          error = e.getMessage();
+      }
   }
 
+  /**
+  * @author Sebastien Cantin
+  * @param dataTable A dataTable containing the memberEmails, guideEmails, startWeeks and endWeeks
+  *                  of all the assignments that ought to be in climbsafe
+  */
   @Then("the following assignments shall exist in the system:")
   public void the_following_assignments_shall_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+      List<Map<String, String>> assignmentList = dataTable.asMaps();
+      for (var row : assignmentList){
+          String memberEmail = row.get("memberEmail");
+          Member m = (Member) Member.getWithEmail(memberEmail);
+          Assignment a = m.getAssignment();
+          String guideEmail = row.get("guideEmail");
+          Integer startWeek = Integer.parseInt(row.get("startWeek"));
+          Integer endWeek = Integer.parseInt(row.get("endWeek"));
+          assertEquals(a.getGuide().getEmail(), guideEmail);
+          assertEquals(a.getStartWeek(), startWeek);
+          assertEquals(a.getEndWeek(), endWeek);
+      }
   }
 
+ /**
+  * @author Sebastien Cantin
+  * @param memberEmail the email of the member whose assignment's status will be checked
+  * @param assignmentStatus the status the member's assignment status will be compared to
+  */
   @Then("the assignment for {string} shall be marked as {string}")
-  public void the_assignment_for_shall_be_marked_as(String string, String string2) {
+  public void the_assignment_for_shall_be_marked_as(String memberEmail, String assignmentStatus) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    Member m = (Member) Member.getWithEmail(memberEmail);
+    Assignment a = m.getAssignment();
+    assertEquals(a.getAssignmentStatusFullName(), assignmentStatus);
   }
 
   @Then("the number of assignments in the system shall be {string}")
@@ -303,15 +331,27 @@ public class AssignmentFeatureStepDefinitions {
     }
   }
 
+  /**
+  * @author Sebastien Cantin
+  * @param memberEmail the email of the member whose assignment status will be checked
+  */
   @Given("the member with {string} has cancelled their trip")
-  public void the_member_with_has_cancelled_their_trip(String string) {
+  public void the_member_with_has_cancelled_their_trip(String memberEmail) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    Member m = (Member)Member.getWithEmail(memberEmail);
+    Assignment a = m.getAssignment();
+    a.cancel();  
   }
 
+  /**
+  * @author Sebastien Cantin
+  * @param memberEmail the email of the member whose assignment status will be checked
+  */
   @Given("the member with {string} has finished their trip")
-  public void the_member_with_has_finished_their_trip(String string) {
+  public void the_member_with_has_finished_their_trip(String memberEmail) {
     // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+      Member m = (Member)Member.getWithEmail(memberEmail);
+      Assignment a = m.getAssignment();
+      a.finishTrip();
   }
 }
