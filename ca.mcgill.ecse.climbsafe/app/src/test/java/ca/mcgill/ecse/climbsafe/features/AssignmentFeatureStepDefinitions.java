@@ -9,57 +9,86 @@ import ca.mcgill.ecse.climbsafe.model.User;
 import ca.mcgill.ecse.climbsafe.model.Member;
 import static java.lang.Integer.parseInt;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.sql.Date;
+import java.util.List;
+import java.util.Map;
+
+
 
 public class AssignmentFeatureStepDefinitions {
   String error = "";
+  private ClimbSafe climbSafe;
+
+  /**
+   * @author Neel Faucher
+   * @param dataTable represents the table which contains input data provided in the feature file
+   * Date, number per weeks, price of guide per week will be associated with ClimbSafe system by transforming dataTable into a list of maps
+   */
   @Given("the following ClimbSafe system exists:")
   public void the_following_climb_safe_system_exists(io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    this.error = "";
+    List<Map<String, String>> rows = dataTable.asMaps();
+    for (Map<String, String> map : rows) {
+      climbSafe = ClimbSafeApplication.getClimbSafe();
+      climbSafe.setStartDate(Date.valueOf(map.get("startDate")));
+      climbSafe.setNrWeeks(parseInt(map.get("nrWeeks")));
+      climbSafe.setPriceOfGuidePerWeek(parseInt(map.get("priceOfGuidePerWeek")));
+    }
   }
 
+ /** @author Neel Faucher
+ * @param dataTable represents the table which contains input data provided in the feature file
+ * name, price per week, weight will be associated with ClimbSafe system by transforming dataTable into a list of maps
+ */
   @Given("the following pieces of equipment exist in the system:")
-  public void the_following_pieces_of_equipment_exist_in_the_system(
-      io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+  public void the_following_pieces_of_equipment_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
+    List<Map<String, String>> cucumberData = dataTable.asMaps();
+
+    for (Map<String, String> row : cucumberData) {
+      climbSafe.addEquipment(row.get("name"), Integer.parseInt(row.get("weight")),
+              Integer.parseInt(row.get("pricePerWeek")));
+    }
   }
 
+  /** @author Neel Faucher
+   * @param dataTable represents the table which contains input data provided in the feature file
+   * discount, items, quantities will be associated with ClimbSafe system by transforming dataTable into a list of maps
+   */
   @Given("the following equipment bundles exist in the system:")
   public void the_following_equipment_bundles_exist_in_the_system(
       io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    List<Map<String, String>> cucumberData = dataTable.asMaps();
+
+    for (var equipmentBundle : cucumberData) {
+      int discount = Integer.parseInt(equipmentBundle.get("discount"));
+      String items = equipmentBundle.get("items");
+      String quantities = equipmentBundle.get("quantities");
+      String[] equipmentItems = items.split(",");
+      String[] equipmentQuantities = quantities.split(",");
+
+      var newBundle = new EquipmentBundle(equipmentBundle.get("name"), discount, climbSafe);
+
+      for (int i = 0; i < equipmentItems.length; i++) {
+        newBundle.addBundleItem(Integer.parseInt(equipmentQuantities[i]), climbSafe,
+                (Equipment) BookableItem.getWithName(equipmentItems[i]));
+      }
+    }
   }
 
+  /** @author Neel Faucher
+   * @param dataTable represents the table which contains input data provided in the feature file
+   * email, password, name, emergency contact will be associated with ClimbSafe system by transforming dataTable into a list of maps
+   */
   @Given("the following guides exist in the system:")
   public void the_following_guides_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
-    // Write code here that turns the phrase above into concrete actions
-    // For automatic transformation, change DataTable to one of
-    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-    //
-    // For other transformations you can register a DataTableType.
-    throw new io.cucumber.java.PendingException();
+    List<Map<String, String>> rows = dataTable.asMaps();
+    for (var row : rows) {
+      String email = row.get("email");
+      String password = row.get("password");
+      String name = row.get("name");
+      String emergencyContact = row.get("emergencyContact");
+      climbSafe.addGuide(email, password, name, emergencyContact);
+    }
   }
 
   @Given("the following members exist in the system:")
