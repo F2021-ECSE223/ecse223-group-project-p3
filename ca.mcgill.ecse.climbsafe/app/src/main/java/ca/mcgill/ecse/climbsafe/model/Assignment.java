@@ -4,8 +4,11 @@
 package ca.mcgill.ecse.climbsafe.model;
 import ca.mcgill.ecse.climbsafe.model.Assignment;
 
-// line 1 "../../../../../ClimbSafeStates.ump"
-// line 82 "../../../../../climbSafe.ump"
+// line 1 "../../../../../../ClimbSafeStates.ump"
+// line 60 "../../../../../../ClimbSafeStates.ump"
+// line 70 "../../../../../../ClimbSafeStates.ump"
+// line 83 "../../../../../../model.ump"
+// line 162 "../../../../../../model.ump"
 public class Assignment
 {
 
@@ -143,13 +146,13 @@ public class Assignment
         wasEventProcessed = true;
         break;
       case Paid:
-        // line 14 "../../../../../ClimbSafeStates.ump"
+        // line 14 "../../../../../../ClimbSafeStates.ump"
         refund(50);
         setAssignmentStatus(AssignmentStatus.Cancelled);
         wasEventProcessed = true;
         break;
       case Started:
-        // line 17 "../../../../../ClimbSafeStates.ump"
+        // line 17 "../../../../../../ClimbSafeStates.ump"
         refund(10);
         setAssignmentStatus(AssignmentStatus.Cancelled);
         wasEventProcessed = true;
@@ -171,7 +174,7 @@ public class Assignment
       case Assigned:
         if (correctWeek(week))
         {
-        // line 10 "../../../../../ClimbSafeStates.ump"
+        // line 10 "../../../../../../ClimbSafeStates.ump"
           banMember();
           setAssignmentStatus(AssignmentStatus.Cancelled);
           wasEventProcessed = true;
@@ -201,6 +204,8 @@ public class Assignment
     switch (aAssignmentStatus)
     {
       case Started:
+        // line 18 "../../../../../../ClimbSafeStates.ump"
+        refund(0)
         setAssignmentStatus(AssignmentStatus.Finished);
         wasEventProcessed = true;
         break;
@@ -219,7 +224,7 @@ public class Assignment
     switch(assignmentStatus)
     {
       case Assigned:
-        // line 7 "../../../../../ClimbSafeStates.ump"
+        // line 7 "../../../../../../ClimbSafeStates.ump"
         assign(member);
         break;
     }
@@ -366,29 +371,29 @@ public class Assignment
     }
   }
 
-  // line 27 "../../../../../ClimbSafeStates.ump"
+  // line 27 "../../../../../../ClimbSafeStates.ump"
    private boolean verifyPay(String authCode){
     if (authCode.isEmpty() || authCode == null ) return false;
         setAuthCode(authCode);
         return true;
   }
 
-  // line 32 "../../../../../ClimbSafeStates.ump"
+  // line 32 "../../../../../../ClimbSafeStates.ump"
    private boolean correctWeek(int week){
     return week == this.getStartWeek();
   }
 
-  // line 35 "../../../../../ClimbSafeStates.ump"
+  // line 35 "../../../../../../ClimbSafeStates.ump"
    private boolean banMember(){
     return this.getMember().banMember();
   }
 
-  // line 38 "../../../../../ClimbSafeStates.ump"
+  // line 38 "../../../../../../ClimbSafeStates.ump"
    private boolean refund(int percentage){
     return this.getMember().setRefund(percentage);
   }
 
-  // line 41 "../../../../../ClimbSafeStates.ump"
+  // line 41 "../../../../../../ClimbSafeStates.ump"
    private boolean assign(Member member){
     return this.setMember(member);
   }
@@ -406,3 +411,5 @@ public class Assignment
             "  " + "climbSafe = "+(getClimbSafe()!=null?Integer.toHexString(System.identityHashCode(getClimbSafe())):"null");
   }
 }
+
+
