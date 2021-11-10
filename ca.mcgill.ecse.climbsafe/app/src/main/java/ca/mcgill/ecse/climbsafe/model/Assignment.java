@@ -205,7 +205,7 @@ public class Assignment
     {
       case Started:
         // line 18 "../../../../../../ClimbSafeStates.ump"
-        refund(0)
+        refund(0);
         setAssignmentStatus(AssignmentStatus.Finished);
         wasEventProcessed = true;
         break;
