@@ -166,9 +166,9 @@ public class AssignmentFeatureStepDefinitions {
    * @param string2 the authorization code that the member provided
    */
   @Then("the assignment for {string} shall record the authorization code {string}")
-  public void the_assignment_for_shall_record_the_authorization_code(String string,
-                                                                     String string2) {
-    ((Member) Member.getWithEmail(string)).getAssignment().setAuthCode(string2);
+  public void the_assignment_for_shall_record_the_authorization_code(String memberEmail,
+                                                                     String authCode) {
+    ((Member) Member.getWithEmail(memberEmail)).getAssignment().setAuthCode(authCode);
   }
 
   /**
@@ -176,8 +176,8 @@ public class AssignmentFeatureStepDefinitions {
    * @param string the email of the member
    */
   @Then("the member account with the email {string} does not exist")
-  public void the_member_account_with_the_email_does_not_exist(String string) {
-    assertNull(Member.getWithEmail(string));
+  public void the_member_account_with_the_email_does_not_exist(String memberEmail) {
+    assertNull(Member.getWithEmail(memberEmail));
   }
 
   /**
@@ -185,8 +185,8 @@ public class AssignmentFeatureStepDefinitions {
    * @param string the number of members in the system
    */
   @Then("there are {string} members in the system")
-  public void there_are_members_in_the_system(String string) {
-    assertEquals(Integer.parseInt(string), climbSafe.getMembers().size());
+  public void there_are_members_in_the_system(String numberOfMembers) {
+    assertEquals(Integer.parseInt(numberOfMembers), climbSafe.getMembers().size());
   }
 
   /**
@@ -194,8 +194,8 @@ public class AssignmentFeatureStepDefinitions {
    * @param string error message
    */
   @Then("the error {string} shall be raised")
-  public void the_error_shall_be_raised(String string) {
-    assertEquals(error, string);
+  public void the_error_shall_be_raised(String errorMessage) {
+    assertEquals(error, errorMessage);
   }
 
  @When("the administrator attempts to cancel the trip for {string}")
