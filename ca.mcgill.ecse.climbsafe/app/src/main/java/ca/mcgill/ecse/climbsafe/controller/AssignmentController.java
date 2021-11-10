@@ -36,7 +36,35 @@ public class AssignmentController {
             a.startWeek(weekNumber);
         }
     }
-    public static void finishMemberTrip(String email) throws InvalidInputException {}
+    /**
+     * @author Rooshnie Velautham
+     * 
+     * This function finishes the trip of that specific member by checking all the edge cases in order to 
+     * do the finish trip properly.
+     * 
+     * @param email this is the email of the member that has finished the trip
+     * @throws InvalidInputException if any error happens it will throw this exception
+     */
+    public static void finishMemberTrip(String email) throws InvalidInputException {
+        Member member= null;
+        User user =  User.getWithEmail(email);
+        if(user==null) throw new InvalidInputException("Member with email address "+email+" does not exist");
+        if(user instanceof Member){
+            member = (Member) user;
+
+        String memberAssignmentStatus = member.getAssignment().getAssignmentStatusFullName();
+        if(member.getBanStatusFullName().equals("Banned")){
+            throw new InvalidInputException("Cannot finish the trip due to a ban");
+        }
+        if(memberAssignmentStatus.equals("Paid") || memberAssignmentStatus.equals("Assigned")){
+            throw new InvalidInputException("Cannot finish a trip which has not started");
+        }
+        if(memberAssignmentStatus.equals("Cancelled")){
+            throw new InvalidInputException("Cannot finish a trip which has been cancelled");
+        }
+        member.getAssignment().finishTrip();
+         }
+    }
     public boolean cancelMemberTrip(Member member){
         return true;
     }
