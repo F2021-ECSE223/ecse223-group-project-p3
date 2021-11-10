@@ -45,9 +45,26 @@ public class AssignmentController {
         }
     }
     
-    public boolean payMemberTrip(Member payer, String authCode){
-        return true;
+    /**
+     * @author Edward Habelrih
+     * @param email this is the email of the member that has finished the trip
+     * @throws InvalidInputException if any error happens it will throw this exception in two cases.
+     *  1. The member's email does not exist
+     *  2. The authcode is invalid
+     */
+    public static void payMemberTrip(String email, String authCode){
+        Member member = (Member) User.getWithEmail(email);
+        if (member == null) {
+            String error = "Member with email address" + email + "does not exist";
+            throw new InvalidInputException(error);
+        }
+        if(authCode == null){
+            String error = "Invalid authorization code";
+            throw new InvalidInputException(error);
+        }
+        member.getAssignment().pay();
     }
+    
     /**
      * @author Romen Poirier Taksev
      * @param weekNumber the week for which the assignments are to be started
