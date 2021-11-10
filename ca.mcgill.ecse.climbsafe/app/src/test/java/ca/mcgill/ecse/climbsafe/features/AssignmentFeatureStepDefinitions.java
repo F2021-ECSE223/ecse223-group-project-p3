@@ -352,6 +352,8 @@ public class AssignmentFeatureStepDefinitions {
     // Write code here that turns the phrase above into concrete actions
       Member m = (Member)Member.getWithEmail(memberEmail);
       Assignment a = m.getAssignment();
+      a.pay("beep boop");
+      a.startWeek(a.getStartWeek());
       a.finishTrip();
   }
 }
