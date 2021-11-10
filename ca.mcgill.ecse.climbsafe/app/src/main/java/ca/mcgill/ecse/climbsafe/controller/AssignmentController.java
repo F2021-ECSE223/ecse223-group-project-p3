@@ -17,7 +17,25 @@ public class AssignmentController {
     public boolean payMemberTrip(Member payer, String authCode){
         return true;
     }
-    public static void startAllTrips(int weekNumber) throws InvalidInputException {}
+    /**
+     * @author Romen Poirier Taksev
+     * @param weekNumber the week for which the assignments are to be started
+     * @throws InvalidInputException
+     */
+    public static void startAllTrips(int weekNumber) throws InvalidInputException{
+        ClimbSafe climbsafe = ClimbSafeApplication.getClimbSafe();
+        List<Assignment> assignments = climbsafe.getAssignments();
+        for (Assignment a :
+                assignments) {
+            //Cannot start a trip which has finished
+            if(a.getAssignmentStatusFullName().equals("Finished")){throw new InvalidInputException("Cannot start a trip which has finished");}
+            //Cannot start a trip which has been cancelled
+            if(a.getAssignmentStatusFullName().equals("Cancelled")){throw new InvalidInputException("Cannot start a trip which has been cancelled");}
+            //Cannot start the trip due to a ban
+            if(a.getMember().getBanStatusFullName().equals("Banned")){throw new InvalidInputException("Cannot start the trip due to a ban");}
+            a.startWeek(weekNumber);
+        }
+    }
     public static void finishMemberTrip(String email) throws InvalidInputException {}
     public boolean cancelMemberTrip(Member member){
         return true;
