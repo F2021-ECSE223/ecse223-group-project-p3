@@ -15,7 +15,7 @@ class Assignment{
     }
     Started{
       cancel / {refund(10);} -> Cancelled;
-      finishTrip/ {refund(0)} -> Finished;
+      finishTrip/ {refund(0);} -> Finished;
     }
     Finished{
       
