@@ -65,7 +65,7 @@ public class AssignmentFeatureStepDefinitions {
     for (var equipmentBundle : cucumberData) {
       int discount = Integer.parseInt(equipmentBundle.get("discount"));
       String items = equipmentBundle.get("items");
-      String quantities = equipmentBundle.get("quantities");
+      String quantities = equipmentBundle.get("quantity");
       String[] equipmentItems = items.split(",");
       String[] equipmentQuantities = quantities.split(",");
 
@@ -137,10 +137,12 @@ public class AssignmentFeatureStepDefinitions {
           String memberEmail = row.get("memberEmail");
           Member m = (Member) Member.getWithEmail(memberEmail);
           Assignment a = m.getAssignment();
-          String guideEmail = row.get("guideEmail");
+          if (m.isGuideRequired()) {
+              String guideEmail = row.get("guideEmail");
+              assertEquals(a.getGuide().getEmail(), guideEmail);
+          }
           Integer startWeek = Integer.parseInt(row.get("startWeek"));
           Integer endWeek = Integer.parseInt(row.get("endWeek"));
-          assertEquals(a.getGuide().getEmail(), guideEmail);
           assertEquals(a.getStartWeek(), startWeek);
           assertEquals(a.getEndWeek(), endWeek);
       }
@@ -165,6 +167,7 @@ public class AssignmentFeatureStepDefinitions {
    */
   @Then("the number of assignments in the system shall be {string}")
   public void the_number_of_assignments_in_the_system_shall_be(String numberOfAssignments) {
+
     assertEquals(Integer.parseInt(numberOfAssignments), this.climbSafe.getAssignments().size());
   }
   /**
