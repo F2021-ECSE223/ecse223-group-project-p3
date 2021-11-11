@@ -54,6 +54,7 @@ public class AssignmentController {
                 throw new RuntimeException(error);
             }
         }
+        ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
     }
     
     /**
