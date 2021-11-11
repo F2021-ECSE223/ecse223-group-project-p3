@@ -13,6 +13,12 @@ import java.util.List;
  */
 public class AssignmentController {
     
+    
+ /**
+ * This function initiates the assignment for all members
+ * @author Neel Faucher
+ * @param allMembers list of all members
+ */
     public static void initiateAllAssignments(List<Member> allMembers) {
         List<Guide> allGuides = ClimbSafeApplication.getClimbSafe().getGuides();
 
