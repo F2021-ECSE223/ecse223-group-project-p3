@@ -190,8 +190,8 @@ public class AssignmentFeatureStepDefinitions {
 
   /**
    * @author Romen Poirier Taksev
-   * @param string the email of the member
-   * @param string2 the authorization code that the member provided
+   * @param memberEmail the email of the member
+   * @param authCode the authorization code that the member provided
    */
   @Then("the assignment for {string} shall record the authorization code {string}")
   public void the_assignment_for_shall_record_the_authorization_code(String memberEmail,
@@ -201,7 +201,7 @@ public class AssignmentFeatureStepDefinitions {
 
   /**
    * @author Romen Poirier Taksev
-   * @param string the email of the member
+   * @param memberEmail the email of the member
    */
   @Then("the member account with the email {string} does not exist")
   public void the_member_account_with_the_email_does_not_exist(String memberEmail) {
@@ -210,7 +210,7 @@ public class AssignmentFeatureStepDefinitions {
 
   /**
    * @author Romen Poirier Taksev
-   * @param string the number of members in the system
+   * @param numberOfMembers the number of members in the system
    */
   @Then("there are {string} members in the system")
   public void there_are_members_in_the_system(String numberOfMembers) {
@@ -219,7 +219,7 @@ public class AssignmentFeatureStepDefinitions {
 
   /**
    * @author Romen Poirier Taksev
-   * @param string error message
+   * @param errorMessage error message
    */
   @Then("the error {string} shall be raised")
   public void the_error_shall_be_raised(String errorMessage) {
