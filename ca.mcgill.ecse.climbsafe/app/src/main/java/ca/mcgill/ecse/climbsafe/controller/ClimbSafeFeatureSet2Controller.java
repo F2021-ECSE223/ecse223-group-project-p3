@@ -2,6 +2,8 @@ package ca.mcgill.ecse.climbsafe.controller;
 
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.*;
+import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
+
 import java.util.List;
 
 
@@ -83,6 +85,7 @@ public class ClimbSafeFeatureSet2Controller {
         BookableItem item = BookableItem.getWithName(itemNames.get(i));
         m.addBookedItem(itemQuantities.get(i), c, item);
       }
+      ClimbSafePersistence.save(c);
     }
     catch (RuntimeException e) {
       error = e.getMessage();
@@ -150,6 +153,7 @@ public class ClimbSafeFeatureSet2Controller {
         BookableItem item = BookableItem.getWithName(newItemNames.get(i));
         member.addBookedItem(member.addBookedItem(newItemQuantities.get(i), c, item));
       }
+      ClimbSafePersistence.save(c);
     }
     catch (RuntimeException e) {
       error = e.getMessage();

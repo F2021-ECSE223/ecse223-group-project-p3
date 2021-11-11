@@ -5,6 +5,8 @@ import ca.mcgill.ecse.climbsafe.model.Member;
 import ca.mcgill.ecse.climbsafe.model.Guide;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.User;
+import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
+import ca.mcgill.ecse.climbsafe.persistence.PersistenceObjectStream;
 
 public class ClimbSafeFeatureSet1Controller {
 
@@ -34,6 +36,7 @@ public class ClimbSafeFeatureSet1Controller {
     ClimbSafeApplication.getClimbSafe().setNrWeeks(nrWeeks);
     ClimbSafeApplication.getClimbSafe().setStartDate(startDate);
     ClimbSafeApplication.getClimbSafe().setPriceOfGuidePerWeek(priceOfGuidePerWeek);
+    ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
   }
 
   /**

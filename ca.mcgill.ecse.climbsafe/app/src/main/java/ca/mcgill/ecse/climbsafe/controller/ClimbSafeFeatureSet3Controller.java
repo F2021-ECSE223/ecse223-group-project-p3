@@ -4,6 +4,7 @@ import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.ClimbSafe;
 import ca.mcgill.ecse.climbsafe.model.Guide;
 import ca.mcgill.ecse.climbsafe.model.User;
+import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 
 public class ClimbSafeFeatureSet3Controller {
   /**
@@ -44,6 +45,7 @@ public class ClimbSafeFeatureSet3Controller {
 
     try {
       c.addGuide(email,password,name,emergencyContact);
+      ClimbSafePersistence.save(c);
     }
     catch (RuntimeException e) {
       error = e.getMessage();
