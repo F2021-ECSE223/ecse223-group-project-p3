@@ -172,7 +172,7 @@ public class AssignmentFeatureStepDefinitions {
   }
   /**
    * @author Edward Habelrih
-   * @param givenError: a string containtinng the error that shall be raised
+   * @param givenError: a string containing the error that shall be raised
    */
   @Then("the system shall raise the error {string}")
   public void the_system_shall_raise_the_error(String givenError) {
@@ -271,6 +271,7 @@ public class AssignmentFeatureStepDefinitions {
     User user =  User.getWithEmail(email);
     if(user instanceof Member){
       Member member = (Member) user;
+      member.getAssignment().setAuthCode("gggg");
       member.getAssignment().pay();
     }
 
