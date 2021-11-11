@@ -190,12 +190,20 @@ public class AssignmentFeatureStepDefinitions {
 
   }
 
-  @When("the administrator attempts to confirm payment for {string} using authorization code {string}")
-  public void the_administrator_attempts_to_confirm_payment_for_using_authorization_code(
-      String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
-  }
+   /**
+     * @author Edward Habelrih
+     * @param string email: a string representing the member attempting to confirm payment
+     * @param authCode: a string representing the authCode
+     */
+    @When("the administrator attempts to confirm payment for {string} using authorization code {string}")
+    public void the_administrator_attempts_to_confirm_payment_for_using_authorization_code(String memberEmail, String authCode) {
+        Member m = (Member) Member.getWithEmail(memberEmail);
+        try {
+            AssignmentController.payMemberTrip(m, authCode);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+    }
 
   /**
    * @author Romen Poirier Taksev
