@@ -17,6 +17,7 @@ public class AssignmentController {
  * This function initiates the assignment for all members
  * @author Neel Faucher
  * @param allMembers list of all members
+ * @throws RuntimeException if member does not have assignment, with error message "Assignments could not be completed for all members"
  */
     
     public static void initiateAllAssignments(List<Member> allMembers) throws RuntimeException{
