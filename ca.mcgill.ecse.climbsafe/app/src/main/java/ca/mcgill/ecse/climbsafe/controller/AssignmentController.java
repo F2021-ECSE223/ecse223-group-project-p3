@@ -64,7 +64,7 @@ public class AssignmentController {
             String error = "Member with email address" + email + "does not exist";
             throw new InvalidInputException(error);
         }
-        if(authCode == null){
+        if(authCode == null || authCode.equals("")){
             String error = "Invalid authorization code";
             throw new InvalidInputException(error);
         }
