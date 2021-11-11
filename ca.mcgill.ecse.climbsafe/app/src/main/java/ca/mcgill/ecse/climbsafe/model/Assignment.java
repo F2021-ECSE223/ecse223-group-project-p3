@@ -3,13 +3,19 @@
 
 package ca.mcgill.ecse.climbsafe.model;
 import ca.mcgill.ecse.climbsafe.model.Assignment;
+import java.io.Serializable;
 
 // line 1 "../../../../../../ClimbSafeStates.ump"
 // line 60 "../../../../../../ClimbSafeStates.ump"
 // line 70 "../../../../../../ClimbSafeStates.ump"
-// line 83 "../../../../../../model.ump"
-// line 162 "../../../../../../model.ump"
-public class Assignment
+// line 52 "../../../../../../ClimbSafePersistence.ump"
+// line 83 "../../../../../../ClimbSafePersistence.ump"
+// line 93 "../../../../../../ClimbSafePersistence.ump"
+// line 103 "../../../../../../ClimbSafePersistence.ump"
+// line 113 "../../../../../../ClimbSafePersistence.ump"
+// line 84 "../../../../../../model.ump"
+// line 160 "../../../../../../model.ump"
+public class Assignment implements Serializable
 {
 
   //------------------------
@@ -409,7 +415,13 @@ public class Assignment
             "  " + "guide = "+(getGuide()!=null?Integer.toHexString(System.identityHashCode(getGuide())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "hotel = "+(getHotel()!=null?Integer.toHexString(System.identityHashCode(getHotel())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "climbSafe = "+(getClimbSafe()!=null?Integer.toHexString(System.identityHashCode(getClimbSafe())):"null");
-  }
+  }  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 55 "../../../../../../ClimbSafePersistence.ump"
+  private static final long serialVersionUID = 8896099581655989380L ;
+
+  
 }
-
-

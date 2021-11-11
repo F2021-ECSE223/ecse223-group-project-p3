@@ -2,11 +2,18 @@
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
 
 package ca.mcgill.ecse.climbsafe.model;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.*;
 
-// line 4 "../../../../../climbSafe.ump"
-public class ClimbSafe
+// line 3 "../../../../../../ClimbSafePersistence.ump"
+// line 78 "../../../../../../ClimbSafePersistence.ump"
+// line 88 "../../../../../../ClimbSafePersistence.ump"
+// line 98 "../../../../../../ClimbSafePersistence.ump"
+// line 108 "../../../../../../ClimbSafePersistence.ump"
+// line 6 "../../../../../../model.ump"
+// line 95 "../../../../../../model.ump"
+public class ClimbSafe implements Serializable
 {
 
   //------------------------
@@ -1012,6 +1019,36 @@ public class ClimbSafe
     
   }
 
+  // line 9 "../../../../../../ClimbSafePersistence.ump"
+   public void reinitialize(){
+    List<Member> members = this.getMembers();
+  List<Guide> guides = this.getGuides();
+  User admin = this.getAdministrator();
+  List<User> allUsers = new ArrayList<>();
+  for(Member m: members){
+   User um = (User) m;
+    allUsers.add(um);
+  }
+  for(Guide g: guides){
+   User ug = (User) g;
+    allUsers.add(ug);
+  }
+  allUsers.add(admin);
+  User.reinitializeUniqueEmails(allUsers);
+  List<Equipment> eqs = this.getEquipment();
+  List<EquipmentBundle> eqbs = this.getBundles();
+  List<BookableItem> allBi = new ArrayList<>();
+  for(Equipment e: eqs){
+    BookableItem be = (BookableItem) e;
+    allBi.add(be);
+  }
+  for(EquipmentBundle b: eqbs){
+   BookableItem bb = (BookableItem) b;
+    allBi.add(bb);
+  }
+  BookableItem.reinitializeUniqueItemNames(allBi);
+  }
+
 
   public String toString()
   {
@@ -1020,5 +1057,13 @@ public class ClimbSafe
             "priceOfGuidePerWeek" + ":" + getPriceOfGuidePerWeek()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "startDate" + "=" + (getStartDate() != null ? !getStartDate().equals(this)  ? getStartDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "administrator = "+(getAdministrator()!=null?Integer.toHexString(System.identityHashCode(getAdministrator())):"null");
-  }
+  }  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 6 "ClimbSafePersistence.ump"
+  private static final long serialVersionUID = -2683593616927798071L ;
+
+  
 }

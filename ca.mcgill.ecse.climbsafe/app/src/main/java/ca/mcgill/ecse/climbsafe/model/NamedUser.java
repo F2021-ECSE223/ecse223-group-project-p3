@@ -4,7 +4,8 @@
 package ca.mcgill.ecse.climbsafe.model;
 import java.util.*;
 
-// line 29 "../../../../../climbSafe.ump"
+// line 31 "../../../../../../model.ump"
+// line 115 "../../../../../../model.ump"
 public abstract class NamedUser extends User
 {
 
