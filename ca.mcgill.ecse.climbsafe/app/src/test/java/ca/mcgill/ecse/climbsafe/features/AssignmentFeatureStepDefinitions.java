@@ -1,14 +1,17 @@
 package ca.mcgill.ecse.climbsafe.features;
 
+import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.controller.AssignmentController;
 import ca.mcgill.ecse.climbsafe.controller.InvalidInputException;
+import ca.mcgill.ecse.climbsafe.model.*;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import ca.mcgill.ecse.climbsafe.model.User;
-import ca.mcgill.ecse.climbsafe.model.Member;
+
+import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +165,7 @@ public class AssignmentFeatureStepDefinitions {
    */
   @Then("the number of assignments in the system shall be {string}")
   public void the_number_of_assignments_in_the_system_shall_be(String numberOfAssignments) {
-    assertEquals(Integer.parseInt(numberOfAssignments), this.climbSafe.getAssignments.size());
+    assertEquals(Integer.parseInt(numberOfAssignments), this.climbSafe.getAssignments().size());
   }
   /**
    * @author Edward Habelrih
@@ -180,22 +183,30 @@ public class AssignmentFeatureStepDefinitions {
   @Given("the following assignments exist in the system:")
   public void the_following_assignments_exist_in_the_system(
           io.cucumber.datatable.DataTable dataTable) {
-    List<Map><String, String>> assignmentList = dataTable.asMaps();
+    List<Map<String, String>> assignmentList = dataTable.asMaps();
     for(int i = 0; i < assignmentList.size(); i++){
-    int startWeek = assignmentList.get(i).getStartWeek();
-    int endWeek = assignmentList.get(i).getEndWeek();
-    Member member = assignmentList.get(i).getMember();
-    climbSafe.addAssignment(startWeek, endWeek, member, climbSafe);
+    int startWeek = parseInt(assignmentList.get(i).get("startWeek"));
+    int endWeek = parseInt(assignmentList.get(i).get("endWeek"));
+    String memberEmail = assignmentList.get(i).get("memberEmail");
+    Member member = (Member) Member.getWithEmail(memberEmail);
+    climbSafe.addAssignment(startWeek, endWeek, member);
     }
 
   }
 
-  @When("the administrator attempts to confirm payment for {string} using authorization code {string}")
-  public void the_administrator_attempts_to_confirm_payment_for_using_authorization_code(
-      String string, String string2) {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
-  }
+    /**
+     * @author Edward Habelrih
+     * @param memberEmail : a string representing the member attempting to confirm payment
+     * @param authCode: a string representing the authCode
+     */
+    @When("the administrator attempts to confirm payment for {string} using authorization code {string}")
+    public void the_administrator_attempts_to_confirm_payment_for_using_authorization_code(String memberEmail, String authCode) {
+        try {
+            AssignmentController.payMemberTrip(memberEmail, authCode);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+    }
 
   /**
    * @author Romen Poirier Taksev
@@ -252,7 +263,7 @@ public class AssignmentFeatureStepDefinitions {
    * @param email this is the email of the member that paid their trip
    * This function sets the status of the assignment to paid
    */
-  @Given("the member with {email} has paid for their trip")
+  @Given("the member with {string} has paid for their trip")
   public void the_member_with_has_paid_for_their_trip(String email) {
     User user =  User.getWithEmail(email);
     if(user instanceof Member){
@@ -264,10 +275,10 @@ public class AssignmentFeatureStepDefinitions {
    /**
    * @author Rooshnie Velautham
    * @param email this is the email of the member that paid their trip
-   * @param percentage it is the percentage of the refund
+   * @param amount it is the percentage of the refund
    * This function checks if the right amount of the percentage has been given depending of their states
    */
-  @Then("the member with email address {email} shall receive a refund of {amount} percent")
+  @Then("the member with email address {string} shall receive a refund of {string} percent")
   public void the_member_with_email_address_shall_receive_a_refund_of_percent(String email,
       String amount) {
     User user =  User.getWithEmail(email);
@@ -282,7 +293,7 @@ public class AssignmentFeatureStepDefinitions {
    * @param email this is the email of the member that wants to start the trip
    * This function puts the member in the start state like they have started their trip
    */
-  @Given("the member with {email} has started their trip")
+  @Given("the member with {string} has started their trip")
   public void the_member_with_has_started_their_trip(String email) {
     User user =  User.getWithEmail(email);
     if(user instanceof Member){
@@ -376,10 +387,14 @@ public class AssignmentFeatureStepDefinitions {
   @Given("the member with {string} has finished their trip")
   public void the_member_with_has_finished_their_trip(String memberEmail) {
     // Write code here that turns the phrase above into concrete actions
-      Member m = (Member)Member.getWithEmail(memberEmail);
-      Assignment a = m.getAssignment();
-      a.pay("beep boop");
-      a.startWeek(a.getStartWeek());
-      a.finishTrip();
+      try {
+          Member m = (Member) Member.getWithEmail(memberEmail);
+          Assignment a = m.getAssignment();
+          AssignmentController.payMemberTrip(memberEmail, "beep boop");
+          a.startWeek(a.getStartWeek());
+          a.finishTrip();
+      }catch(Exception e){
+          error = e.getMessage();
+      }
   }
 }
