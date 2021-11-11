@@ -19,7 +19,7 @@ public class AssignmentController {
  * @param allMembers list of all members
  */
     
-    public static void initiateAllAssignments(List<Member> allMembers) {
+    public static void initiateAllAssignments(List<Member> allMembers) throws RuntimeException{
         List<Guide> allGuides = ClimbSafeApplication.getClimbSafe().getGuides();
 
         for (Guide guide : allGuides) {
@@ -33,12 +33,11 @@ public class AssignmentController {
                                 currentStart = a.getEndWeek();
                             }
                         }
-                        startWeek = currentStart;
+                        startWeek = currentStart + 1;
                     }
                     if (member.isGuideRequired()) {
-
-                        if (ClimbSafeApplication.getClimbSafe().getNrWeeks() - startWeek >= member.getNrWeeks()) {
-                            int endWeek = startWeek + member.getNrWeeks();
+                        if (ClimbSafeApplication.getClimbSafe().getNrWeeks() - startWeek +1 >= member.getNrWeeks()) {
+                            int endWeek = startWeek + member.getNrWeeks()-1;
                             Assignment newA = new Assignment(startWeek, endWeek, member, ClimbSafeApplication.getClimbSafe());
                             newA.setGuide(guide);
                         }
@@ -47,6 +46,12 @@ public class AssignmentController {
                         new Assignment(startWeek, endWeek, member, ClimbSafeApplication.getClimbSafe());
                     }
                 }
+            }
+        }
+        for (Member m : ClimbSafeApplication.getClimbSafe().getMembers()){
+            if (!m.hasAssignment()){
+                String error = "Assignments could not be completed for all members";
+                throw new RuntimeException(error);
             }
         }
     }
@@ -58,7 +63,7 @@ public class AssignmentController {
      *  1. The member's email does not exist
      *  2. The authcode is invalid
      */
-    public static void payMemberTrip(String email, String authCode){
+    public static void payMemberTrip(String email, String authCode) throws InvalidInputException{
         Member member = (Member) User.getWithEmail(email);
         if (member == null) {
             String error = "Member with email address" + email + "does not exist";
