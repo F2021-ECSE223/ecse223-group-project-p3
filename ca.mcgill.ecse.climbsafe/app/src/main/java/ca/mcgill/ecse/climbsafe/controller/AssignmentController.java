@@ -66,13 +66,28 @@ public class AssignmentController {
     public static void payMemberTrip(String email, String authCode) throws InvalidInputException{
         Member member = (Member) User.getWithEmail(email);
         if (member == null) {
-            String error = "Member with email address" + email + "does not exist";
+            String error = "Member with email address " + email + " does not exist";
             throw new InvalidInputException(error);
         }
+
         if(authCode == null || authCode.equals("")){
-            String error = "Invalid authorization code";
-            throw new InvalidInputException(error);
+                String error = "Invalid authorization code";
+                throw new InvalidInputException(error);
         }
+        if(member.getAssignment().getAssignmentStatusFullName().equals("Paid")||member.getAssignment().getAssignmentStatusFullName().equals("Started")){
+            throw new InvalidInputException("Trip has already been paid for");
+        }
+        if (member.getBanStatusFullName().equals("Banned")){
+            throw new InvalidInputException("Cannot pay for the trip due to a ban");
+        }
+        if (member.getAssignment().getAssignmentStatusFullName().equals("Cancelled")){
+            throw new InvalidInputException("Cannot pay for a trip which has been cancelled");
+        }
+        if (member.getAssignment().getAssignmentStatusFullName().equals("Finished")){
+            throw new InvalidInputException("Cannot pay for a trip which has finished");
+        }
+
+        member.getAssignment().setAuthCode(authCode);
         member.getAssignment().pay();
     }
     
@@ -138,7 +153,7 @@ public class AssignmentController {
     public static void cancelMemberTrip(String email) throws InvalidInputException {
         Member member = (Member) User.getWithEmail(email);
         if (member==null) {
-            String error = "Member with email address" + email + "does not exist";
+            String error = "Member with email address " + email + " does not exist";
             throw new InvalidInputException(error);
         }
         if(member.getBanStatusFullName().equals("Banned")) {
