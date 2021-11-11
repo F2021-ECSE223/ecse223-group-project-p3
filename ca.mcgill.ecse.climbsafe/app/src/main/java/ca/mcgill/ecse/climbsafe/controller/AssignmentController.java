@@ -62,6 +62,10 @@ public class AssignmentController {
      * @throws InvalidInputException if any error happens it will throw this exception in two cases.
      *  1. The member's email does not exist
      *  2. The authcode is invalid
+     *  3. Trip has already been paid for
+     *  4. Cannot pay for the trip due to a ban
+     *  5. Cannot pay for a trip which ahs been cancelled
+     *  6. Cannot pay for a trip which has finished
      */
     public static void payMemberTrip(String email, String authCode) throws InvalidInputException{
         Member member = (Member) User.getWithEmail(email);
