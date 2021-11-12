@@ -21,7 +21,7 @@ public class AssignmentController {
  * @throws RuntimeException if member does not have assignment, with error message "Assignments could not be completed for all members"
  */
     
-    public static void initiateAllAssignments(List<Member> allMembers) throws RuntimeException{
+    public static void initiateAllAssignments(List<Member> allMembers) throws InvalidInputException{
         List<Guide> allGuides = ClimbSafeApplication.getClimbSafe().getGuides();
 
         for (Guide guide : allGuides) {
@@ -53,10 +53,14 @@ public class AssignmentController {
         for (Member m : ClimbSafeApplication.getClimbSafe().getMembers()){
             if (!m.hasAssignment()){
                 String error = "Assignments could not be completed for all members";
-                throw new RuntimeException(error);
+                throw new InvalidInputException(error);
             }
         }
-        ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
+        }
     }
     
     /**
@@ -96,6 +100,11 @@ public class AssignmentController {
 
         member.getAssignment().setAuthCode(authCode);
         member.getAssignment().pay();
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
+        }
     }
     
     /**
@@ -115,6 +124,11 @@ public class AssignmentController {
             //Cannot start the trip due to a ban
             if(a.getMember().getBanStatusFullName().equals("Banned")){throw new InvalidInputException("Cannot start the trip due to a ban");}
             a.startWeek(weekNumber);
+        }
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
         }
     }
     /**
@@ -145,6 +159,11 @@ public class AssignmentController {
             }
             member.getAssignment().finishTrip();
         }
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
+        }
     }
     /**
      * @author Abhijeet Praveen
@@ -170,5 +189,10 @@ public class AssignmentController {
             throw new InvalidInputException("Cannot cancel a trip which has finished");
         }
         member.getAssignment().cancel();
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
+        }
     }
 }

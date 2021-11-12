@@ -94,6 +94,11 @@ public class ClimbSafeFeatureSet5Controller {
 
 
         }
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
+        }
     }
 
     /**
@@ -206,7 +211,11 @@ public class ClimbSafeFeatureSet5Controller {
                 throw new InvalidInputException(e.getMessage());
             }
 
-
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
         }
     }
+}
 	

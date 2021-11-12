@@ -36,7 +36,11 @@ public class ClimbSafeFeatureSet1Controller {
     ClimbSafeApplication.getClimbSafe().setNrWeeks(nrWeeks);
     ClimbSafeApplication.getClimbSafe().setStartDate(startDate);
     ClimbSafeApplication.getClimbSafe().setPriceOfGuidePerWeek(priceOfGuidePerWeek);
-    ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+    try {
+      ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+    }catch (Exception e){
+      throw new InvalidInputException(e.getMessage());
+    }
   }
 
   /**
@@ -50,6 +54,11 @@ public class ClimbSafeFeatureSet1Controller {
       User user = User.getWithEmail(email);
       if (user instanceof Guide) {
         user.delete();
+        try {
+          ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+          throw new RuntimeException(e.getMessage());
+        }
       }
   }
 
@@ -64,6 +73,11 @@ public class ClimbSafeFeatureSet1Controller {
     User user = User.getWithEmail(email);
     if (user instanceof Member) {
       user.delete();
+      try {
+        ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+      }catch (Exception e){
+        throw new RuntimeException(e.getMessage());
+      }
     }
   }
 
