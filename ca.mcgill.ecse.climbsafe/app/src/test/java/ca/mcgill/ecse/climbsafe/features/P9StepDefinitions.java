@@ -170,6 +170,8 @@ public class P9StepDefinitions {
           nrWeeks, guideRequired, hotelRequired, bookableItems, itemQuantities);
     } catch (InvalidInputException e) {
       error = e.getMessage();
+    } catch (Exception e) {
+      error = e.getMessage();
     }
   }
 
