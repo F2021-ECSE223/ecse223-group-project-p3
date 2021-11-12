@@ -103,7 +103,7 @@ public class AssignmentController {
         try {
             ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
         }catch (Exception e){
-            throw new InvalidInputException(e.getMessage());
+
         }
     }
     
@@ -157,6 +157,9 @@ public class AssignmentController {
             if(memberAssignmentStatus.equals("Cancelled")){
                 throw new InvalidInputException("Cannot finish a trip which has been cancelled");
             }
+//            if(memberAssignmentStatus.equals("Finished")){
+//                throw new InvalidInputException("Cannot finish a trip which has been cancelled");
+//            }
             member.getAssignment().finishTrip();
         }
         try {
