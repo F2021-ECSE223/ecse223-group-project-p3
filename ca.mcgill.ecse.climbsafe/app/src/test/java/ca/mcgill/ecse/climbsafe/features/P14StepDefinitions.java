@@ -6,6 +6,7 @@ import java.util.Map;
 
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.controller.ClimbSafeFeatureSet1Controller;
+import ca.mcgill.ecse.climbsafe.controller.InvalidInputException;
 import ca.mcgill.ecse.climbsafe.model.*;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -125,7 +126,13 @@ public class P14StepDefinitions {
    */
   @When("the member attempts to delete the account with email {string} \\(p14)")
   public void the_member_attempts_to_delete_the_account_with_email_p14(String string) {
-    ClimbSafeFeatureSet1Controller.deleteMember(string);
+    try{
+      ClimbSafeFeatureSet1Controller.deleteMember(string);
+    }catch(InvalidInputException e){
+
+    }
+
+
 
   }
 
@@ -158,9 +165,11 @@ public class P14StepDefinitions {
   @When("the member attempts to delete the member account with email {string} \\(p14)")
 
   public void the_member_attempts_to_delete_the_member_account_with_email_p14(String string) {
+    try{
+      ClimbSafeFeatureSet1Controller.deleteMember(string);
+    }catch(InvalidInputException e){
 
-    ClimbSafeFeatureSet1Controller.deleteMember(string);
-
+    }
   }
 
   /**

@@ -36,7 +36,11 @@ public class ClimbSafeFeatureSet1Controller {
     ClimbSafeApplication.getClimbSafe().setNrWeeks(nrWeeks);
     ClimbSafeApplication.getClimbSafe().setStartDate(startDate);
     ClimbSafeApplication.getClimbSafe().setPriceOfGuidePerWeek(priceOfGuidePerWeek);
-    ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+    try {
+      ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+    }catch (Exception e){
+      throw new InvalidInputException(e.getMessage());
+    }
   }
 
   /**
@@ -46,10 +50,15 @@ public class ClimbSafeFeatureSet1Controller {
    *        If the user is a guide, then the user will be deleted.
    */
 
-  public static void deleteGuide(String email) {
+  public static void deleteGuide(String email) throws InvalidInputException {
       User user = User.getWithEmail(email);
       if (user instanceof Guide) {
         user.delete();
+        try {
+          ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+          throw new InvalidInputException(e.getMessage());
+        }
       }
   }
 
@@ -60,10 +69,15 @@ public class ClimbSafeFeatureSet1Controller {
    *        If the user is a member, then the member will be deleted.
    */
 
-  public static void deleteMember(String email) {
+  public static void deleteMember(String email) throws InvalidInputException {
     User user = User.getWithEmail(email);
     if (user instanceof Member) {
       user.delete();
+      try {
+        ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+      }catch (Exception e){
+        throw new InvalidInputException(e.getMessage());
+      }
     }
   }
 

@@ -27,7 +27,7 @@ public class ClimbSafeFeatureSet2Controller {
    */
   public static void registerMember(String email, String password, String name,
                                     String emergencyContact, int nrWeeks, boolean guideRequired, boolean hotelRequired,
-                                    List<String> itemNames, List<Integer> itemQuantities) throws InvalidInputException {
+                                    List<String> itemNames, List<Integer> itemQuantities) throws Exception {
 
     String error = "";
 
@@ -85,7 +85,12 @@ public class ClimbSafeFeatureSet2Controller {
         BookableItem item = BookableItem.getWithName(itemNames.get(i));
         m.addBookedItem(itemQuantities.get(i), c, item);
       }
-      ClimbSafePersistence.save(c);
+
+      try {
+        ClimbSafePersistence.save(c);
+      }catch (Exception e){
+        throw new InvalidInputException("Could not save");
+      }
     }
     catch (RuntimeException e) {
       error = e.getMessage();
@@ -153,7 +158,11 @@ public class ClimbSafeFeatureSet2Controller {
         BookableItem item = BookableItem.getWithName(newItemNames.get(i));
         member.addBookedItem(member.addBookedItem(newItemQuantities.get(i), c, item));
       }
-      ClimbSafePersistence.save(c);
+         try {
+           ClimbSafePersistence.save(c);
+         }catch (Exception e){
+           throw new InvalidInputException(e.getMessage());
+         }
     }
     catch (RuntimeException e) {
       error = e.getMessage();

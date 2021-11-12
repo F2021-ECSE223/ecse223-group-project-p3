@@ -35,7 +35,11 @@ public class ClimbSafeFeatureSet4Controller {
       }
     }
     new Equipment(name, weight, pricePerWeek, ClimbSafeApplication.getClimbSafe());
-    ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+    try {
+      ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+    }catch (Exception e){
+      throw new InvalidInputException(e.getMessage());
+    }
   }
 
   /**
@@ -78,6 +82,11 @@ public class ClimbSafeFeatureSet4Controller {
       updatedEquipment.setPricePerWeek(newPricePerWeek);
     }else{
       throw new InvalidInputException("The piece of equipment does not exist");
+    }
+    try {
+      ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+    }catch (Exception e){
+      throw new InvalidInputException(e.getMessage());
     }
   }
 
