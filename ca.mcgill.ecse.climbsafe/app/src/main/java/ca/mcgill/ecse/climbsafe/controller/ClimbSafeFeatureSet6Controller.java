@@ -44,7 +44,7 @@ public class ClimbSafeFeatureSet6Controller {
       try {
         ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
       }catch (Exception e){
-        throw new RuntimeException(e.getMessage());
+        throw new InvalidInputException(e.getMessage());
       }
     }
   }
@@ -59,7 +59,7 @@ public class ClimbSafeFeatureSet6Controller {
    *        BookableItem class from the model, then we use the delete method from the EquipmentBundle
    *        class to delete it.
    */
-  public static void deleteEquipmentBundle(String name) {
+  public static void deleteEquipmentBundle(String name) throws InvalidInputException{
     BookableItem bookableItem = BookableItem.getWithName(name);
     if(bookableItem instanceof EquipmentBundle){
       EquipmentBundle equipmentBundle = (EquipmentBundle) EquipmentBundle.getWithName(name);
@@ -67,7 +67,7 @@ public class ClimbSafeFeatureSet6Controller {
       try {
         ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
       }catch (Exception e){
-        throw new RuntimeException(e.getMessage());
+        throw new InvalidInputException(e.getMessage());
       }
     }
   }
