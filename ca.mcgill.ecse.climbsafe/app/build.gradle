@@ -37,8 +37,8 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication'
-    sourceCompatibility = 15
-    targetCompatibility = 15
+    sourceCompatibility = 17
+    targetCompatibility = 17
 }
 
 tasks.named('test') {
