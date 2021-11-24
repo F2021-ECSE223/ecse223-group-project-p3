@@ -19,8 +19,7 @@ public class ClimbSafeApplication {
   public static void main(String[] args) {
     System.out.println(new ClimbSafeApplication().getGreeting());
 
-    EventQueue.invokeLater(ClimbSafePage::new);
-
+    new ClimbSafePage();
   }
 
   public static ClimbSafe getClimbSafe() {
