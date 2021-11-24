@@ -1,0 +1,73 @@
+class Assignment{
+  depend ca.mcgill.ecse.climbsafe.model.Assignment;
+  lazy immutable authCode;
+  
+  assignmentStatus{
+    Assigned{
+      entry / {assign(member);}
+      pay[verifyPay(authCode)] -> Paid;
+      cancel -> Cancelled;
+      startWeek(int week)[correctWeek(week)] / {banMember();} -> Cancelled;
+    }
+    Paid{
+      startWeek(int week)[correctWeek(week)] -> Started;
+      cancel / {refund(50);} -> Cancelled;
+    }
+    Started{
+      cancel / {refund(10);} -> Cancelled;
+      finishTrip/ {refund(0);} -> Finished;
+    }
+    Finished{
+      
+    }
+    Cancelled{
+    }
+  }
+  private boolean verifyPay(String authCode){
+        if (authCode.isEmpty() || authCode == null ) return false;
+        setAuthCode(authCode);
+        return true;
+  }
+  private boolean correctWeek(int week){
+    return week == this.getStartWeek();
+  }
+  private boolean banMember(){
+    return this.getMember().banMember();
+  }
+  private boolean refund(int percentage){
+   return this.getMember().setRefund(percentage);
+  }
+  private boolean assign(Member member){
+   return this.setMember(member);
+}
+}
+
+class Member{
+   lazy immutable int refund;
+    depend ca.mcgill.ecse.climbsafe.model.Member;
+  banStatus{
+    Unbanned{
+      banMember() -> Banned;
+    }
+    Banned{
+    }
+  }
+}//$?[End_of_model]$?
+
+namespace -;
+
+
+class Assignment
+{
+  position 50 30 109 45;
+}
+
+class Member
+{
+  position 50 130 109 45;
+}
+
+class Assignment
+{
+  position 50 30 109 45;
+}
