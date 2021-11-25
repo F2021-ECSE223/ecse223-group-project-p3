@@ -4,6 +4,7 @@
 package ca.mcgill.ecse.climbsafe.application;
 
 import java.awt.*;
+import java.io.IOException;
 import java.sql.Date;
 import ca.mcgill.ecse.climbsafe.model.ClimbSafe;
 import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
@@ -16,7 +17,7 @@ public class ClimbSafeApplication {
     return "Hello World!";
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     System.out.println(new ClimbSafeApplication().getGreeting());
 
     new ClimbSafePage();
