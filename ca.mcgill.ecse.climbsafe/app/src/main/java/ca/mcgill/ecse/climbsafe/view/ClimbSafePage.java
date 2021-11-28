@@ -36,7 +36,7 @@ public class ClimbSafePage {
         addBundleCard();
         addAssignmentCard();
         addPayCard();
-        AddTripCard();
+        addTripCard();
         
         mainFrame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
         mainFrame.pack();
