@@ -19,7 +19,26 @@ import javax.swing.WindowConstants;
 
 
 public class ClimbSafePage {
-    JFrame mainFrame = new JFrame();
+    private static JFrame mainFrame;
+    private static JTabbedPane tabbedPane;
+    
 
-
+    public static void start(){
+        //UIManager.put("swing.boldMetal", Boolean.FALSE); //for some reason this is key
+        mainFrame = new JFrame("ClimbSafe");
+        mainFrame.setPreferredSize(new Dimension(1920, 1080));
+        //mainFrame.setIconImage();
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        tabbedPane = new JTabbedPane();
+        addAdminCard();
+        
+        mainFrame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+        mainFrame.pack();
+        mainFrame.setVisible(true);
+    }
+    public static void addAdminCard(){
+        JPanel card1 = new JPanel() {};
+        
+        tabbedPane.addTab("Admin Page", card1);
+    }
 }
