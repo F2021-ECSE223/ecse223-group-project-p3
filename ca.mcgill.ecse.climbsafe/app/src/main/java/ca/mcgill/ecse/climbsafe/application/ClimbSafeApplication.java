@@ -6,6 +6,7 @@ package ca.mcgill.ecse.climbsafe.application;
 import java.sql.Date;
 import ca.mcgill.ecse.climbsafe.model.ClimbSafe;
 import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
+import ca.mcgill.ecse.climbsafe.view.ClimbSafePage;
 
 public class ClimbSafeApplication {
   private static ClimbSafe climbSafe;
@@ -16,7 +17,7 @@ public class ClimbSafeApplication {
 
   public static void main(String[] args) {
     System.out.println(new ClimbSafeApplication().getGreeting());
-
+    start();
   }
 
   public static ClimbSafe getClimbSafe() {
