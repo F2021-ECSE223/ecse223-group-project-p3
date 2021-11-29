@@ -17,7 +17,7 @@ public class ClimbSafeApplication {
 
   public static void main(String[] args) {
     System.out.println(new ClimbSafeApplication().getGreeting());
-    start();
+    ClimbSafePage.start();
   }
 
   public static ClimbSafe getClimbSafe() {
