@@ -3,7 +3,10 @@
  */
 package ca.mcgill.ecse.climbsafe.application;
 
+import java.io.FileNotFoundException;
 import java.sql.Date;
+
+import ca.mcgill.ecse.climbsafe.controller.ClimbSafeFeatureSet1Controller;
 import ca.mcgill.ecse.climbsafe.model.ClimbSafe;
 import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 import ca.mcgill.ecse.climbsafe.view.ClimbSafePage;
@@ -12,12 +15,16 @@ public class ClimbSafeApplication {
   private static ClimbSafe climbSafe;
 
   public String getGreeting() {
-    return "Hello World!";
+    return "Welcome to the program";
   }
 
   public static void main(String[] args) {
-    System.out.println(new ClimbSafeApplication().getGreeting());
+    try {
+      ClimbSafeFeatureSet1Controller.setup(Date.valueOf("2021-09-09"), 15, 30);
+    }catch (Exception e){}
     ClimbSafePage.start();
+    System.out.println(new ClimbSafeApplication().getGreeting());
+
   }
 
   public static ClimbSafe getClimbSafe() {

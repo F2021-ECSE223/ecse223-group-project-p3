@@ -12,6 +12,9 @@ package ca.mcgill.ecse.climbsafe.view;
         import java.awt.event.ActionListener;
         import java.awt.image.BufferedImage;
         import java.io.IOException;
+        import java.net.MalformedURLException;
+        import java.net.URL;
+        import java.nio.file.Path;
         import java.util.ArrayList;
         import java.util.List;
         import java.util.logging.Level;
@@ -63,11 +66,29 @@ public class ClimbSafePage {
         mainFrame.setVisible(true);
     }
 
-    public static void addNMCCard(){
-        java.net.URL imageURL = ClimbSafePage.class.getResource("images/Hikers-Background.png");
+    public static java.net.URL getPhoto(int num)  {
+        java.net.URL imageURL = ClimbSafePage.class.getResource("ClimbSafePage.class");
+        String imageString = (imageURL.getFile());
+        imageString = imageString.substring(0,81);
+        imageString += "src/main/java/ca/mcgill/ecse/climbsafe/view/images/";
+        if (num == 0) imageString+= "Hikers-Background.png";
+        else imageString+="Mountain-Background.png";
+        imageString = "file:"+imageString;
+        System.out.println(imageString);
+        try {
+            imageURL = new URL(imageString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         System.out.println(imageURL);
+        return imageURL;
+    }
+
+    public static void addNMCCard(){
+        java.net.URL imageURL = getPhoto(0);
         BufferedImage hikerBackground = null;
         try {
+            if (imageURL != null)
             hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,10 +114,11 @@ public class ClimbSafePage {
     public static void addMemberCard(){
 
         //Create the "cards".
-        java.net.URL imageURL = ClimbSafePage.class.getResource("images/Hikers-Background.png");
-        System.out.println(imageURL);
+        java.net.URL imageURL = getPhoto(0);
+
         BufferedImage hikerBackground = null;
         try {
+            if (imageURL != null)
             hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
@@ -551,10 +573,11 @@ public class ClimbSafePage {
     }
 
     public static void addGuideCard(){
-        java.net.URL imageURL = ClimbSafePage.class.getResource("images/Hikers-Background.png");
-        System.out.println(imageURL);
+        java.net.URL imageURL = getPhoto(0);
+
         BufferedImage hikerBackground = null;
         try {
+            if (imageURL != null)
             hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
@@ -577,10 +600,11 @@ public class ClimbSafePage {
         tabbedPane.addTab("Register, Update and Delete Guide", card3);
     }
     public static void addEquipmentCard(){
-        java.net.URL imageURL = ClimbSafePage.class.getResource("images/Hikers-Background.png");
-        System.out.println(imageURL);
+        java.net.URL imageURL = getPhoto(0);
+
         BufferedImage hikerBackground = null;
         try {
+            if (imageURL != null)
             hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
@@ -603,10 +627,11 @@ public class ClimbSafePage {
         tabbedPane.addTab("Add, Update and Delete Equipment", card4);
     }
     public static void addBundleCard(){
-        java.net.URL imageURL = ClimbSafePage.class.getResource("images/Mountain-Background.png");
-        System.out.println(imageURL);
+        java.net.URL imageURL = getPhoto(1);
+
         BufferedImage hikerBackground = null;
         try {
+            if (imageURL != null)
             hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
@@ -629,10 +654,11 @@ public class ClimbSafePage {
         tabbedPane.addTab("Add, Update and Delete Equipment Bundle", card5);
     }
     public static void addAssignmentCard(){
-        java.net.URL imageURL = ClimbSafePage.class.getResource("images/Mountain-Background.png");
-        System.out.println(imageURL);
+        java.net.URL imageURL = getPhoto(1);
+
         BufferedImage hikerBackground = null;
         try {
+            if (imageURL != null)
             hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
@@ -655,10 +681,11 @@ public class ClimbSafePage {
         tabbedPane.addTab("Initiate and View Assignments", card6);
     }
     public static void addPayCard(){
-        java.net.URL imageURL = ClimbSafePage.class.getResource("images/Mountain-Background.png");
-        System.out.println(imageURL);
+        java.net.URL imageURL = getPhoto(1);
+
         BufferedImage hikerBackground = null;
         try {
+            if (imageURL != null)
             hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
@@ -681,10 +708,11 @@ public class ClimbSafePage {
         tabbedPane.addTab("Pay for Member's Trip", card7);
     }
     public static void addTripCard(){
-        java.net.URL imageURL = ClimbSafePage.class.getResource("images/Mountain-Background.png");
-        System.out.println(imageURL);
+        java.net.URL imageURL = getPhoto(1);
+
         BufferedImage hikerBackground = null;
         try {
+            if (imageURL != null)
             hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);

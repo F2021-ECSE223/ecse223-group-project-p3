@@ -98,8 +98,8 @@ public abstract class User implements Serializable
   // line 45 "../../../../../../ClimbSafePersistence.ump"
    public static  void reinitializeUniqueEmails(List<User> users){
     usersByEmail = new HashMap<String, User>();
-    for (User u: users){
-      usersByEmail.put(u.getEmail(),u);
+    for (User u : users) {
+      if (u != null) usersByEmail.put(u.getEmail(), u);
     }
   }
 
