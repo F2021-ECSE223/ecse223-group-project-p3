@@ -69,7 +69,7 @@ public class ClimbSafePage {
     public static java.net.URL getPhoto(int num)  {
         java.net.URL imageURL = ClimbSafePage.class.getResource("ClimbSafePage.class");
         String imageString = (imageURL.getFile());
-        imageString = imageString.substring(0,81);
+        imageString = imageString.substring(0,imageString.length()-73);
         imageString += "src/main/java/ca/mcgill/ecse/climbsafe/view/images/";
         if (num == 0) imageString+= "Hikers-Background.png";
         else imageString+="Mountain-Background.png";
