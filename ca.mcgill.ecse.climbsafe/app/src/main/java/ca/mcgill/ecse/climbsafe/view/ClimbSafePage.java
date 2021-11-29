@@ -74,13 +74,11 @@ public class ClimbSafePage {
         if (num == 0) imageString+= "Hikers-Background.png";
         else imageString+="Mountain-Background.png";
         imageString = "file:"+imageString;
-        System.out.println(imageString);
         try {
             imageURL = new URL(imageString);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        System.out.println(imageURL);
         return imageURL;
     }
 
