@@ -1,0 +1,8 @@
+namespace ca.mcgill.ecse.climbsafe.controller;
+
+class TOBookableItem {
+  unique name;
+  Integer discount;
+  Integer weight;
+  Integer pricePerWeek;
+  }
