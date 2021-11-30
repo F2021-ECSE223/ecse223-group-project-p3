@@ -1,5 +1,7 @@
 namespace ca.mcgill.ecse.climbsafe.model;
-use ClimbSafeStates.ump;
+
+external interface Serializable {}
+
 use ClimbSafePersistence.ump;
 
 class ClimbSafe {
@@ -18,7 +20,7 @@ class ClimbSafe {
 }
 
 class User {
-  abstract; 
+  abstract;
   unique email;
   password;
 }
@@ -49,6 +51,10 @@ associationClass BookedItem {
   Integer quantity;
   * Member member;
   * BookableItem item;
+
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = 12L;
 }
 
 class BookableItem {
@@ -71,6 +77,10 @@ associationClass BundleItem {
   Integer quantity;
   * EquipmentBundle bundle;
   * Equipment equipment;
+
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = 13L;
 }
 
 class Hotel {
@@ -86,78 +96,4 @@ class Assignment {
   0..1 -- 1 Member member;
   * -- 0..1 Guide guide;
   * -- 0..1 Hotel hotel;
-}//$?[End_of_model]$?
-
-namespace -;
-
-
-class ClimbSafe
-{
-  position 50 30 109 45;
-  position.association BookedItem:bookedItems__ClimbSafe 186,93 0,10;
-  position.association ClimbSafe__EquipmentBundle:bundles 31,93 30,0;
-  position.association BundleItem:bundleItems__ClimbSafe 220,4 0,10;
-  position.association ClimbSafe__Hotel:hotels 220,42 0,10;
-  position.association Assignment:assignments__ClimbSafe 220,80 0,10;
-}
-
-class User
-{
-  position 50 130 109 45;
-}
-
-class Administrator
-{
-  position 50 230 109 45;
-}
-
-class NamedUser
-{
-  position 50 330 109 45;
-}
-
-class Guide
-{
-  position 50 430 109 45;
-}
-
-class Member
-{
-  position 250 30 109 45;
-}
-
-class BookedItem
-{
-  position 250 130 109 45;
-}
-
-class BookableItem
-{
-  position 250 230 109 45;
-}
-
-class Equipment
-{
-  position 250 330 109 45;
-}
-
-class EquipmentBundle
-{
-  position 250 430 109 45;
-}
-
-class BundleItem
-{
-  position 450 30 109 45;
-}
-
-class Hotel
-{
-  position 450 130 109 45;
-}
-
-class Assignment
-{
-  position 450 230 109 45;
-  position.association Assignment__Guide:guide 0,10 110,10;
 }
