@@ -12,7 +12,6 @@ package ca.mcgill.ecse.climbsafe.view;
         import java.io.IOException;
         import java.net.MalformedURLException;
         import java.net.URL;
-        import java.nio.file.Path;
         import java.util.ArrayList;
         import java.util.Arrays;
         import java.util.List;
@@ -29,7 +28,9 @@ public class ClimbSafePage {
     private static JTabbedPane tabbedPane;
     private static String[] memberNameList;
     private static String[] authCodeList;
-    //private static BasicBack
+    private static String[] equipmentNameArray;
+    private static String[] equipmentBundleNameArray;
+
 
 
     public static void start(){
@@ -81,6 +82,32 @@ public class ClimbSafePage {
             e.printStackTrace();
         }
         return imageURL;
+    }
+    private static void updateEquipmentNames() {
+        List<TOBookableItem> equipmentList = TOController.getEquipment();
+        if (equipmentList == null || equipmentList.size() == 0) {
+            equipmentNameArray = new String[1];
+            equipmentNameArray[0] = "Placeholder";
+        }
+        else{
+            equipmentNameArray = new String[equipmentList.size()];
+            for (int i = 0; i < equipmentList.size(); i++) {
+                equipmentNameArray[i] = equipmentList.get(i).getName();
+            }
+        }
+    }
+    private static void updateBundlesNames() {
+        List<TOBookableItem> equipmentBundleList = TOController.getBundles();
+        if (equipmentBundleList==null || equipmentBundleList.size() == 0){
+            equipmentBundleNameArray = new String[1];
+            equipmentBundleNameArray[0] = "Placeholder";
+        }
+        else {
+            equipmentBundleNameArray = new String[equipmentBundleList.size()];
+            for (int i = 0; i < equipmentBundleList.size(); i++) {
+                equipmentBundleNameArray[i] = equipmentBundleList.get(i).getName();
+            }
+        }
     }
 
     public static void addNMCCard(){
@@ -135,7 +162,9 @@ public class ClimbSafePage {
             }
         };
 
-        card2.setLayout(new BoxLayout(card2, BoxLayout.Y_AXIS));
+
+
+
         JPanel memberPart = new JPanel() {
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
@@ -143,79 +172,101 @@ public class ClimbSafePage {
                 return size;
             }
         };
-        memberPart.setOpaque(false);
-        card2.add(memberPart);
         JPanel leftColumn = new JPanel(){};
-        leftColumn.setLayout(new BoxLayout(leftColumn, BoxLayout.Y_AXIS));
-        leftColumn.setOpaque(false);
-        memberPart.add(leftColumn);
-
-
         JPanel col1 = new JPanel(){};
-        col1.setPreferredSize(new Dimension(300,35));
-        col1.setOpaque(false);
-        JLabel emailLabel = new JLabel("Email:", SwingConstants.RIGHT);
-        emailLabel.setPreferredSize(new Dimension(150, 35));
-        col1.add(emailLabel);
-        JTextField email = new JTextField("johndoe@email.com");
-        email.setPreferredSize(new Dimension(150,25));
-        col1.add(email);
-        leftColumn.add(col1);
-        leftColumn.add(new JLabel(" "));
-
         JPanel col2 = new JPanel(){};
-        col2.setPreferredSize(new Dimension(300,35));
-        col2.setOpaque(false);
-        JLabel nameLabel = new JLabel("Name:",SwingConstants.RIGHT);
-        nameLabel.setPreferredSize(new Dimension(150, 35));
-        col2.add(nameLabel);
-        JTextField name = new JTextField("John Doe");
-        name.setPreferredSize(new Dimension(150,25));
-        col2.add(name);
-        leftColumn.add(col2);
-        leftColumn.add(new JLabel(" "));
-
         JPanel col3 = new JPanel(){};
-        col3.setPreferredSize(new Dimension(300,35));
-        col3.setOpaque(false);
-        JLabel passwordLabel = new JLabel("Password:",SwingConstants.RIGHT);
-        passwordLabel.setPreferredSize(new Dimension(150, 35));
-        col3.add(passwordLabel);
-        JPasswordField password = new JPasswordField("Password");
-        password.setPreferredSize(new Dimension(150,25));
-        col3.add(password);
-        leftColumn.add(col3);
-        leftColumn.add(new JLabel(" "));
-
         JPanel col4 = new JPanel(){};
-        col4.setPreferredSize(new Dimension(300,35));
-        col4.setOpaque(false);
-        JLabel emergencyContactLabel = new JLabel("Emergency Contact:",SwingConstants.RIGHT);
-        emergencyContactLabel.setPreferredSize(new Dimension(150, 35));
-        col4.add(emergencyContactLabel);
-        JTextField emergencyContact = new JTextField("(514)-XXX-XXXX");
-        emergencyContact.setPreferredSize(new Dimension(150,25));
-        col4.add(emergencyContact);
-        leftColumn.add(col4);
-        leftColumn.add(new JLabel(" "));
-
         JPanel col5 = new JPanel(){};
-        col5.setPreferredSize(new Dimension(300,35));
-        col5.setOpaque(false);
-        JLabel lengthLabel = new JLabel("Length of Stay:", SwingConstants.RIGHT);
-        lengthLabel.setPreferredSize(new Dimension(150, 35));
-        col5.add(lengthLabel);
         JPanel weeks = new JPanel();
-        weeks.setPreferredSize(new Dimension(150,35));
+        JPanel col6 = new JPanel(){};
+        JPanel before = new JPanel();
+        JPanel col7 = new JPanel(){};
+        JPanel after = new JPanel();
+        JPanel col8 = new JPanel(){};
+        JPanel guideNeeded = new JPanel();
+        JPanel rightColumn = new JPanel(){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.width += 100;
+                return size;
+            }
+        };
+        JPanel bottomButtons = new JPanel();
+        JPanel row1 = new JPanel();
+        JPanel row2 = new JPanel();
+        JPanel row3 = new JPanel();
+        JPanel row4 = new JPanel();
+
+
+        memberPart.setOpaque(false);
+        leftColumn.setOpaque(false);
+        col1.setOpaque(false);
+        col2.setOpaque(false);
+        col3.setOpaque(false);
+        col4.setOpaque(false);
+        col5.setOpaque(false);
         weeks.setOpaque(false);
+        col6.setOpaque(false);
+        before.setOpaque(false);
+        col7.setOpaque(false);
+        after.setOpaque(false);
+        col8.setOpaque(false);
+        guideNeeded.setOpaque(false);
+        rightColumn.setOpaque(false);
+        bottomButtons.setOpaque(false);
+        row1.setOpaque(false);
+        row2.setOpaque(false);
+        row3.setOpaque(false);
+        row4.setOpaque(false);
+
+        card2.setLayout(new BoxLayout(card2, BoxLayout.Y_AXIS));
+        leftColumn.setLayout(new BoxLayout(leftColumn, BoxLayout.Y_AXIS));
+        rightColumn.setLayout(new BoxLayout(rightColumn, BoxLayout.Y_AXIS));
+
+        JLabel emailLabel = new JLabel("Email:", SwingConstants.RIGHT);
+        JLabel nameLabel = new JLabel("Name:",SwingConstants.RIGHT);
+        JLabel passwordLabel = new JLabel("Password:",SwingConstants.RIGHT);
+        JLabel emergencyContactLabel = new JLabel("Emergency Contact:",SwingConstants.RIGHT);
+        JLabel lengthLabel = new JLabel("Length of Stay:", SwingConstants.RIGHT);
         JLabel nrWeeks = new JLabel("1 week(s)");
-        JButton weekUp = new JButton("<html>+</html>"){
+        JLabel stayBeforeLabel = new JLabel("Stay Before:",SwingConstants.RIGHT);
+        JLabel beforeText = new JLabel("+ 3 days");
+        JLabel stayAfterLabel = new JLabel("Stay After:",SwingConstants.RIGHT);
+        JLabel afterText = new JLabel("+ 3 days");
+        JLabel guideLabel = new JLabel("Add Guide:",SwingConstants.RIGHT);
+        JLabel equipmentLabel = new JLabel("Equipment:",SwingConstants.RIGHT);
+        JLabel contentLabel1 = new JLabel("Content:",SwingConstants.RIGHT);
+        JLabel equipmentQuantity = new JLabel("0");
+        JLabel equipmentBundleLabel = new JLabel("Equipment Bundle:",SwingConstants.RIGHT);
+        JLabel contentLabel2 = new JLabel("Content:",SwingConstants.RIGHT);
+        JLabel equipmentBundleQuantity = new JLabel("0");
+
+
+        JTextField email = new JTextField("johndoe@email.com");
+        JTextField name = new JTextField("John Doe");
+        JTextField emergencyContact = new JTextField("(514)-XXX-XXXX");
+
+        JPasswordField password = new JPasswordField("Password");
+
+        JToggleButton stayBefore = new JToggleButton("<html><span>&#10007;</span></html>"){
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
                 size.height -= 5;
                 return size;
-        }};
-        weekUp.setHorizontalAlignment(SwingConstants.CENTER);
+            }};
+        JToggleButton stayAfter = new JToggleButton("<html><span>&#10007;</span></html>"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height -= 5;
+                return size;
+            }};
+        JToggleButton guide = new JToggleButton("<html><span>&#10007;</span></html>"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height -= 5;
+                return size;
+            }};
 
         JButton weekDown = new JButton("<html>-</html>"){
             public Dimension getPreferredSize() {
@@ -223,9 +274,181 @@ public class ClimbSafePage {
                 size.height -= 5;
                 return size;
             }};
+        JButton weekUp = new JButton("<html>+</html>"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height -= 5;
+                return size;
+            }};
+        JButton equipmentUp = new JButton("<html>+</html>"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height -= 5;
+                return size;
+            }};
+        JButton equipmentDown = new JButton("<html>-</html>"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height -= 5;
+                return size;
+            }};
+        JButton equipmentBundleUp = new JButton("<html>+</html>"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height -= 5;
+                return size;
+            }};
+        JButton equipmentBundleDown = new JButton("<html>-</html>"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height -= 5;
+                return size;
+            }};
+        JButton registerMember = new JButton("Register Member"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
+        JButton updateMember = new JButton("Update Member"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
+        JButton deleteMember = new JButton("Delete Member"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
 
-        weeks.add(weekDown);weeks.add(nrWeeks);weeks.add(weekUp);
+        updateEquipmentNames();
+        int[] equipmentQuantityArray = new int[equipmentNameArray.length];
+        JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentNameArray);
+        updateBundlesNames();
+        int[] equipmentBundleQuantityArray = new int[equipmentBundleNameArray.length];
+        JComboBox<String> equipmentBundleVisualList = new JComboBox<>(equipmentBundleNameArray);
+
+
+
+        card2.add(memberPart);
+        card2.add(bottomButtons);
+
+        memberPart.add(leftColumn);
+        memberPart.add(rightColumn);
+
+        leftColumn.add(col1);
+        leftColumn.add(new JLabel(" "));
+        leftColumn.add(col2);
+        leftColumn.add(new JLabel(" "));
+        leftColumn.add(col3);
+        leftColumn.add(new JLabel(" "));
+        leftColumn.add(col4);
+        leftColumn.add(new JLabel(" "));
+        leftColumn.add(col5);
+        leftColumn.add(new JLabel(" "));
+        leftColumn.add(col6);
+        leftColumn.add(new JLabel(" "));
+        leftColumn.add(col7);
+        leftColumn.add(new JLabel(" "));
+        leftColumn.add(col8);
+        leftColumn.add(new JLabel(" "));
+
+        rightColumn.add(row1);
+        rightColumn.add(new JLabel(" "));
+        rightColumn.add(row2);
+        rightColumn.add(new JLabel(" "));
+        rightColumn.add(new JLabel(" "));
+        rightColumn.add(new JLabel(" "));
+        rightColumn.add(new JLabel(" "));
+        rightColumn.add(new JLabel(" "));
+        rightColumn.add(row3);
+        rightColumn.add(new JLabel(" "));
+        rightColumn.add(row4);
+
+        col1.add(emailLabel);
+        col1.add(email);
+        col2.add(nameLabel);
+        col2.add(name);
+        col3.add(passwordLabel);
+        col3.add(password);
+        col4.add(emergencyContactLabel);
+        col4.add(emergencyContact);
+        col5.add(lengthLabel);
         col5.add(weeks);
+        weeks.add(weekDown);
+        weeks.add(nrWeeks);
+        weeks.add(weekUp);
+        col6.add(stayBeforeLabel);
+        col6.add(before);
+        before.add(stayBefore);
+        before.add(beforeText);
+        col7.add(stayAfterLabel);
+        col7.add(after);
+        after.add(stayAfter);
+        after.add(afterText);
+        col8.add(guideLabel);
+        col8.add(guideNeeded);
+        guideNeeded.add(guide);
+        row1.add(equipmentLabel);
+        row1.add(equipmentVisualList);
+        row2.add(contentLabel1);
+        row2.add(equipmentDown);
+        row2.add(equipmentQuantity);
+        row2.add(equipmentUp);
+        row3.add(equipmentBundleLabel);
+        row3.add(equipmentBundleVisualList);
+        row4.add(contentLabel2);
+        row4.add(equipmentBundleDown);
+        row4.add(equipmentBundleQuantity);
+        row4.add(equipmentBundleUp);
+        bottomButtons.add(registerMember);
+        bottomButtons.add(updateMember);
+        bottomButtons.add(deleteMember);
+
+
+
+        col1.setPreferredSize(new Dimension(300,35));
+        emailLabel.setPreferredSize(new Dimension(150, 35));
+        email.setPreferredSize(new Dimension(150,25));
+        col2.setPreferredSize(new Dimension(300,35));
+        nameLabel.setPreferredSize(new Dimension(150, 35));
+        name.setPreferredSize(new Dimension(150,25));
+        col3.setPreferredSize(new Dimension(300,35));
+        passwordLabel.setPreferredSize(new Dimension(150, 35));
+        password.setPreferredSize(new Dimension(150,25));
+        col4.setPreferredSize(new Dimension(300,35));
+        emergencyContactLabel.setPreferredSize(new Dimension(150, 35));
+        emergencyContact.setPreferredSize(new Dimension(150,25));
+        col5.setPreferredSize(new Dimension(300,35));
+        lengthLabel.setPreferredSize(new Dimension(150, 35));
+        weeks.setPreferredSize(new Dimension(150,35));
+        col6.setPreferredSize(new Dimension(299,35));
+        stayBeforeLabel.setPreferredSize(new Dimension(150, 35));
+        before.setPreferredSize(new Dimension(150,35));
+        col7.setPreferredSize(new Dimension(299,35));
+        stayAfterLabel.setPreferredSize(new Dimension(150, 35));
+        after.setPreferredSize(new Dimension(150,35));
+        col8.setPreferredSize(new Dimension(350,35));
+        guideLabel.setPreferredSize(new Dimension(150, 35));
+        guideNeeded.setPreferredSize(new Dimension(150,35));
+        equipmentLabel.setPreferredSize(new Dimension(150,20));
+        contentLabel1.setPreferredSize(new Dimension(150,20));
+        equipmentBundleLabel.setPreferredSize(new Dimension(150,20));
+        contentLabel2.setPreferredSize(new Dimension(150,20));
+
+        weekUp.setHorizontalAlignment(SwingConstants.CENTER);
+
+
+
+
         weekUp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -248,23 +471,6 @@ public class ClimbSafePage {
                 nrWeeks.setText(num+" week(s)");
             }
         });
-        leftColumn.add(col5);
-        leftColumn.add(new JLabel(" "));
-
-        JPanel col6 = new JPanel(){};
-        col6.setPreferredSize(new Dimension(299,35));
-        col6.setOpaque(false);
-        JLabel stayBeforeLabel = new JLabel("Stay Before:",SwingConstants.RIGHT);
-        stayBeforeLabel.setPreferredSize(new Dimension(150, 35));
-        col6.add(stayBeforeLabel);
-        JPanel before = new JPanel();
-        before.setPreferredSize(new Dimension(150,35));
-        JToggleButton stayBefore = new JToggleButton("<html><span>&#10007;</span></html>"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height -= 5;
-                return size;
-            }};
         stayBefore.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -272,28 +478,7 @@ public class ClimbSafePage {
                 else stayBefore.setText("<html><span>&#10007;</span></html>");
             }
         });
-        before.add(stayBefore);
-        JLabel beforeText = new JLabel("+ 3 days");
-        before.add(beforeText);
-        before.setOpaque(false);
-        col6.add(before);
-        leftColumn.add(col6);
-        leftColumn.add(new JLabel(" "));
 
-        JPanel col7 = new JPanel(){};
-        col7.setPreferredSize(new Dimension(299,35));
-        col7.setOpaque(false);
-        JLabel stayAfterLabel = new JLabel("Stay After:",SwingConstants.RIGHT);
-        stayAfterLabel.setPreferredSize(new Dimension(150, 35));
-        col7.add(stayAfterLabel);
-        JPanel after = new JPanel();
-        after.setPreferredSize(new Dimension(150,35));
-        JToggleButton stayAfter = new JToggleButton("<html><span>&#10007;</span></html>"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height -= 5;
-                return size;
-            }};
         stayAfter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -301,28 +486,6 @@ public class ClimbSafePage {
                 else stayAfter.setText("<html><span>&#10007;</span></html>");
             }
         });
-        after.add(stayAfter);
-        JLabel afterText = new JLabel("+ 3 days");
-        after.setOpaque(false);
-        after.add(afterText);
-        col7.add(after);
-        leftColumn.add(col7);
-        leftColumn.add(new JLabel(" "));
-
-        JPanel col8 = new JPanel(){};
-        col8.setPreferredSize(new Dimension(350,35));
-        col8.setOpaque(false);
-        JLabel guideLabel = new JLabel("Add Guide:",SwingConstants.RIGHT);
-        guideLabel.setPreferredSize(new Dimension(150, 35));
-        col8.add(guideLabel);
-        JPanel guideNeeded = new JPanel();
-        guideNeeded.setPreferredSize(new Dimension(150,35));
-        JToggleButton guide = new JToggleButton("<html><span>&#10007;</span></html>"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height -= 5;
-                return size;
-            }};
         guide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -330,66 +493,6 @@ public class ClimbSafePage {
                 else guide.setText("<html><span>&#10007;</span></html>");
             }
         });
-        guideNeeded.add(guide);
-        guideNeeded.setOpaque(false);
-        col8.add(guideNeeded);
-        leftColumn.add(col8);
-        leftColumn.add(new JLabel(" "));
-
-
-
-        JPanel rightColumn = new JPanel(){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.width += 100;
-                return size;
-            }
-        };
-        rightColumn.setLayout(new BoxLayout(rightColumn, BoxLayout.Y_AXIS));
-        rightColumn.setOpaque(false);
-        memberPart.add(rightColumn);
-
-        JPanel row1 = new JPanel();
-        row1.setOpaque(false);
-        JLabel equipmentLabel = new JLabel("Equipment:",SwingConstants.RIGHT);
-        equipmentLabel.setPreferredSize(new Dimension(150,20));
-
-        List<TOBookableItem> equipmentList = TOController.getEquipment();
-        String[] equipmentNameArray = new String[equipmentList.size()];
-        int[] equipmentQuantityArray = new int[equipmentList.size()];
-        for (int i= 0;i<equipmentList.size();i++){
-            equipmentNameArray[i] = equipmentList.get(i).getName();
-            equipmentQuantityArray[i] = 0;
-        }
-        JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentNameArray);
-
-        row1.add(equipmentLabel);
-        row1.add(equipmentVisualList);
-        rightColumn.add(row1);
-        rightColumn.add(new JLabel(" "));
-
-        JPanel row2 = new JPanel();
-        row2.setOpaque(false);
-        rightColumn.add(row2);
-        JLabel contentLabel1 = new JLabel("Content:",SwingConstants.RIGHT);
-        contentLabel1.setPreferredSize(new Dimension(150,20));
-        row2.add(contentLabel1);
-
-        JLabel equipmentQuantity = new JLabel("0");
-        JButton equipmentUp = new JButton("<html>+</html>"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height -= 5;
-                return size;
-            }};
-        JButton equipmentDown = new JButton("<html>-</html>"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height -= 5;
-                return size;
-            }};
-        row2.add(equipmentDown);row2.add(equipmentQuantity);row2.add(equipmentUp);
-
         equipmentVisualList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -415,54 +518,6 @@ public class ClimbSafePage {
                 equipmentQuantityArray[equipmentVisualList.getSelectedIndex()] = num;
             }
         });
-
-        rightColumn.add(new JLabel(" "));
-        rightColumn.add(new JLabel(" "));
-        rightColumn.add(new JLabel(" "));
-        rightColumn.add(new JLabel(" "));
-        rightColumn.add(new JLabel(" "));
-
-        JPanel row3 = new JPanel();
-        row3.setOpaque(false);
-        JLabel equipmentBundleLabel = new JLabel("Equipment Bundle:",SwingConstants.RIGHT);
-        equipmentBundleLabel.setPreferredSize(new Dimension(150,20));
-
-        List<TOBookableItem> equipmentBundleList = TOController.getBundles();
-        String[] equipmentBundleNameArray = new String[equipmentBundleList.size()];
-        int[] equipmentBundleQuantityArray = new int[equipmentBundleList.size()];
-        for (int i= 0;i<equipmentBundleList.size();i++){
-            equipmentBundleNameArray[i] = equipmentBundleList.get(i).getName();
-            equipmentBundleQuantityArray[i] = 0;
-        }
-        JComboBox<String> equipmentBundleVisualList = new JComboBox<>(equipmentBundleNameArray);
-
-        row3.add(equipmentBundleLabel);
-        row3.add(equipmentBundleVisualList);
-        rightColumn.add(row3);
-        rightColumn.add(new JLabel(" "));
-
-        JPanel row4 = new JPanel();
-        row4.setOpaque(false);
-        rightColumn.add(row4);
-        JLabel contentLabel2 = new JLabel("Content:",SwingConstants.RIGHT);
-        contentLabel2.setPreferredSize(new Dimension(150,20));
-        row4.add(contentLabel2);
-
-        JLabel equipmentBundleQuantity = new JLabel("0");
-        JButton equipmentBundleUp = new JButton("<html>+</html>"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height -= 5;
-                return size;
-            }};
-        JButton equipmentBundleDown = new JButton("<html>-</html>"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height -= 5;
-                return size;
-            }};
-        row4.add(equipmentBundleDown);row4.add(equipmentBundleQuantity);row4.add(equipmentBundleUp);
-
         equipmentBundleVisualList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -488,18 +543,6 @@ public class ClimbSafePage {
                 equipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()] = num;
             }
         });
-
-        JPanel bottomButtons = new JPanel();
-        card2.add(bottomButtons);
-        JButton registerMember = new JButton("Register Member"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height += 50;
-                size.width += 50;
-                return size;
-            }
-        };
-        bottomButtons.add(registerMember);
         registerMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -518,17 +561,6 @@ public class ClimbSafePage {
                 }
             }
         });
-
-        JButton updateMember = new JButton("Update Member"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height += 50;
-                size.width += 50;
-                return size;
-            }
-        };
-        bottomButtons.setOpaque(false);
-        bottomButtons.add(updateMember);
         updateMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -547,15 +579,6 @@ public class ClimbSafePage {
                 }
             }
         });
-        JButton deleteMember = new JButton("Delete Member"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height += 50;
-                size.width += 50;
-                return size;
-            }
-        };
-        bottomButtons.add(deleteMember);
         deleteMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -570,6 +593,8 @@ public class ClimbSafePage {
 
         tabbedPane.addTab("Register, Update and Delete Member", card2);
     }
+
+
 
     public static void addGuideCard(){
         java.net.URL imageURL = getPhoto(0);
@@ -598,6 +623,9 @@ public class ClimbSafePage {
 
         tabbedPane.addTab("Register, Update and Delete Guide", card3);
     }
+
+
+
     public static void addEquipmentCard(){
         java.net.URL imageURL = getPhoto(0);
 
@@ -625,6 +653,9 @@ public class ClimbSafePage {
 
         tabbedPane.addTab("Add, Update and Delete Equipment", card4);
     }
+
+
+
     public static void addBundleCard(){
         java.net.URL imageURL = getPhoto(1);
 
@@ -652,6 +683,9 @@ public class ClimbSafePage {
 
         tabbedPane.addTab("Add, Update and Delete Equipment Bundle", card5);
     }
+
+
+
     public static void addAssignmentCard(){
         java.net.URL imageURL = getPhoto(1);
 
@@ -679,6 +713,7 @@ public class ClimbSafePage {
 
         tabbedPane.addTab("Initiate and View Assignments", card6);
     }
+
 
 
     public static void addPayCard(){
