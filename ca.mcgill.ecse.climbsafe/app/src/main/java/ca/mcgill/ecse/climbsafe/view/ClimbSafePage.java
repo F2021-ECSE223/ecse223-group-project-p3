@@ -3,8 +3,7 @@ package ca.mcgill.ecse.climbsafe.view;
 
         import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
         import ca.mcgill.ecse.climbsafe.controller.*;
-        import ca.mcgill.ecse.climbsafe.model.Equipment;
-        import ca.mcgill.ecse.climbsafe.model.EquipmentBundle;
+
 
         import java.awt.*;
         import java.awt.event.ActionEvent;
@@ -355,7 +354,7 @@ public class ClimbSafePage {
         JLabel equipmentLabel = new JLabel("Equipment:",SwingConstants.RIGHT);
         equipmentLabel.setPreferredSize(new Dimension(150,20));
 
-        List<Equipment> equipmentList = ClimbSafeApplication.getClimbSafe().getEquipment();
+        List<TOBookableItem> equipmentList = TOController.getEquipment();
         String[] equipmentNameArray = new String[equipmentList.size()];
         int[] equipmentQuantityArray = new int[equipmentList.size()];
         for (int i= 0;i<equipmentList.size();i++){
@@ -428,7 +427,7 @@ public class ClimbSafePage {
         JLabel equipmentBundleLabel = new JLabel("Equipment Bundle:",SwingConstants.RIGHT);
         equipmentBundleLabel.setPreferredSize(new Dimension(150,20));
 
-        List<EquipmentBundle> equipmentBundleList = ClimbSafeApplication.getClimbSafe().getBundles();
+        List<TOBookableItem> equipmentBundleList = TOController.getBundles();
         String[] equipmentBundleNameArray = new String[equipmentBundleList.size()];
         int[] equipmentBundleQuantityArray = new int[equipmentBundleList.size()];
         for (int i= 0;i<equipmentBundleList.size();i++){
