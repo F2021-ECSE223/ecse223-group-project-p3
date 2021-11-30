@@ -28,6 +28,8 @@ package ca.mcgill.ecse.climbsafe.view;
 public class ClimbSafePage {
     private static JFrame mainFrame;
     private static JTabbedPane tabbedPane;
+    private static String[] memberNameList;
+    private static String[] authCodeList;
     //private static BasicBack
 
 
@@ -234,7 +236,7 @@ public class ClimbSafePage {
                 //TODO Create climbsafe TO?
                 int len = ClimbSafeApplication.getClimbSafe().getNrWeeks();
                 if (num > len) num = len;
-                nrWeeks.setText(String.valueOf(num)+" week(s)");
+                nrWeeks.setText(num+" week(s)");
             }
         });
         weekDown.addActionListener(new ActionListener() {
@@ -244,7 +246,7 @@ public class ClimbSafePage {
                 int num = Integer.parseInt(txt[0]);
                 num -= 1;
                 if (num<0) num = 0;
-                nrWeeks.setText(String.valueOf(num)+" week(s)");
+                nrWeeks.setText(num+" week(s)");
             }
         });
         leftColumn.add(col5);
@@ -343,7 +345,7 @@ public class ClimbSafePage {
                 size.width += 100;
                 return size;
             }
-        };;
+        };
         rightColumn.setLayout(new BoxLayout(rightColumn, BoxLayout.Y_AXIS));
         rightColumn.setOpaque(false);
         memberPart.add(rightColumn);
@@ -505,12 +507,12 @@ public class ClimbSafePage {
                 boolean hotel = stayBefore.isSelected() || stayAfter.isSelected();
                 try {
                     List<String> itemNames = new ArrayList<>();
-                    for (String s : equipmentNameArray) itemNames.add(s);
-                    for (String s : equipmentBundleNameArray) itemNames.add(s);
+                    itemNames.addAll(Arrays.asList(equipmentNameArray));
+                    itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
                     List<Integer> itemQuantities = new ArrayList<>();
                     for (int i : equipmentQuantityArray) itemQuantities.add(i);
                     for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
-                    ClimbSafeFeatureSet2Controller.registerMember(email.getText(), password.getText(), name.getText(),
+                    ClimbSafeFeatureSet2Controller.registerMember(email.getText(), String.valueOf(password.getPassword()), name.getText(),
                             emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), hotel, itemNames, itemQuantities);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
@@ -534,8 +536,8 @@ public class ClimbSafePage {
                 boolean hotel = stayBefore.isSelected() || stayAfter.isSelected();
                 try {
                     List<String> itemNames = new ArrayList<>();
-                    for (String s : equipmentNameArray) itemNames.add(s);
-                    for (String s : equipmentBundleNameArray) itemNames.add(s);
+                    itemNames.addAll(Arrays.asList(equipmentNameArray));
+                    itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
                     List<Integer> itemQuantities = new ArrayList<>();
                     for (int i : equipmentQuantityArray) itemQuantities.add(i);
                     for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
@@ -718,8 +720,8 @@ public class ClimbSafePage {
         JLabel members= new JLabel("Member Names:");
         JLabel code = new JLabel("Authorization Code:");
         List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
-        String[] memberNameList = new String[toAssignmentList.size()];
-        String[] authCodeList = new String[toAssignmentList.size()];
+        memberNameList = new String[toAssignmentList.size()];
+        authCodeList = new String[toAssignmentList.size()];
         for (int i= 0;i<toAssignmentList.size();i++){
             memberNameList[i] = toAssignmentList.get(i).getMemberEmail();
             authCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
@@ -732,11 +734,10 @@ public class ClimbSafePage {
         }
         JComboBox<String> memberNameVisualList = new JComboBox<>(memberNameList);
         JTextField authCode = new JTextField(authCodeList[0]);
-        String[] finalAuthCodeList = authCodeList;
         memberNameVisualList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                authCode.setText(finalAuthCodeList[memberNameVisualList.getSelectedIndex()]);
+                authCode.setText(authCodeList[memberNameVisualList.getSelectedIndex()]);
             }
         });
         authCode.setPreferredSize(new Dimension(authCode.getPreferredSize().width+50, authCode.getPreferredSize().height));
@@ -762,8 +763,8 @@ public class ClimbSafePage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
-                String[] memberNameList = new String[toAssignmentList.size()];
-                String[] authCodeList = new String[toAssignmentList.size()];
+                memberNameList = new String[toAssignmentList.size()];
+                authCodeList = new String[toAssignmentList.size()];
                 for (int i= 0;i<toAssignmentList.size();i++){
                     memberNameList[i] = toAssignmentList.get(i).getMemberEmail();
                     authCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
@@ -774,8 +775,7 @@ public class ClimbSafePage {
                     authCodeList = new String[1];
                     authCodeList[0] = "Placeholder";
                 }
-                String[] finalAuthCodeList = authCodeList;
-                authCode.setText(finalAuthCodeList[0]);
+                authCode.setText(authCodeList[0]);
             }
         });
         buttons.add(pay);
