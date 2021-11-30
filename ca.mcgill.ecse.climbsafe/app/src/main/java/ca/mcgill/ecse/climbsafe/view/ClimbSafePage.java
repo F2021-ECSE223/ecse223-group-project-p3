@@ -30,6 +30,8 @@ public class ClimbSafePage {
     private static String[] authCodeList;
     private static String[] equipmentNameArray;
     private static String[] equipmentBundleNameArray;
+    private static int[] equipmentQuantityArray;
+    private static  int[] equipmentBundleQuantityArray;
 
 
 
@@ -88,6 +90,8 @@ public class ClimbSafePage {
         if (equipmentList == null || equipmentList.size() == 0) {
             equipmentNameArray = new String[1];
             equipmentNameArray[0] = "Placeholder";
+            equipmentQuantityArray = new int[1];
+            equipmentQuantityArray[0] = 0;
         }
         else{
             equipmentNameArray = new String[equipmentList.size()];
@@ -101,12 +105,29 @@ public class ClimbSafePage {
         if (equipmentBundleList==null || equipmentBundleList.size() == 0){
             equipmentBundleNameArray = new String[1];
             equipmentBundleNameArray[0] = "Placeholder";
+            equipmentBundleQuantityArray = new int[1];
+            equipmentBundleQuantityArray[0] = 0;
         }
         else {
             equipmentBundleNameArray = new String[equipmentBundleList.size()];
             for (int i = 0; i < equipmentBundleList.size(); i++) {
                 equipmentBundleNameArray[i] = equipmentBundleList.get(i).getName();
             }
+        }
+    }
+    private static void updatePay() {
+        List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
+        memberNameList = new String[toAssignmentList.size()];
+        authCodeList = new String[toAssignmentList.size()];
+        for (int i = 0; i < toAssignmentList.size(); i++) {
+            memberNameList[i] = toAssignmentList.get(i).getMemberEmail();
+            authCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
+        }
+        if (toAssignmentList.size() == 0) {
+            memberNameList = new String[1];
+            memberNameList[0] = "Placeholder";
+            authCodeList = new String[1];
+            authCodeList[0] = "Placeholder";
         }
     }
 
@@ -328,12 +349,18 @@ public class ClimbSafePage {
                 return size;
             }
         };
+        JButton refreshMember = new JButton("Refresh Bookable Item Lists"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
 
         updateEquipmentNames();
-        int[] equipmentQuantityArray = new int[equipmentNameArray.length];
         JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentNameArray);
         updateBundlesNames();
-        int[] equipmentBundleQuantityArray = new int[equipmentBundleNameArray.length];
         JComboBox<String> equipmentBundleVisualList = new JComboBox<>(equipmentBundleNameArray);
 
 
@@ -412,6 +439,7 @@ public class ClimbSafePage {
         bottomButtons.add(registerMember);
         bottomButtons.add(updateMember);
         bottomButtons.add(deleteMember);
+        bottomButtons.add(refreshMember);
 
 
 
@@ -496,6 +524,7 @@ public class ClimbSafePage {
         equipmentVisualList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (equipmentVisualList.getSelectedIndex() !=-1)
                 equipmentQuantity.setText(String.valueOf(equipmentQuantityArray[equipmentVisualList.getSelectedIndex()]));
             }
         });
@@ -521,6 +550,7 @@ public class ClimbSafePage {
         equipmentBundleVisualList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (equipmentBundleVisualList.getSelectedIndex() !=-1)
                 equipmentBundleQuantity.setText(String.valueOf(equipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()]));
             }
         });
@@ -588,6 +618,17 @@ public class ClimbSafePage {
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
+            }
+        });
+        refreshMember.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateEquipmentNames();
+                equipmentVisualList.removeAllItems();
+                for (String s : equipmentNameArray) equipmentVisualList.addItem(s);
+                updateBundlesNames();
+                equipmentBundleVisualList.removeAllItems();
+                for (String s : equipmentBundleNameArray) equipmentBundleVisualList.addItem(s);
             }
         });
 
@@ -717,6 +758,7 @@ public class ClimbSafePage {
 
 
     public static void addPayCard(){
+        updatePay();
         java.net.URL imageURL = getPhoto(1);
 
         BufferedImage hikerBackground = null;
@@ -753,69 +795,46 @@ public class ClimbSafePage {
 
         JLabel members= new JLabel("Member Names:");
         JLabel code = new JLabel("Authorization Code:");
-        List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
-        memberNameList = new String[toAssignmentList.size()];
-        authCodeList = new String[toAssignmentList.size()];
-        for (int i= 0;i<toAssignmentList.size();i++){
-            memberNameList[i] = toAssignmentList.get(i).getMemberEmail();
-            authCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
-        }
-        if (memberNameList.length==0){
-            memberNameList = new String[1];
-            memberNameList[0] = "Placeholder";
-            authCodeList = new String[1];
-            authCodeList[0] = "Placeholder";
-        }
+        JButton pay = new JButton("Pay Member Trip");
+        JButton refresh = new JButton("Refresh Member Names");
         JComboBox<String> memberNameVisualList = new JComboBox<>(memberNameList);
         JTextField authCode = new JTextField(authCodeList[0]);
+        fields.add(members);
+        fields.add(memberNameVisualList);
+        fields.add(code);
+        fields.add(authCode);
+        buttons.add(pay);
+        buttons.add(refresh);
+        card7.add(fields);
+        card7.add(buttons);
+
+        authCode.setPreferredSize(new Dimension(authCode.getPreferredSize().width+50, authCode.getPreferredSize().height));
+
         memberNameVisualList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 authCode.setText(authCodeList[memberNameVisualList.getSelectedIndex()]);
             }
         });
-        authCode.setPreferredSize(new Dimension(authCode.getPreferredSize().width+50, authCode.getPreferredSize().height));
-        fields.add(members);
-        fields.add(memberNameVisualList);
-        fields.add(code);
-        fields.add(authCode);
-
-        JButton pay = new JButton("Pay Member Trip");
         pay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (toAssignmentList.size()>0 && authCode != null)
+                    if (memberNameList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
                     AssignmentController.payMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()), authCode.getText());
                 } catch (InvalidInputException ex) {
                     ex.printStackTrace();
                 }
             }
         });
-        JButton refresh = new JButton("Refresh Member Names");
         refresh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
-                memberNameList = new String[toAssignmentList.size()];
-                authCodeList = new String[toAssignmentList.size()];
-                for (int i= 0;i<toAssignmentList.size();i++){
-                    memberNameList[i] = toAssignmentList.get(i).getMemberEmail();
-                    authCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
-                }
-                if (memberNameList.length==0){
-                    memberNameList = new String[1];
-                    memberNameList[0] = "Placeholder";
-                    authCodeList = new String[1];
-                    authCodeList[0] = "Placeholder";
-                }
+                updatePay();
                 authCode.setText(authCodeList[0]);
             }
         });
-        buttons.add(pay);
-        buttons.add(refresh);
 
-        card7.add(fields);card7.add(buttons);
 
 
         tabbedPane.addTab("Pay for Member's Trip", card7);
