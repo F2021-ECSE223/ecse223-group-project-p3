@@ -2,8 +2,7 @@
 package ca.mcgill.ecse.climbsafe.view;
 
         import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
-        import ca.mcgill.ecse.climbsafe.controller.ClimbSafeFeatureSet1Controller;
-        import ca.mcgill.ecse.climbsafe.controller.ClimbSafeFeatureSet2Controller;
+        import ca.mcgill.ecse.climbsafe.controller.*;
         import ca.mcgill.ecse.climbsafe.model.Equipment;
         import ca.mcgill.ecse.climbsafe.model.EquipmentBundle;
 
@@ -16,6 +15,7 @@ package ca.mcgill.ecse.climbsafe.view;
         import java.net.URL;
         import java.nio.file.Path;
         import java.util.ArrayList;
+        import java.util.Arrays;
         import java.util.List;
         import java.util.logging.Level;
         import java.util.logging.Logger;
@@ -678,6 +678,8 @@ public class ClimbSafePage {
 
         tabbedPane.addTab("Initiate and View Assignments", card6);
     }
+
+
     public static void addPayCard(){
         java.net.URL imageURL = getPhoto(1);
 
@@ -700,11 +702,95 @@ public class ClimbSafePage {
                 return size;
             }
         };
-        //TODO: add elements to card7 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
+        card7.setLayout(new BoxLayout(card7, BoxLayout.Y_AXIS));
+
+        JPanel fields = new JPanel(new FlowLayout(FlowLayout.CENTER, 20,5)){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.width += 100;
+                return size;
+            }
+        };
+        JPanel buttons = new JPanel();
+        fields.setOpaque(false);
+        buttons.setOpaque(false);
+
+        JLabel members= new JLabel("Member Names:");
+        JLabel code = new JLabel("Authorization Code:");
+        List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
+        String[] memberNameList = new String[toAssignmentList.size()];
+        String[] authCodeList = new String[toAssignmentList.size()];
+        for (int i= 0;i<toAssignmentList.size();i++){
+            memberNameList[i] = toAssignmentList.get(i).getMemberEmail();
+            authCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
+        }
+        if (memberNameList.length==0){
+            memberNameList = new String[1];
+            memberNameList[0] = "Placeholder";
+            authCodeList = new String[1];
+            authCodeList[0] = "Placeholder";
+        }
+        JComboBox<String> memberNameVisualList = new JComboBox<>(memberNameList);
+        JTextField authCode = new JTextField(authCodeList[0]);
+        String[] finalAuthCodeList = authCodeList;
+        memberNameVisualList.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                authCode.setText(finalAuthCodeList[memberNameVisualList.getSelectedIndex()]);
+            }
+        });
+        authCode.setPreferredSize(new Dimension(authCode.getPreferredSize().width+50, authCode.getPreferredSize().height));
+        fields.add(members);
+        fields.add(memberNameVisualList);
+        fields.add(code);
+        fields.add(authCode);
+
+        JButton pay = new JButton("Pay Member Trip");
+        pay.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (toAssignmentList.size()>0 && authCode != null)
+                    AssignmentController.payMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()), authCode.getText());
+                } catch (InvalidInputException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        JButton refresh = new JButton("Refresh Member Names");
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
+                String[] memberNameList = new String[toAssignmentList.size()];
+                String[] authCodeList = new String[toAssignmentList.size()];
+                for (int i= 0;i<toAssignmentList.size();i++){
+                    memberNameList[i] = toAssignmentList.get(i).getMemberEmail();
+                    authCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
+                }
+                if (memberNameList.length==0){
+                    memberNameList = new String[1];
+                    memberNameList[0] = "Placeholder";
+                    authCodeList = new String[1];
+                    authCodeList[0] = "Placeholder";
+                }
+                String[] finalAuthCodeList = authCodeList;
+                authCode.setText(finalAuthCodeList[0]);
+            }
+        });
+        buttons.add(pay);
+        buttons.add(refresh);
+
+        card7.add(fields);card7.add(buttons);
+
 
         tabbedPane.addTab("Pay for Member's Trip", card7);
     }
+
+
+
+
+
     public static void addTripCard(){
         java.net.URL imageURL = getPhoto(1);
 

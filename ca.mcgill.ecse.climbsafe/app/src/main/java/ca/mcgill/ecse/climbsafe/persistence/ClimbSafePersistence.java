@@ -19,7 +19,6 @@ public class ClimbSafePersistence {
     public static void save(ClimbSafe climbSafe) {
         PersistenceObjectStream.setFilename(filename);
         PersistenceObjectStream.serialize(climbSafe);
-        System.out.println("saved succesfully");
     }
 
     public static ClimbSafe load() {
