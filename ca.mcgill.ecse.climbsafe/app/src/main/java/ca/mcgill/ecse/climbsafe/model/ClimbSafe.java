@@ -7,12 +7,9 @@ import java.sql.Date;
 import java.util.*;
 
 // line 3 "../../../../../../ClimbSafePersistence.ump"
-// line 78 "../../../../../../ClimbSafePersistence.ump"
-// line 88 "../../../../../../ClimbSafePersistence.ump"
-// line 98 "../../../../../../ClimbSafePersistence.ump"
-// line 108 "../../../../../../ClimbSafePersistence.ump"
-// line 6 "../../../../../../model.ump"
-// line 95 "../../../../../../model.ump"
+// line 117 "../../../../../../ClimbSafePersistence.ump"
+// line 9 "../../../../../../model.ump"
+// line 107 "../../../../../../model.ump"
 public class ClimbSafe implements Serializable
 {
 
@@ -1021,32 +1018,9 @@ public class ClimbSafe implements Serializable
 
   // line 9 "../../../../../../ClimbSafePersistence.ump"
    public void reinitialize(){
-    List<Member> members = this.getMembers();
-  List<Guide> guides = this.getGuides();
-  User admin = this.getAdministrator();
-  List<User> allUsers = new ArrayList<>();
-  for(Member m: members){
-   User um = (User) m;
-    allUsers.add(um);
-  }
-  for(Guide g: guides){
-   User ug = (User) g;
-    allUsers.add(ug);
-  }
-  allUsers.add(admin);
-  User.reinitializeUniqueEmails(allUsers);
-  List<Equipment> eqs = this.getEquipment();
-  List<EquipmentBundle> eqbs = this.getBundles();
-  List<BookableItem> allBi = new ArrayList<>();
-  for(Equipment e: eqs){
-    BookableItem be = (BookableItem) e;
-    allBi.add(be);
-  }
-  for(EquipmentBundle b: eqbs){
-   BookableItem bb = (BookableItem) b;
-    allBi.add(bb);
-  }
-  BookableItem.reinitializeUniqueItemNames(allBi);
+    User.reinitializeUniqueEmail(this.getAdministrator(), this.getGuides(), this.getMembers());
+    BookableItem.reinitializeUniqueName(this.getEquipment(), this.getBundles());
+    Hotel.reinitializeUniqueName(this.getHotels());
   }
 
 
@@ -1062,8 +1036,8 @@ public class ClimbSafe implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 6 "ClimbSafePersistence.ump"
-  private static final long serialVersionUID = -2683593616927798071L ;
+  // line 6 "../../../../../../ClimbSafePersistence.ump"
+  private static final long serialVersionUID = 1L ;
 
   
 }

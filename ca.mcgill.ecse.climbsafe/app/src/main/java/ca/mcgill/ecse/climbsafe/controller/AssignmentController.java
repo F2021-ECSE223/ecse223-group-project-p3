@@ -85,6 +85,7 @@ public class AssignmentController {
                 String error = "Invalid authorization code";
                 throw new InvalidInputException(error);
         }
+
         if(member.getAssignment().getAssignmentStatusFullName().equals("Paid")||member.getAssignment().getAssignmentStatusFullName().equals("Started")){
             throw new InvalidInputException("Trip has already been paid for");
         }

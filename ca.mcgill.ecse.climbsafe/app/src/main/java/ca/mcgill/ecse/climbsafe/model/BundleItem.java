@@ -2,10 +2,11 @@
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
 
 package ca.mcgill.ecse.climbsafe.model;
+import java.io.Serializable;
 
-// line 71 "../../../../../model.ump"
-// line 150 "../../../../../model.ump"
-public class BundleItem
+// line 78 "../../../../../model.ump"
+// line 165 "../../../../../model.ump"
+public class BundleItem implements Serializable
 {
 
   //------------------------
@@ -251,5 +252,12 @@ public class BundleItem
             "  " + "climbSafe = "+(getClimbSafe()!=null?Integer.toHexString(System.identityHashCode(getClimbSafe())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "bundle = "+(getBundle()!=null?Integer.toHexString(System.identityHashCode(getBundle())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "equipment = "+(getEquipment()!=null?Integer.toHexString(System.identityHashCode(getEquipment())):"null");
-  }
+  }  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 85 model.ump
+  private static final long serialVersionUID = 13L;
+  
 }
