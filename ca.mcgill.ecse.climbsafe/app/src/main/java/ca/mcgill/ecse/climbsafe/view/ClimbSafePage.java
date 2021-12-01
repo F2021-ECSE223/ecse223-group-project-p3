@@ -843,7 +843,7 @@ public class ClimbSafePage {
 
 
 
-
+private static void addTripCard() {
     java.net.URL imageURL = getPhoto(1);
 
         BufferedImage hikerBackground = null;
@@ -954,5 +954,5 @@ public class ClimbSafePage {
 
         tabbedPane.addTab("Start trips, finish a trip and cancel a trip", card8);
 
-
+        }
 }
