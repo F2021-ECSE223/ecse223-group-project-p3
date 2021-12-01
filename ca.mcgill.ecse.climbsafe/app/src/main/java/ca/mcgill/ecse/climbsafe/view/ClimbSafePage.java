@@ -50,10 +50,12 @@ public class ClimbSafePage {
         midPane.setLayout(new BoxLayout(midPane, BoxLayout.Y_AXIS)); //sets so that elements are added vertically to panel
         midPane.setBackground(new Color(207,226,255));
 
+        JPanel head = new JPanel();
+        head.setOpaque(false);
         JLabel header = new JLabel("Neptan Mountain Climbing");
         header.setFont(new Font("Britannic Bold", Font.BOLD, 90));
-        header.setPreferredSize(new Dimension(400,200));
-        midPane.add(header);
+        head.add(header);
+        midPane.add(head);
         tabbedPane = new JTabbedPane();
         addNMCCard();
         addMemberCard();
