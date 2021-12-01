@@ -70,6 +70,11 @@ public class ClimbSafePage {
         mainFrame.setVisible(true);
     }
 
+    /**
+     * @author Sebastien Cantin
+     * @param num number associated to the photo that will be chosen
+     * @return the url of the photo to be used as a background
+     */
     public static java.net.URL getPhoto(int num)  {
         java.net.URL imageURL = ClimbSafePage.class.getResource("ClimbSafePage.class");
         String imageString = (imageURL.getFile());
@@ -85,6 +90,11 @@ public class ClimbSafePage {
         }
         return imageURL;
     }
+
+    /**
+     * @author Sebastien Cantin
+     * updates the array holding all the equipment names
+     */
     private static void updateEquipmentNames() {
         List<TOBookableItem> equipmentList = TOController.getEquipment();
         if (equipmentList == null || equipmentList.size() == 0) {
@@ -100,6 +110,11 @@ public class ClimbSafePage {
             }
         }
     }
+
+    /**
+     * @author Sebastien Cantin
+     * updates the array holding all the bundle names
+     */
     private static void updateBundlesNames() {
         List<TOBookableItem> equipmentBundleList = TOController.getBundles();
         if (equipmentBundleList==null || equipmentBundleList.size() == 0){
@@ -115,6 +130,12 @@ public class ClimbSafePage {
             }
         }
     }
+
+    /**
+     * @author Sebastien Cantin
+     * updates all the important things to pay, the array with all users that have an assignment
+     * and their authcodes
+     */
     private static void updatePay() {
         List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
         memberNameList = new String[toAssignmentList.size()];
@@ -158,6 +179,11 @@ public class ClimbSafePage {
         tabbedPane.addTab("Setup NMC", card1);
     }
 
+
+    /**
+     * @author Sebastien Cantin
+     * fills in the tab in the UI responsible for registering, updating and deleting member accounts
+     */
     public static void addMemberCard(){
 
         //Create the "cards".
@@ -756,7 +782,10 @@ public class ClimbSafePage {
     }
 
 
-
+    /**
+     * @author Sebastien Cantin
+     * fills in the tab in the UI associated to paying for a member's trip
+     */
     public static void addPayCard(){
         updatePay();
         java.net.URL imageURL = getPhoto(1);
@@ -841,9 +870,11 @@ public class ClimbSafePage {
     }
 
 
-
-
-private static void addTripCard() {
+    /**
+     * @author Sebastien Cantin
+     * Fills in the tab in the UI associated to starting, finishing and cancelling trips
+     */
+    private static void addTripCard() {
     java.net.URL imageURL = getPhoto(1);
 
         BufferedImage hikerBackground = null;

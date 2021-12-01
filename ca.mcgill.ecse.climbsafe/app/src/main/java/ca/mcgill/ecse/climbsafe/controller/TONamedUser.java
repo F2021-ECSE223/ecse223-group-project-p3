@@ -4,7 +4,7 @@
 package ca.mcgill.ecse.climbsafe.controller;
 
 // line 27 "../../../../../../model.ump"
-// line 56 "../../../../../../model.ump"
+// line 57 "../../../../../../model.ump"
 public class TONamedUser
 {
 
@@ -17,15 +17,16 @@ public class TONamedUser
   private String password;
   private String name;
   private String emergencyContact;
-  private String hotelRequired;
-  private String guideRequired;
-  private String nrWeeks;
+  private boolean hotelRequired;
+  private boolean guideRequired;
+  private int nrWeeks;
+  private String guideOrMember;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public TONamedUser(String aEmail, String aPassword, String aName, String aEmergencyContact, String aHotelRequired, String aGuideRequired, String aNrWeeks)
+  public TONamedUser(String aEmail, String aPassword, String aName, String aEmergencyContact, boolean aHotelRequired, boolean aGuideRequired, int aNrWeeks, String aGuideOrMember)
   {
     email = aEmail;
     password = aPassword;
@@ -34,6 +35,7 @@ public class TONamedUser
     hotelRequired = aHotelRequired;
     guideRequired = aGuideRequired;
     nrWeeks = aNrWeeks;
+    guideOrMember = aGuideOrMember;
   }
 
   //------------------------
@@ -72,7 +74,7 @@ public class TONamedUser
     return wasSet;
   }
 
-  public boolean setHotelRequired(String aHotelRequired)
+  public boolean setHotelRequired(boolean aHotelRequired)
   {
     boolean wasSet = false;
     hotelRequired = aHotelRequired;
@@ -80,7 +82,7 @@ public class TONamedUser
     return wasSet;
   }
 
-  public boolean setGuideRequired(String aGuideRequired)
+  public boolean setGuideRequired(boolean aGuideRequired)
   {
     boolean wasSet = false;
     guideRequired = aGuideRequired;
@@ -88,10 +90,18 @@ public class TONamedUser
     return wasSet;
   }
 
-  public boolean setNrWeeks(String aNrWeeks)
+  public boolean setNrWeeks(int aNrWeeks)
   {
     boolean wasSet = false;
     nrWeeks = aNrWeeks;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setGuideOrMember(String aGuideOrMember)
+  {
+    boolean wasSet = false;
+    guideOrMember = aGuideOrMember;
     wasSet = true;
     return wasSet;
   }
@@ -116,19 +126,24 @@ public class TONamedUser
     return emergencyContact;
   }
 
-  public String getHotelRequired()
+  public boolean getHotelRequired()
   {
     return hotelRequired;
   }
 
-  public String getGuideRequired()
+  public boolean getGuideRequired()
   {
     return guideRequired;
   }
 
-  public String getNrWeeks()
+  public int getNrWeeks()
   {
     return nrWeeks;
+  }
+
+  public String getGuideOrMember()
+  {
+    return guideOrMember;
   }
 
   public void delete()
@@ -144,6 +159,7 @@ public class TONamedUser
             "emergencyContact" + ":" + getEmergencyContact()+ "," +
             "hotelRequired" + ":" + getHotelRequired()+ "," +
             "guideRequired" + ":" + getGuideRequired()+ "," +
-            "nrWeeks" + ":" + getNrWeeks()+ "]";
+            "nrWeeks" + ":" + getNrWeeks()+ "," +
+            "guideOrMember" + ":" + getGuideOrMember()+ "]";
   }
 }
