@@ -233,8 +233,6 @@ public class ClimbSafePage {
         JPanel col6 = new JPanel(){};
         JPanel before = new JPanel();
         JPanel col7 = new JPanel(){};
-        JPanel after = new JPanel();
-        JPanel col8 = new JPanel(){};
         JPanel guideNeeded = new JPanel();
         JPanel rightColumn = new JPanel(){
             public Dimension getPreferredSize() {
@@ -261,8 +259,6 @@ public class ClimbSafePage {
         col6.setOpaque(false);
         before.setOpaque(false);
         col7.setOpaque(false);
-        after.setOpaque(false);
-        col8.setOpaque(false);
         guideNeeded.setOpaque(false);
         rightColumn.setOpaque(false);
         bottomButtons.setOpaque(false);
@@ -281,10 +277,8 @@ public class ClimbSafePage {
         JLabel emergencyContactLabel = new JLabel("Emergency Contact:",SwingConstants.RIGHT);
         JLabel lengthLabel = new JLabel("Length of Stay:", SwingConstants.RIGHT);
         JLabel nrWeeks = new JLabel("1 week(s)");
-        JLabel stayBeforeLabel = new JLabel("Stay Before:",SwingConstants.RIGHT);
-        JLabel beforeText = new JLabel("+ 3 days");
-        JLabel stayAfterLabel = new JLabel("Stay After:",SwingConstants.RIGHT);
-        JLabel afterText = new JLabel("+ 3 days");
+        JLabel stayHotelLabel = new JLabel("Stay at Hotel:",SwingConstants.RIGHT);
+        JLabel hotelText = new JLabel("+ 3 days");
         JLabel guideLabel = new JLabel("Add Guide:",SwingConstants.RIGHT);
         JLabel equipmentLabel = new JLabel("Equipment:",SwingConstants.RIGHT);
         JLabel contentLabel1 = new JLabel("Content:",SwingConstants.RIGHT);
@@ -300,18 +294,13 @@ public class ClimbSafePage {
 
         JPasswordField password = new JPasswordField("Password");
 
-        JToggleButton stayBefore = new JToggleButton("<html><span>&#10007;</span></html>"){
+        JToggleButton stayHotel = new JToggleButton("<html><span>&#10007;</span></html>"){
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
                 size.height -= 5;
                 return size;
             }};
-        JToggleButton stayAfter = new JToggleButton("<html><span>&#10007;</span></html>"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height -= 5;
-                return size;
-            }};
+
         JToggleButton guide = new JToggleButton("<html><span>&#10007;</span></html>"){
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
@@ -415,8 +404,6 @@ public class ClimbSafePage {
         leftColumn.add(new JLabel(" "));
         leftColumn.add(col7);
         leftColumn.add(new JLabel(" "));
-        leftColumn.add(col8);
-        leftColumn.add(new JLabel(" "));
 
         rightColumn.add(row1);
         rightColumn.add(new JLabel(" "));
@@ -443,16 +430,12 @@ public class ClimbSafePage {
         weeks.add(weekDown);
         weeks.add(nrWeeks);
         weeks.add(weekUp);
-        col6.add(stayBeforeLabel);
+        col6.add(stayHotelLabel);
         col6.add(before);
-        before.add(stayBefore);
-        before.add(beforeText);
-        col7.add(stayAfterLabel);
-        col7.add(after);
-        after.add(stayAfter);
-        after.add(afterText);
-        col8.add(guideLabel);
-        col8.add(guideNeeded);
+        before.add(stayHotel);
+        before.add(hotelText);
+        col7.add(guideLabel);
+        col7.add(guideNeeded);
         guideNeeded.add(guide);
         row1.add(equipmentLabel);
         row1.add(equipmentVisualList);
@@ -489,12 +472,9 @@ public class ClimbSafePage {
         lengthLabel.setPreferredSize(new Dimension(150, 35));
         weeks.setPreferredSize(new Dimension(150,35));
         col6.setPreferredSize(new Dimension(299,35));
-        stayBeforeLabel.setPreferredSize(new Dimension(150, 35));
+        stayHotelLabel.setPreferredSize(new Dimension(150, 35));
         before.setPreferredSize(new Dimension(150,35));
-        col7.setPreferredSize(new Dimension(299,35));
-        stayAfterLabel.setPreferredSize(new Dimension(150, 35));
-        after.setPreferredSize(new Dimension(150,35));
-        col8.setPreferredSize(new Dimension(350,35));
+        col7.setPreferredSize(new Dimension(320,35));
         guideLabel.setPreferredSize(new Dimension(150, 35));
         guideNeeded.setPreferredSize(new Dimension(150,35));
         equipmentLabel.setPreferredSize(new Dimension(150,20));
@@ -529,21 +509,15 @@ public class ClimbSafePage {
                 nrWeeks.setText(num+" week(s)");
             }
         });
-        stayBefore.addActionListener(new ActionListener() {
+        stayHotel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (stayBefore.isSelected())stayBefore.setText("<html><span>&#10003;</span></html>");
-                else stayBefore.setText("<html><span>&#10007;</span></html>");
+                if (stayHotel.isSelected())stayHotel.setText("<html><span>&#10003;</span></html>");
+                else stayHotel.setText("<html><span>&#10007;</span></html>");
             }
         });
 
-        stayAfter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (stayAfter.isSelected())stayAfter.setText("<html><span>&#10003;</span></html>");
-                else stayAfter.setText("<html><span>&#10007;</span></html>");
-            }
-        });
+
         guide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -606,7 +580,7 @@ public class ClimbSafePage {
         registerMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean hotel = stayBefore.isSelected() || stayAfter.isSelected();
+
                 try {
                     List<String> itemNames = new ArrayList<>();
                     itemNames.addAll(Arrays.asList(equipmentNameArray));
@@ -615,7 +589,7 @@ public class ClimbSafePage {
                     for (int i : equipmentQuantityArray) itemQuantities.add(i);
                     for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
                     ClimbSafeFeatureSet2Controller.registerMember(email.getText(), String.valueOf(password.getPassword()), name.getText(),
-                            emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), hotel, itemNames, itemQuantities);
+                            emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), stayHotel.isSelected(), itemNames, itemQuantities);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -624,7 +598,6 @@ public class ClimbSafePage {
         updateMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean hotel = stayBefore.isSelected() || stayAfter.isSelected();
                 try {
                     List<String> itemNames = new ArrayList<>();
                     itemNames.addAll(Arrays.asList(equipmentNameArray));
@@ -633,7 +606,7 @@ public class ClimbSafePage {
                     for (int i : equipmentQuantityArray) itemQuantities.add(i);
                     for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
                     ClimbSafeFeatureSet2Controller.updateMember(email.getText(), password.getText(), name.getText(),
-                            emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), hotel, itemNames, itemQuantities);
+                            emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), stayHotel.isSelected(), itemNames, itemQuantities);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -642,7 +615,6 @@ public class ClimbSafePage {
         deleteMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean hotel = stayBefore.isSelected() || stayAfter.isSelected();
                 try {
                     ClimbSafeFeatureSet1Controller.deleteMember(email.getText());
                 } catch (Exception ex) {
