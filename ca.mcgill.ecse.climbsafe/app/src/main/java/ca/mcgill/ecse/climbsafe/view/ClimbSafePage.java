@@ -26,7 +26,7 @@ package ca.mcgill.ecse.climbsafe.view;
 public class ClimbSafePage {
     private static JFrame mainFrame;
     private static JTabbedPane tabbedPane;
-    private static String[] memberNameList;
+    private static String[] memberEmailList;
     private static String[] authCodeList;
     private static String[] equipmentNameArray;
     private static String[] equipmentBundleNameArray;
@@ -140,15 +140,15 @@ public class ClimbSafePage {
      */
     private static void updatePay() {
         List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
-        memberNameList = new String[toAssignmentList.size()];
+        memberEmailList = new String[toAssignmentList.size()];
         authCodeList = new String[toAssignmentList.size()];
         for (int i = 0; i < toAssignmentList.size(); i++) {
-            memberNameList[i] = toAssignmentList.get(i).getMemberEmail();
+            memberEmailList[i] = toAssignmentList.get(i).getMemberEmail();
             authCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
         }
         if (toAssignmentList.size() == 0) {
-            memberNameList = new String[1];
-            memberNameList[0] = "Placeholder";
+            memberEmailList = new String[1];
+            memberEmailList[0] = "Placeholder";
             authCodeList = new String[1];
             authCodeList[0] = "Placeholder";
         }
@@ -828,7 +828,7 @@ public class ClimbSafePage {
         JLabel code = new JLabel("Authorization Code:");
         JButton pay = new JButton("Pay Member Trip");
         JButton refresh = new JButton("Refresh Member Names");
-        JComboBox<String> memberNameVisualList = new JComboBox<>(memberNameList);
+        JComboBox<String> memberNameVisualList = new JComboBox<>(memberEmailList);
         JTextField authCode = new JTextField(authCodeList[0]);
         fields.add(members);
         fields.add(memberNameVisualList);
@@ -851,7 +851,7 @@ public class ClimbSafePage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (memberNameList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
+                    if (memberEmailList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
                     AssignmentController.payMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()), authCode.getText());
                 } catch (InvalidInputException ex) {
                     ex.printStackTrace();
@@ -905,7 +905,7 @@ public class ClimbSafePage {
         JPanel finishCancel = new JPanel();
 
         JLabel weekNumber = new JLabel("Week number: 1");
-        JComboBox<String> memberNameVisualList = new JComboBox<>(memberNameList);
+        JComboBox<String> memberNameVisualList = new JComboBox<>(memberEmailList);
 
         JButton weekDown = new JButton("<html>-</html>");
         JButton weekUp = new JButton("<html>+</html>");
