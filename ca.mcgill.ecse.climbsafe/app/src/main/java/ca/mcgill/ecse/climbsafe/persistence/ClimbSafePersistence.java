@@ -5,7 +5,7 @@ import ca.mcgill.ecse.climbsafe.model.*;
 import java.sql.Date;
 
 public class ClimbSafePersistence {
-    private static String filename = "data.climbsafe";
+    private static String filename = "ClimbSafeDemo.data";
 
     public static void setFilename(String filename) {
         ClimbSafePersistence.filename = filename;

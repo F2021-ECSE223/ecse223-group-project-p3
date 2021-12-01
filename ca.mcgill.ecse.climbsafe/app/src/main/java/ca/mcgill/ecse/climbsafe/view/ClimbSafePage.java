@@ -107,6 +107,7 @@ public class ClimbSafePage {
         }
         else{
             equipmentNameArray = new String[equipmentList.size()];
+            equipmentQuantityArray = new int[equipmentList.size()];
             for (int i = 0; i < equipmentList.size(); i++) {
                 equipmentNameArray[i] = equipmentList.get(i).getName();
             }
@@ -127,6 +128,7 @@ public class ClimbSafePage {
         }
         else {
             equipmentBundleNameArray = new String[equipmentBundleList.size()];
+            equipmentBundleQuantityArray = new int[equipmentBundleList.size()];
             for (int i = 0; i < equipmentBundleList.size(); i++) {
                 equipmentBundleNameArray[i] = equipmentBundleList.get(i).getName();
             }
@@ -523,7 +525,7 @@ public class ClimbSafePage {
                 String[] txt = nrWeeks.getText().split(" ");
                 int num = Integer.parseInt(txt[0]);
                 num -= 1;
-                if (num<0) num = 0;
+                if (num<1) num = 1;
                 nrWeeks.setText(num+" week(s)");
             }
         });
