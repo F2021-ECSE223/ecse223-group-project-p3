@@ -17,7 +17,8 @@ public class TOController {
     public static List<TOBookableItem> getEquipment() {
         var bookableItems = new ArrayList<TOBookableItem>();
         for (var equipment: ClimbSafeApplication.getClimbSafe().getEquipment()){
-            bookableItems.add(new TOBookableItem(equipment.getName(), 0, equipment.getWeight(), equipment.getPricePerWeek()));
+            TOBookableItem item = TOBookableItem.getWithName(equipment.getName());
+            bookableItems.add(Objects.requireNonNullElseGet(item, () -> new TOBookableItem(equipment.getName(), 0, equipment.getWeight(), equipment.getPricePerWeek())));
         }
         return bookableItems;
     }
@@ -29,7 +30,9 @@ public class TOController {
     public static List<TOBookableItem> getBundles() {
         var bookableItems = new ArrayList<TOBookableItem>();
         for (var bundle: ClimbSafeApplication.getClimbSafe().getBundles()){
-            bookableItems.add(new TOBookableItem(bundle.getName(), bundle.getDiscount(), 0, 0));
+            TOBookableItem item = TOBookableItem.getWithName(bundle.getName());
+            bookableItems.add(Objects.requireNonNullElseGet(item, () -> new TOBookableItem(bundle.getName(), bundle.getDiscount(), 0, 0)));
+
         }
         return bookableItems;
     }
