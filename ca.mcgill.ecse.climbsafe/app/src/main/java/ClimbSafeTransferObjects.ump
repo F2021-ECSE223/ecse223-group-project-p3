@@ -19,4 +19,17 @@ class TOBookableItem {
   Integer discount;
   Integer weight;
   Integer pricePerWeek;
-  }
+ }
+class TOClimbSafe{
+  Integer nrWeeks;
+}
+class TONamedUser{
+  email;
+  password;
+  name;
+  emergencyContact;
+  hotelRequired;
+  guideRequired;
+  nrWeeks;
+
+}
