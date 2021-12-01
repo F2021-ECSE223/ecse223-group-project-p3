@@ -844,8 +844,7 @@ public class ClimbSafePage {
 
 
 
-    public static void addTripCard(){
-        java.net.URL imageURL = getPhoto(1);
+    java.net.URL imageURL = getPhoto(1);
 
         BufferedImage hikerBackground = null;
         try {
@@ -866,11 +865,94 @@ public class ClimbSafePage {
                 return size;
             }
         };
-        //TODO: add elements to card8 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
+        card8.setLayout(new BoxLayout(card8, BoxLayout.Y_AXIS));
+
+        JPanel start = new JPanel();
+        JPanel middle = new JPanel();
+        JPanel finishCancel = new JPanel();
+
+        JLabel weekNumber = new JLabel("Week number: 1");
+        JComboBox<String> memberNameVisualList = new JComboBox<>(memberNameList);
+
+        JButton weekDown = new JButton("<html>-</html>");
+        JButton weekUp = new JButton("<html>+</html>");
+        JButton startWeek = new JButton("Start Week");
+        JButton finish = new JButton("Finish Member's Trip");
+        JButton cancel = new JButton("Cancel Member's Trip");
+
+
+        start.setOpaque(false);
+        middle.setOpaque(false);
+        finishCancel.setOpaque(false);
+
+        start.add(weekDown);
+        start.add(weekNumber);
+        start.add(weekUp);
+        start.add(startWeek);
+        middle.add(memberNameVisualList);
+        finishCancel.add(finish);
+        finishCancel.add(cancel);
+        card8.add(start);
+        card8.add(middle);
+        card8.add(finishCancel);
+
+
+        weekDown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] txt = weekNumber.getText().split(" ");
+                int num = Integer.parseInt(txt[2]);
+                num -= 1;
+                if (num < 1) num = 1;
+                weekNumber.setText("Week Number: "+num);
+            }
+        });
+        weekDown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] txt = weekNumber.getText().split(" ");
+                int num = Integer.parseInt(txt[2]);
+                num += 1;
+                //TODO Create climbsafe TO?
+                int len = ClimbSafeApplication.getClimbSafe().getNrWeeks();
+                if (num > len) num = len;
+                weekNumber.setText("Week Number: "+num);
+            }
+        });
+        startWeek.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    AssignmentController.startAllTrips(Integer.parseInt(weekNumber.getText().split(" ")[2]));
+                } catch (InvalidInputException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        finish.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex())!="Placeholder")
+                    AssignmentController.finishMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
+                } catch (InvalidInputException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex())!="Placeholder")
+                    AssignmentController.cancelMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
+                } catch (InvalidInputException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
         tabbedPane.addTab("Start trips, finish a trip and cancel a trip", card8);
-    }
 
 
 }
