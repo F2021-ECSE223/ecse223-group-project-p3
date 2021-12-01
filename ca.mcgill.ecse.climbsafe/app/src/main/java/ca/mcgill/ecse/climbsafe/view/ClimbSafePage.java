@@ -843,13 +843,13 @@ public class ClimbSafePage {
 
 
 
-
-    java.net.URL imageURL = getPhoto(1);
+    private static void addTripCard() {
+        java.net.URL imageURL = getPhoto(1);
 
         BufferedImage hikerBackground = null;
         try {
             if (imageURL != null)
-            hikerBackground = ImageIO.read(imageURL);
+                hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -859,6 +859,7 @@ public class ClimbSafePage {
                 super.paintComponent(g);
                 g.drawImage(finalBackground, 0, 0, getWidth(), getHeight(), this);
             }
+
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
                 size.height = 800;
@@ -904,7 +905,7 @@ public class ClimbSafePage {
                 int num = Integer.parseInt(txt[2]);
                 num -= 1;
                 if (num < 1) num = 1;
-                weekNumber.setText("Week Number: "+num);
+                weekNumber.setText("Week Number: " + num);
             }
         });
         weekDown.addActionListener(new ActionListener() {
@@ -916,7 +917,7 @@ public class ClimbSafePage {
                 //TODO Create climbsafe TO?
                 int len = ClimbSafeApplication.getClimbSafe().getNrWeeks();
                 if (num > len) num = len;
-                weekNumber.setText("Week Number: "+num);
+                weekNumber.setText("Week Number: " + num);
             }
         });
         startWeek.addActionListener(new ActionListener() {
@@ -933,8 +934,8 @@ public class ClimbSafePage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex())!="Placeholder")
-                    AssignmentController.finishMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
+                    if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
+                        AssignmentController.finishMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
                 } catch (InvalidInputException ex) {
                     ex.printStackTrace();
                 }
@@ -944,8 +945,8 @@ public class ClimbSafePage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex())!="Placeholder")
-                    AssignmentController.cancelMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
+                    if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
+                        AssignmentController.cancelMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
                 } catch (InvalidInputException ex) {
                     ex.printStackTrace();
                 }
@@ -954,5 +955,5 @@ public class ClimbSafePage {
 
         tabbedPane.addTab("Start trips, finish a trip and cancel a trip", card8);
 
-
+    }
 }

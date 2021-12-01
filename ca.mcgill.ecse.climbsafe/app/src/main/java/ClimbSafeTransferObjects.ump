@@ -14,3 +14,9 @@ class TOAssignment {
   authorizationCode;
   Integer refundedPercentageAmount;
 }
+class TOBookableItem {
+  unique name;
+  Integer discount;
+  Integer weight;
+  Integer pricePerWeek;
+  }
