@@ -1985,8 +1985,9 @@ public class ClimbSafePage {
                     updateAssignment();
                     displayList.setListData(memberEmailList);
                     displayList.setPreferredSize(new Dimension(displayList.getPreferredSize().width +120,displayList.getPreferredSize().height+80));
+                    new Popup("Assignments Initiated Successfully",card6,0);
                 } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
+                    new Popup(ex.getMessage(), card6,1);
                 }
             }
         });
