@@ -9,6 +9,23 @@ import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 import ca.mcgill.ecse.climbsafe.persistence.PersistenceObjectStream;
 
 public class ClimbSafeFeatureSet1Controller {
+  
+  
+    public static void updateAdmin(String email, String password) throws InvalidInputException {
+
+    String error = "";
+    if (password == null || password.equals("")) error = "The password cannot be empty";
+    if (email == null || email.equals("")) error = "The name cannot be empty";
+
+    if (error.length() > 0) {
+      throw new InvalidInputException(error.trim());
+    } else {
+      ClimbSafe climbSafe2 = ClimbSafeApplication.getClimbSafe();
+      Administrator admin2 = climbSafe2.getAdministrator();
+      admin2.setPassword(password);
+      admin2.setEmail(email);
+    }
+  }
 
   /**
    * @author Neel Faucher
