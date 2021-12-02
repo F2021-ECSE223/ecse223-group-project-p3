@@ -32,16 +32,22 @@ public class ClimbSafePage {
     private static JTabbedPane tabbedPane;
     private static String[] memberEmailList;
     private static String[] authCodeList;
+
     private static String[] equipmentNameArray;
     private static String[] equipmentBundleNameArray;
     private static int[] equipmentQuantityArray;
     private static  int[] equipmentBundleQuantityArray;
+
 
     private static String updateErrorMsg = "";
     private static String addErrorMsg = "";
     private static String deleteErrorMsg = "";
     private static List<TOBookableItem> equipmentList = TOController.getEquipment();
     private static String[] equipmentListNames = new String[equipmentList.size()];
+    private static List<TOBookableItem> bundleList = TOController.getEquipment();
+    private static String[] bundleListNames = new String[equipmentList.size()];
+    private static int[] memberEquipmentQuantityArray = new int[equipmentList.size()];
+    private static  int[] memberEquipmentBundleQuantityArray = new int[bundleList.size()];
 
     private static void updateEquipmentList(){
         equipmentList = TOController.getEquipment();
@@ -52,6 +58,18 @@ public class ClimbSafePage {
         equipmentListNames = tempList;
         for (TOBookableItem e :
                 equipmentList) {
+            e.delete();
+        }
+    }
+    private static void updateBundleList(){
+        bundleList = TOController.getBundles();
+        String[] tempList = new String[bundleList.size()];
+        for(int i = 0; i < bundleList.size(); i++){
+            tempList[i] = bundleList.get(i).getName();
+        }
+        bundleListNames = tempList;
+        for (TOBookableItem e :
+                bundleList) {
             e.delete();
         }
     }
@@ -115,47 +133,7 @@ public class ClimbSafePage {
         return imageURL;
     }
 
-    /**
-     * @author Sebastien Cantin
-     * updates the array holding all the equipment names
-     */
-    private static void updateEquipmentNames() {
-        List<TOBookableItem> equipmentList = TOController.getEquipment();
-        if (equipmentList == null || equipmentList.size() == 0) {
-            equipmentNameArray = new String[1];
-            equipmentNameArray[0] = "Placeholder";
-            equipmentQuantityArray = new int[1];
-            equipmentQuantityArray[0] = 0;
-        }
-        else{
-            equipmentNameArray = new String[equipmentList.size()];
-            equipmentQuantityArray = new int[equipmentList.size()];
-            for (int i = 0; i < equipmentList.size(); i++) {
-                equipmentNameArray[i] = equipmentList.get(i).getName();
-            }
-        }
-    }
 
-    /**
-     * @author Sebastien Cantin
-     * updates the array holding all the bundle names
-     */
-    private static void updateBundlesNames() {
-        List<TOBookableItem> equipmentBundleList = TOController.getBundles();
-        if (equipmentBundleList==null || equipmentBundleList.size() == 0){
-            equipmentBundleNameArray = new String[1];
-            equipmentBundleNameArray[0] = "Placeholder";
-            equipmentBundleQuantityArray = new int[1];
-            equipmentBundleQuantityArray[0] = 0;
-        }
-        else {
-            equipmentBundleNameArray = new String[equipmentBundleList.size()];
-            equipmentBundleQuantityArray = new int[equipmentBundleList.size()];
-            for (int i = 0; i < equipmentBundleList.size(); i++) {
-                equipmentBundleNameArray[i] = equipmentBundleList.get(i).getName();
-            }
-        }
-    }
 
     /**
      * @author Sebastien Cantin
@@ -528,10 +506,15 @@ public class ClimbSafePage {
             }
         };
 
-        updateEquipmentNames();
-        JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentNameArray);
-        updateBundlesNames();
-        JComboBox<String> equipmentBundleVisualList = new JComboBox<>(equipmentBundleNameArray);
+
+        JComboBox members = new JComboBox(memberEmailList);
+        members.setPreferredSize(new Dimension(members.getPreferredSize().width +50,members.getPreferredSize().height));
+        updateEquipmentList();
+        JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentListNames);
+        equipmentVisualList.setPreferredSize(new Dimension(equipmentVisualList.getPreferredSize().width+50, equipmentVisualList.getPreferredSize().height));
+        updateBundleList();
+        JComboBox<String> equipmentBundleVisualList = new JComboBox<>(bundleListNames);
+        equipmentBundleVisualList.setPreferredSize(new Dimension(equipmentBundleVisualList.getPreferredSize().width+50, equipmentBundleVisualList.getPreferredSize().height));
 
 
 
@@ -638,6 +621,38 @@ public class ClimbSafePage {
 
 
 
+
+        members.addActionListener(new ActionListener() {//TODO: finish this
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TONamedUser member = TOController.getUserWithEmail((String) members.getSelectedItem());
+                email.setText(member.getEmail());
+                name.setText(member.getName());
+                password.setText(member.getPassword());
+                emergencyContact.setText(member.getEmergencyContact());
+                nrWeeks.setText(String.valueOf(member.getNrWeeks()));
+                guide.setSelected(member.getGuideRequired());
+                if (member.getGuideRequired())guide.setText("<html><span>&#10003;</span></html>");
+                else guide.setText("<html><span>&#10007;</span></html>");
+                stayHotel.setSelected(member.getHotelRequired());
+                if (member.getHotelRequired())stayHotel.setText("<html><span>&#10003;</span></html>");
+                else stayHotel.setText("<html><span>&#10007;</span></html>");
+                for (var bookedItem: TOController.getItemsforMemberEmail(member.getEmail())){
+                    if (bookedItem.getItem().getWeight()==0){ //equipment bundle
+                        for (int i = 0; i< bundleListNames.length; i++){
+                            if (bundleListNames[i]==bookedItem.getItem().getName()) memberEquipmentBundleQuantityArray[i]= bookedItem.getQuantity();
+                        }
+
+                    }else{  //equipment
+                        for (int i = 0; i< equipmentListNames.length; i++){
+                            if (equipmentListNames[i]==bookedItem.getItem().getName()) memberEquipmentQuantityArray[i]= bookedItem.getQuantity();
+                        }
+                    }
+                }
+            }
+        });
+
+
         weekUp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -733,8 +748,8 @@ public class ClimbSafePage {
 
                 try {
                     List<String> itemNames = new ArrayList<>();
-                    itemNames.addAll(Arrays.asList(equipmentNameArray));
-                    itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
+                    itemNames.addAll(Arrays.asList(equipmentListNames));
+                    itemNames.addAll(Arrays.asList(bundleListNames));
                     List<Integer> itemQuantities = new ArrayList<>();
                     for (int i : equipmentQuantityArray) itemQuantities.add(i);
                     for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
@@ -750,8 +765,8 @@ public class ClimbSafePage {
             public void actionPerformed(ActionEvent e) {
                 try {
                     List<String> itemNames = new ArrayList<>();
-                    itemNames.addAll(Arrays.asList(equipmentNameArray));
-                    itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
+                    itemNames.addAll(Arrays.asList(equipmentListNames));
+                    itemNames.addAll(Arrays.asList(bundleListNames));
                     List<Integer> itemQuantities = new ArrayList<>();
                     for (int i : equipmentQuantityArray) itemQuantities.add(i);
                     for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
@@ -775,12 +790,12 @@ public class ClimbSafePage {
         refreshMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateEquipmentNames();
+                updateEquipmentList();
                 equipmentVisualList.removeAllItems();
-                for (String s : equipmentNameArray) equipmentVisualList.addItem(s);
-                updateBundlesNames();
+                for (String s : equipmentListNames) equipmentVisualList.addItem(s);
+                updateBundleList();
                 equipmentBundleVisualList.removeAllItems();
-                for (String s : equipmentBundleNameArray) equipmentBundleVisualList.addItem(s);
+                for (String s : bundleListNames) equipmentBundleVisualList.addItem(s);
             }
         });
 
