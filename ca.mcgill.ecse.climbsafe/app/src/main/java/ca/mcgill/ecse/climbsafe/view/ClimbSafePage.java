@@ -957,7 +957,6 @@ public class ClimbSafePage {
                     equipmentWeightField.setText("");
                     equipmentPriceField.setText("");
                 }
-                System.out.println(ClimbSafeApplication.getClimbSafe().getEquipment());
                 successMsgAddLabel.setVisible(successAdd);
                 errorMsgLabel.setText(addErrorMsg);
                 addErrorMsg = "";
@@ -1012,7 +1011,6 @@ public class ClimbSafePage {
                     equipmentWeightUpdateField.setText("");
                     equipmentPriceUpdateField.setText("");
                 }
-                System.out.println(ClimbSafeApplication.getClimbSafe().getEquipment());
                 successMsgUpdateLabel.setText(String.format("Successfully updated equipment %s.", oldName));
                 successMsgUpdateLabel.setVisible(successUpdate);
                 errorMsgUpdateLabel.setText(updateErrorMsg);
@@ -1058,7 +1056,6 @@ public class ClimbSafePage {
                     }
                     allEquipmentsDisplay.setListData(equipmentListNames);
                 }
-                System.out.println(ClimbSafeApplication.getClimbSafe().getEquipment());
                 successMsgDeleteLabel.setText(String.format("Successfully deleted equipment %s.", oldName));
                 successMsgDeleteLabel.setVisible(successDelete);
                 errorMsgDeleteLabel.setText(deleteErrorMsg);
