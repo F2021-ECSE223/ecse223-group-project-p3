@@ -796,6 +796,9 @@ public class ClimbSafePage {
 
 
 
+    /**
+     * @author Romen Poirier Taksev
+     */
     public static void addEquipmentCard(){
         java.net.URL imageURL = getPhoto(0);
 
@@ -818,42 +821,47 @@ public class ClimbSafePage {
                 return size;
             }
         };
-        //TODO: add elements to card4 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
 
         updateEquipmentList();
 
+        //Panel for adding equipment
         JPanel addEquipmentPanel = new JPanel();
         addEquipmentPanel.setLayout(null);
         addEquipmentPanel.setBounds(230, 50, 1000, 150);
         addEquipmentPanel.setBackground(Color.lightGray);
         addEquipmentPanel.setOpaque(false);
 
+        //title of add equipment panel
         JLabel addEquipmentPanelTitle = new JLabel("Add a new equipment to the ClimbSafe");
         addEquipmentPanelTitle.setBounds(5,5,addEquipmentPanel.getWidth(),15);
         addEquipmentPanelTitle.setHorizontalAlignment(SwingConstants.LEFT);
 
+        //text field and title of text field to set name of equipment
         JTextField equipmentNameField = new JTextField();
         equipmentNameField.setBounds(50, 60, 150, 30);
         JLabel equipmentNameText = new JLabel("Equipment Name");
         equipmentNameText.setBounds(equipmentNameField.getX()+3, equipmentNameField.getY()-15, 150, 15);
         equipmentNameText.setHorizontalAlignment(SwingConstants.LEFT);
 
+        //text field and title of text field to set weight of equipment
         JTextField equipmentWeightField = new JTextField();
         equipmentWeightField.setBounds(equipmentNameField.getX() + equipmentNameField.getWidth() + 50, equipmentNameField.getY(), 150, 30);
         JLabel equipmentWeightText = new JLabel("Equipment Weight");
         equipmentWeightText.setBounds(equipmentWeightField.getX()+3, equipmentWeightField.getY()-15, 150, 15);
         equipmentWeightText.setHorizontalAlignment(SwingConstants.LEFT);
 
+        //text field and title of text field to set price of equipment
         JTextField equipmentPriceField = new JTextField();
         equipmentPriceField.setBounds(equipmentWeightField.getX() + equipmentWeightField.getWidth() + 50, equipmentNameField.getY(), 150, 30);
         JLabel equipmentPriceText = new JLabel("Equipment Price");
         equipmentPriceText.setBounds(equipmentPriceField.getX()+3, equipmentPriceField.getY()-15, 150, 15);
         equipmentPriceText.setHorizontalAlignment(SwingConstants.LEFT);
 
+        //button to add equipment
         JButton submitButton = new JButton("Add");
         submitButton.setBounds(equipmentPriceField.getX() + 180, equipmentNameField.getY(), 100, 30);
 
+        //add all of previous to add equipment panel
         addEquipmentPanel.add(submitButton);
         addEquipmentPanel.add(equipmentNameField);
         addEquipmentPanel.add(equipmentWeightField);
@@ -870,48 +878,56 @@ public class ClimbSafePage {
         updateEquipmentPanel.setBackground(Color.lightGray);
         updateEquipmentPanel.setOpaque(false);
 
+        //title of update equipment panel
         JLabel updateEquipmentPanelTitle = new JLabel("Update an equipment in the ClimbSafe");
         updateEquipmentPanelTitle.setBounds(5,5,addEquipmentPanel.getWidth(),15);
         updateEquipmentPanelTitle.setHorizontalAlignment(SwingConstants.LEFT);
         updateEquipmentPanel.add(updateEquipmentPanelTitle);
 
+        //text field and title of text field to update name of equipment
         JTextField equipmentNameUpdateField = new JTextField();
         equipmentNameUpdateField.setBounds(50, 60, 150, 30);
-
-        JLabel test = new JLabel();
-        test.setBounds(equipmentNameUpdateField.getX() + 5, equipmentNameUpdateField.getY() + 20, 150, 30);
-        test.setForeground(Color.decode("#ff8c00"));
-        updateEquipmentPanel.add(test);
-
         JLabel equipmentNameUpdateText = new JLabel("Updated Equipment Name");
         equipmentNameUpdateText.setBounds(equipmentNameUpdateField.getX()+3, equipmentNameUpdateField.getY()-15, 200, 15);
         equipmentNameUpdateText.setHorizontalAlignment(SwingConstants.LEFT);
 
+        //current name of equipment
+        JLabel currentEquipmentName = new JLabel();
+        currentEquipmentName.setBounds(equipmentNameUpdateField.getX() + 5, equipmentNameUpdateField.getY() + 20, 150, 30);
+        currentEquipmentName.setForeground(Color.decode("#ff8c00"));
+        updateEquipmentPanel.add(currentEquipmentName);
+
+        //text field and title of text field to update weight of equipment
         JTextField equipmentWeightUpdateField = new JTextField();
         equipmentWeightUpdateField.setBounds(equipmentNameUpdateField.getX() + equipmentNameUpdateField.getWidth() + 50, equipmentNameUpdateField.getY(), 150, 30);
         JLabel equipmentWeightUpdateText = new JLabel("Updated Equipment Weight");
         equipmentWeightUpdateText.setBounds(equipmentWeightUpdateField.getX()+3, equipmentWeightUpdateField.getY()-15, 200, 15);
         equipmentWeightUpdateText.setHorizontalAlignment(SwingConstants.LEFT);
 
-        JLabel test1 = new JLabel();
-        test1.setBounds(equipmentWeightUpdateField.getX() + 5, equipmentNameUpdateField.getY() + 20, 150, 30);
-        test1.setForeground(Color.decode("#ff8c00"));
-        updateEquipmentPanel.add(test1);
+        //current weight of equipment
+        JLabel currentEquipmentWeight = new JLabel();
+        currentEquipmentWeight.setBounds(equipmentWeightUpdateField.getX() + 5, equipmentNameUpdateField.getY() + 20, 150, 30);
+        currentEquipmentWeight.setForeground(Color.decode("#ff8c00"));
+        updateEquipmentPanel.add(currentEquipmentWeight);
 
+        //text field and title of text field to update price of equipment
         JTextField equipmentPriceUpdateField = new JTextField();
         equipmentPriceUpdateField.setBounds(equipmentWeightUpdateField.getX() + equipmentWeightUpdateField.getWidth() + 50, equipmentNameField.getY(), 150, 30);
         JLabel equipmentPriceUpdateText = new JLabel("Updated Equipment Price");
         equipmentPriceUpdateText.setBounds(equipmentPriceUpdateField.getX()+3, equipmentPriceUpdateField.getY()-15, 200, 15);
         equipmentPriceUpdateText.setHorizontalAlignment(SwingConstants.LEFT);
 
-        JLabel test2 = new JLabel();
-        test2.setBounds(equipmentPriceUpdateField.getX() + 5, equipmentNameUpdateField.getY() + 20, 150, 30);
-        test2.setForeground(Color.decode("#ff8c00"));
-        updateEquipmentPanel.add(test2);
+        //current price of equipment
+        JLabel currentEquipmentPrice = new JLabel();
+        currentEquipmentPrice.setBounds(equipmentPriceUpdateField.getX() + 5, equipmentNameUpdateField.getY() + 20, 150, 30);
+        currentEquipmentPrice.setForeground(Color.decode("#ff8c00"));
+        updateEquipmentPanel.add(currentEquipmentPrice);
 
+        //button to submit changes
         JButton updateButton = new JButton("Update");
         updateButton.setBounds(equipmentPriceUpdateField.getX() + 180, equipmentNameUpdateField.getY(), 100, 30);
 
+        //add all of above to update equipment panel
         updateEquipmentPanel.add(updateButton);
         updateEquipmentPanel.add(equipmentPriceUpdateField);
         updateEquipmentPanel.add(equipmentWeightUpdateText);
@@ -926,26 +942,32 @@ public class ClimbSafePage {
         deleteEquipmentPanel.setBounds(230, updateEquipmentPanel.getY() + 200, 1000, 150);
         deleteEquipmentPanel.setOpaque(false);
 
+        //title of delete equipment panel
         JLabel deleteEquipmentPanelTitle = new JLabel("Delete an equipment from the ClimbSafe");
         deleteEquipmentPanelTitle.setBounds(5,5,addEquipmentPanel.getWidth(),15);
         deleteEquipmentPanelTitle.setHorizontalAlignment(SwingConstants.LEFT);
         deleteEquipmentPanel.add(deleteEquipmentPanelTitle);
 
+        //text space to see which equipment will be deleted
         JTextField equipmentDeleteText = new JTextField("Select an equipment to delete");
         equipmentDeleteText.setBounds(50, 70, 250, 30);
 
+        //button to delete currently selected equipment
         JButton deleteButton = new JButton("Delete");
         deleteButton.setBounds(equipmentDeleteText.getX() + 270, equipmentDeleteText.getY(), 100, 31);
 
+        //add all of above to delete equipment panel
         deleteEquipmentPanel.add(deleteButton);
         deleteEquipmentPanel.add(equipmentDeleteText);
 
+        //List to display all equipments currently in the climbsafe
         JLabel allEquipmentDisplayTitle = new JLabel("All Equipments");
         allEquipmentDisplayTitle.setBounds(10,20, 150,20);
         JList<String> allEquipmentsDisplay = new JList<>();
         allEquipmentsDisplay.setListData(equipmentListNames);
         allEquipmentsDisplay.setBounds(10,40,150,200);
 
+        //all everything to card 4
         card4.add(allEquipmentDisplayTitle);
         card4.add(allEquipmentsDisplay);
         card4.add(addEquipmentPanel);
@@ -954,6 +976,7 @@ public class ClimbSafePage {
         card4.setLayout(null);
         card4.setVisible(true);
 
+        //update current equipment name, weight and price
         TOBookableItem eq = null;
         String eqName = allEquipmentsDisplay.getSelectedValue();
         for (TOBookableItem tob:
@@ -963,128 +986,149 @@ public class ClimbSafePage {
             }
         }
         if(eq != null){
-            test.setText("Current Name: " + eqName);
-            test1.setText("Current weight: " + eq.getWeight());
-            test2.setText("Current Price: " + eq.getPricePerWeek());
+            currentEquipmentName.setText("Current Name: " + eqName);
+            currentEquipmentWeight.setText("Current weight: " + eq.getWeight());
+            currentEquipmentPrice.setText("Current Price: " + eq.getPricePerWeek());
         }
 
-        allEquipmentsDisplay.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                TOBookableItem eq = null;
-                String eqName = allEquipmentsDisplay.getSelectedValue();
-                for (TOBookableItem tob:
-                        equipmentList) {
-                    if(tob.getName().equals(eqName)){
-                        eq = tob;
-                    }
+        /**
+         * @author Romen Poirier Taksev
+         * checks which element is currently selected in the list, and updates current equipment name, price and weight and delete text.
+         */
+        allEquipmentsDisplay.addListSelectionListener(e -> {
+            TOBookableItem eq1 = null;
+            String eqName1 = allEquipmentsDisplay.getSelectedValue();
+            for (TOBookableItem tob:
+                    equipmentList) {
+                if(tob.getName().equals(eqName1)){
+                    eq1 = tob;
                 }
-                if(eq != null){
-                    test.setText("Current Name: " + eqName);
-                    test1.setText("Current weight: " + eq.getWeight());
-                    test2.setText("Current Price: " + eq.getPricePerWeek());
-                    equipmentDeleteText.setText("Delete " + eqName + "?");
-                }
+            }
+            if(eq1 != null){
+                currentEquipmentName.setText("Current Name: " + eqName1);
+                currentEquipmentWeight.setText("Current weight: " + eq1.getWeight());
+                currentEquipmentPrice.setText("Current Price: " + eq1.getPricePerWeek());
+                equipmentDeleteText.setText("Delete " + eqName1 + "?");
             }
         });
 
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        /**
+         * @author Romen Poirier Taksev
+         * when submit button is pressed, try to add equipment to climbsafe. Otheriwse throw error
+         */
+        submitButton.addActionListener(e -> {
 
-                if(equipmentWeightField.getText().equals("") || equipmentPriceField.getText().equals("")){
-                    addErrorMsg = equipmentWeightField.getText().equals("") ? "Weight field can not be empty" : "Price field can not be empty";
-                    new Popup(addErrorMsg, card4, 1);
-                    addErrorMsg = "";
-                    return;
-                }
-                try{
-
-                    ClimbSafeFeatureSet4Controller.addEquipment(equipmentNameField.getText(), Integer.parseInt(equipmentWeightField.getText()), Integer.parseInt(equipmentPriceField.getText()));
-                }
-                catch (Exception a){
-                    addErrorMsg = a.getMessage();
-                }
-                if(addErrorMsg.equals("")){
-                    new Popup("Successfully added equipment to ClimbSafe.", card4, 0);
-                    updateEquipmentList();
-                    allEquipmentsDisplay.setListData(equipmentListNames);
-                    equipmentNameField.setText("");
-                    equipmentWeightField.setText("");
-                    equipmentPriceField.setText("");
-                }
+            if(equipmentWeightField.getText().equals("") || equipmentPriceField.getText().equals("")){
+                addErrorMsg = equipmentWeightField.getText().equals("") ? "Weight field can not be empty" : "Price field can not be empty";
                 new Popup(addErrorMsg, card4, 1);
                 addErrorMsg = "";
-                card4.revalidate();
-                card4.repaint();
+                return;
             }
+            try{
+
+                ClimbSafeFeatureSet4Controller.addEquipment(equipmentNameField.getText(), Integer.parseInt(equipmentWeightField.getText()), Integer.parseInt(equipmentPriceField.getText()));
+            }
+            catch (Exception a){
+                addErrorMsg = a.getMessage();
+            }
+            if(addErrorMsg.equals("")){
+                new Popup(String.format("Successfully added %s to ClimbSafe.", equipmentNameField.getText()), card4, 0);
+                updateEquipmentList();
+                allEquipmentsDisplay.setListData(equipmentListNames);
+                equipmentNameField.setText("");
+                equipmentWeightField.setText("");
+                equipmentPriceField.setText("");
+                equipmentDeleteText.setText("");
+                currentEquipmentName.setText("");
+                currentEquipmentWeight.setText("");
+                currentEquipmentPrice.setText("");
+            }
+            else{
+                new Popup(addErrorMsg, card4, 1);
+            }
+            addErrorMsg = "";
+            card4.revalidate();
+            card4.repaint();
         });
 
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(allEquipmentsDisplay.getSelectedValue() == null){
-                    updateErrorMsg = "No equipments to update.";
-                    new Popup(updateErrorMsg, card4, 1);
-                    updateErrorMsg = "";
-                    return;
-                }
-                if(equipmentWeightUpdateField.getText().equals("") || equipmentPriceUpdateField.getText().equals("")){
-                    updateErrorMsg = equipmentWeightUpdateField.getText().equals("") ? "Weight field can not be empty" : "Price field can not be empty";
-                    new Popup(updateErrorMsg, card4, 1);
-                    updateErrorMsg = "";
-                    return;
-                }
-                try{
-
-                    ClimbSafeFeatureSet4Controller.updateEquipment(String.valueOf(allEquipmentsDisplay.getSelectedValue()), equipmentNameUpdateField.getText(), Integer.parseInt(equipmentWeightUpdateField.getText()), Integer.parseInt(equipmentPriceUpdateField.getText()));
-                }
-                catch (Exception a){
-                    updateErrorMsg = a.getMessage();
-                }
-                if(updateErrorMsg.equals("")){
-                    String oldName = String.valueOf(allEquipmentsDisplay.getSelectedValue());
-                    new Popup(String.format("Successfully updated equipment %s.", oldName), card4, 0);
-                    updateEquipmentList();
-                    allEquipmentsDisplay.setListData(equipmentListNames);
-                    equipmentNameUpdateField.setText("");
-                    equipmentWeightUpdateField.setText("");
-                    equipmentPriceUpdateField.setText("");
-                }
+        /**
+         * @author Romen Poirier Taksev
+         * when update button is pressed, try to update equipment in the climbsafe of the name selected in the List. Throw an error if it doesn't work.
+         */
+        updateButton.addActionListener(e -> {
+            if(allEquipmentsDisplay.getSelectedValue() == null){
+                updateErrorMsg = equipmentList.size() != 0 ? "No equipment currently selected." :"No equipments to update.";
                 new Popup(updateErrorMsg, card4, 1);
                 updateErrorMsg = "";
-                card4.revalidate();
-                card4.repaint();
+                return;
             }
+            if(equipmentWeightUpdateField.getText().equals("") || equipmentPriceUpdateField.getText().equals("")){
+                updateErrorMsg = equipmentWeightUpdateField.getText().equals("") ? "Weight field can not be empty" : "Price field can not be empty";
+                new Popup(updateErrorMsg, card4, 1);
+                updateErrorMsg = "";
+                return;
+            }
+            try{
+                ClimbSafeFeatureSet4Controller.updateEquipment(String.valueOf(allEquipmentsDisplay.getSelectedValue()), equipmentNameUpdateField.getText(), Integer.parseInt(equipmentWeightUpdateField.getText()), Integer.parseInt(equipmentPriceUpdateField.getText()));
+            }
+            catch (Exception a){
+                updateErrorMsg = a.getMessage();
+            }
+            if(updateErrorMsg.equals("")){
+                String oldName = String.valueOf(allEquipmentsDisplay.getSelectedValue());
+                new Popup(String.format("Successfully updated equipment %s.", oldName), card4, 0);
+                updateEquipmentList();
+                allEquipmentsDisplay.setListData(equipmentListNames);
+                equipmentNameUpdateField.setText("");
+                equipmentWeightUpdateField.setText("");
+                equipmentPriceUpdateField.setText("");
+                currentEquipmentName.setText("");
+                currentEquipmentWeight.setText("");
+                currentEquipmentPrice.setText("");
+            }
+            else{
+                new Popup(updateErrorMsg, card4, 1);
+            }
+            updateErrorMsg = "";
+            card4.revalidate();
+            card4.repaint();
         });
 
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        /**
+         * @author Romen Poirier Taksev
+         * when delete button is pressed, try to delete equipment in the climbsafe of the name selected in the List. Throw an error if it doesn't work.
+         */
+        deleteButton.addActionListener(e -> {
 
-                if(allEquipmentsDisplay.getSelectedValue() == null){
-                    deleteErrorMsg = "No more equipments to delete.";
-                    new Popup(deleteErrorMsg, card4, 1);
-                    deleteErrorMsg = "";
-                    return;
-                }
-                try{
-                    ClimbSafeFeatureSet6Controller.deleteEquipment(String.valueOf(allEquipmentsDisplay.getSelectedValue()));
-                }
-                catch (Exception a){
-                    deleteErrorMsg = a.getMessage();
-                }
-                if(deleteErrorMsg.equals("")){
-                    String oldName = String.valueOf(allEquipmentsDisplay.getSelectedValue());
-                    new Popup(String.format("Successfully deleted equipment %s.", oldName), card4, 0);
-                    updateEquipmentList();
-                    allEquipmentsDisplay.setListData(equipmentListNames);
-                }
+            if(allEquipmentsDisplay.getSelectedValue() == null){
+
+                deleteErrorMsg = equipmentList.size() != 0 ? "No equipment currently selected." :"No more equipments to delete.";
                 new Popup(deleteErrorMsg, card4, 1);
                 deleteErrorMsg = "";
-                card4.revalidate();
-                card4.repaint();
+                return;
             }
+            try{
+                ClimbSafeFeatureSet6Controller.deleteEquipment(String.valueOf(allEquipmentsDisplay.getSelectedValue()));
+            }
+            catch (Exception a){
+                deleteErrorMsg = a.getMessage();
+            }
+            if(deleteErrorMsg.equals("")){
+                String oldName = String.valueOf(allEquipmentsDisplay.getSelectedValue());
+                new Popup(String.format("Successfully deleted equipment %s.", oldName), card4, 0);
+                updateEquipmentList();
+                allEquipmentsDisplay.setListData(equipmentListNames);
+                equipmentDeleteText.setText("");
+                currentEquipmentName.setText("");
+                currentEquipmentWeight.setText("");
+                currentEquipmentPrice.setText("");
+            }
+            else{
+                new Popup(deleteErrorMsg, card4, 1);
+            }
+            deleteErrorMsg = "";
+            card4.revalidate();
+            card4.repaint();
         });
 
 
