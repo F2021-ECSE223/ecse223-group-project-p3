@@ -20,6 +20,8 @@ package ca.mcgill.ecse.climbsafe.view;
 
         import javax.imageio.ImageIO;
         import javax.swing.*;
+        import javax.swing.event.ListSelectionEvent;
+        import javax.swing.event.ListSelectionListener;
 
 
 
@@ -719,7 +721,7 @@ public class ClimbSafePage {
         JPanel addEquipmentPanel = new JPanel();
         addEquipmentPanel.setLayout(null);
         addEquipmentPanel.setBounds(230, 50, 1000, 150);
-        addEquipmentPanel.setBackground(new Color(255, 255, 255, 120));
+        addEquipmentPanel.setBackground(Color.lightGray);
         //addEquipmentPanel.setOpaque(false);
 
         JLabel addEquipmentPanelTitle = new JLabel("Add a new equipment to the ClimbSafe");
@@ -747,10 +749,12 @@ public class ClimbSafePage {
         JLabel errorMsgLabel = new JLabel(addErrorMsg);
         errorMsgLabel.setBounds(5, 130, 350, 15);
         errorMsgLabel.setForeground(Color.red);
+        errorMsgLabel.setBackground(Color.gray);
 
         JLabel successMsgAddLabel = new JLabel("Successfully added equipment to ClimbSafe.");
         successMsgAddLabel.setBounds(710, 130, 300, 15);
         successMsgAddLabel.setForeground(Color.green);
+        successMsgAddLabel.setBackground(Color.gray);
         successMsgAddLabel.setVisible(false);
 
         JButton submitButton = new JButton("Add");
@@ -771,7 +775,7 @@ public class ClimbSafePage {
         JPanel updateEquipmentPanel = new JPanel();
         updateEquipmentPanel.setLayout(null);
         updateEquipmentPanel.setBounds(230, addEquipmentPanel.getY() + 200, 1000, 150);
-        updateEquipmentPanel.setBackground(Color.white);
+        updateEquipmentPanel.setBackground(Color.lightGray);
 
         JLabel updateEquipmentPanelTitle = new JLabel("Update an equipment in the ClimbSafe");
         updateEquipmentPanelTitle.setBounds(5,5,addEquipmentPanel.getWidth(),15);
@@ -786,6 +790,13 @@ public class ClimbSafePage {
 
         JTextField equipmentNameUpdateField = new JTextField();
         equipmentNameUpdateField.setBounds(equipmentUpdateDropdown.getX() + equipmentUpdateDropdown.getWidth() + 50, equipmentUpdateDropdown.getY(), 150, 30);
+
+        JLabel test = new JLabel();
+        test.setBounds(equipmentNameUpdateField.getX() + 5, equipmentUpdateDropdown.getY() + 20, 150, 30);
+        test.setForeground(Color.white);
+        updateEquipmentPanel.add(test);
+
+
         JLabel equipmentNameUpdateText = new JLabel("Updated Equipment Name");
         equipmentNameUpdateText.setBounds(equipmentNameUpdateField.getX()+3, equipmentNameUpdateField.getY()-15, 200, 15);
         equipmentNameUpdateText.setHorizontalAlignment(SwingConstants.LEFT);
@@ -796,11 +807,21 @@ public class ClimbSafePage {
         equipmentWeightUpdateText.setBounds(equipmentWeightUpdateField.getX()+3, equipmentWeightUpdateField.getY()-15, 200, 15);
         equipmentWeightUpdateText.setHorizontalAlignment(SwingConstants.LEFT);
 
+        JLabel test1 = new JLabel();
+        test1.setBounds(equipmentWeightUpdateField.getX() + 5, equipmentUpdateDropdown.getY() + 20, 150, 30);
+        test1.setForeground(Color.white);
+        updateEquipmentPanel.add(test1);
+
         JTextField equipmentPriceUpdateField = new JTextField();
         equipmentPriceUpdateField.setBounds(equipmentWeightUpdateField.getX() + equipmentWeightUpdateField.getWidth() + 50, equipmentNameField.getY(), 150, 30);
         JLabel equipmentPriceUpdateText = new JLabel("Updated Equipment Price");
         equipmentPriceUpdateText.setBounds(equipmentPriceUpdateField.getX()+3, equipmentPriceUpdateField.getY()-15, 200, 15);
         equipmentPriceUpdateText.setHorizontalAlignment(SwingConstants.LEFT);
+
+        JLabel test2 = new JLabel();
+        test2.setBounds(equipmentPriceUpdateField.getX() + 5, equipmentUpdateDropdown.getY() + 20, 150, 30);
+        test2.setForeground(Color.white);
+        updateEquipmentPanel.add(test2);
 
         JLabel successMsgUpdateLabel = new JLabel();
         successMsgUpdateLabel.setBounds(720, 130, 350, 15);
@@ -826,13 +847,11 @@ public class ClimbSafePage {
         updateEquipmentPanel.add(equipmentNameUpdateField);
         updateEquipmentPanel.add(equipmentNameUpdateText);
 
-
-
         //panel to delete equipments in the climbsafe
         JPanel deleteEquipmentPanel = new JPanel();
         deleteEquipmentPanel.setLayout(null);
         deleteEquipmentPanel.setBounds(230, updateEquipmentPanel.getY() + 200, 1000, 150);
-        deleteEquipmentPanel.setBackground(Color.white);
+        deleteEquipmentPanel.setBackground(Color.lightGray);
         JLabel deleteEquipmentPanelTitle = new JLabel("Delete an equipment from the ClimbSafe");
         deleteEquipmentPanelTitle.setBounds(5,5,addEquipmentPanel.getWidth(),15);
         deleteEquipmentPanelTitle.setHorizontalAlignment(SwingConstants.LEFT);
@@ -863,12 +882,47 @@ public class ClimbSafePage {
         deleteEquipmentPanel.add(equipmentDeleteDropdown);
         deleteEquipmentPanel.add(equipmentDeleteText);
 
+        JLabel allEquipmentDisplayTitle = new JLabel("All Equipments");
+        allEquipmentDisplayTitle.setBounds(10,20, 150,20);
+        JList<String> allEquipmentsDisplay = new JList<>();
+        allEquipmentsDisplay.setListData(equipmentListNames);
+        allEquipmentsDisplay.setBounds(10,40,150,200);
 
+        card4.add(allEquipmentDisplayTitle);
+        card4.add(allEquipmentsDisplay);
         card4.add(addEquipmentPanel);
         card4.add(updateEquipmentPanel);
         card4.add(deleteEquipmentPanel);
         card4.setLayout(null);
         card4.setVisible(true);
+
+        allEquipmentsDisplay.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int selectedEq = allEquipmentsDisplay.getSelectedIndex();
+                equipmentDeleteDropdown.setSelectedIndex(selectedEq);
+                equipmentUpdateDropdown.setSelectedIndex(selectedEq);
+            }
+        });
+
+        equipmentUpdateDropdown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TOBookableItem eq = null;
+                String eqName = (String) equipmentUpdateDropdown.getSelectedItem();
+                for (TOBookableItem tob:
+                     equipmentList) {
+                    if(tob.getName().equals(eqName)){
+                        eq = tob;
+                    }
+                }
+                if(eq != null){
+                    test.setText("Current Name: " + eqName);
+                    test1.setText("Current weight: " + eq.getWeight());
+                    test2.setText("Current Price: " + eq.getPricePerWeek());
+                }
+            }
+        });
 
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -898,6 +952,7 @@ public class ClimbSafePage {
                     updateEquipmentList();
                     equipmentUpdateDropdown.addItem(equipmentListNames[equipmentListNames.length-1]);
                     equipmentDeleteDropdown.addItem(equipmentListNames[equipmentListNames.length-1]);
+                    allEquipmentsDisplay.setListData(equipmentListNames);
                     equipmentNameField.setText("");
                     equipmentWeightField.setText("");
                     equipmentPriceField.setText("");
@@ -952,6 +1007,7 @@ public class ClimbSafePage {
                         equipmentUpdateDropdown.addItem(s);
                         equipmentDeleteDropdown.addItem(s);
                     }
+                    allEquipmentsDisplay.setListData(equipmentListNames);
                     equipmentNameUpdateField.setText("");
                     equipmentWeightUpdateField.setText("");
                     equipmentPriceUpdateField.setText("");
@@ -1000,6 +1056,7 @@ public class ClimbSafePage {
                         equipmentUpdateDropdown.addItem(s);
                         equipmentDeleteDropdown.addItem(s);
                     }
+                    allEquipmentsDisplay.setListData(equipmentListNames);
                 }
                 System.out.println(ClimbSafeApplication.getClimbSafe().getEquipment());
                 successMsgDeleteLabel.setText(String.format("Successfully deleted equipment %s.", oldName));
