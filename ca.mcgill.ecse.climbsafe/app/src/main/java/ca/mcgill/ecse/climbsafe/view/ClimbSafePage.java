@@ -37,6 +37,9 @@ public class ClimbSafePage {
     private static String[] equipmentBundleNameArray;
     private static int[] equipmentQuantityArray;
     private static  int[] equipmentBundleQuantityArray;
+    private static String[] assignedMemberList;
+    private static String[] memberList;
+    private static String[] authCodeList;
 
 
     private static String updateErrorMsg = "";
@@ -1461,6 +1464,16 @@ public class ClimbSafePage {
                 }
 
 
+            }
+        });
+            cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               try{
+                   ClimbSafeFeatureSet6Controller.deleteEquipmentBundle((String)bundleList.getSelectedItem());
+               }catch (Exception ex){
+                   ex.printStackTrace();
+               }
             }
         });
         bundleList.addActionListener(new ActionListener() {
