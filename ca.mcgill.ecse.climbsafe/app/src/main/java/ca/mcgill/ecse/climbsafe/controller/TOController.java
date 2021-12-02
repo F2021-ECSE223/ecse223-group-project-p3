@@ -1,9 +1,7 @@
 package ca.mcgill.ecse.climbsafe.controller;
 
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
-import ca.mcgill.ecse.climbsafe.model.Guide;
-import ca.mcgill.ecse.climbsafe.model.Member;
-import ca.mcgill.ecse.climbsafe.model.NamedUser;
+import ca.mcgill.ecse.climbsafe.model.*;
 
 import javax.naming.Name;
 import java.util.ArrayList;
@@ -86,4 +84,14 @@ public class TOController {
 
         return guides;
     }
+    public static List<TOBookedItem> getItemsforMemberEmail(String aEmail){
+        var itemList =  new ArrayList<TOBookedItem>();
+        var member = (Member)Member.getWithEmail(aEmail);
+        for (var item: member.getBookedItems()){
+            if (item.getItem() instanceof Equipment) itemList.add(new TOBookedItem(item.getQuantity(), aEmail, new TOBookableItem(item.getItem().getName(),0,((Equipment) item.getItem()).getWeight(),((Equipment) item.getItem()).getPricePerWeek())));
+            else itemList.add(new TOBookedItem(item.getQuantity(), aEmail, new TOBookableItem(item.getItem().getName(), ((EquipmentBundle)item.getItem()).getDiscount(),0,0)));
+        }
+        return itemList;
+    }
+
 }

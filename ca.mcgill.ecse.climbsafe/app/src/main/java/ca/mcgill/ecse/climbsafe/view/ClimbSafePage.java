@@ -21,9 +21,6 @@ package ca.mcgill.ecse.climbsafe.view;
         import javax.imageio.ImageIO;
         import javax.swing.*;
         import javax.swing.border.EmptyBorder;
-        import javax.swing.border.LineBorder;
-        import javax.swing.border.TitledBorder;
-        import javax.swing.event.AncestorListener;
         import javax.swing.event.ListSelectionEvent;
         import javax.swing.event.ListSelectionListener;
 
@@ -37,8 +34,8 @@ public class ClimbSafePage {
     private static String[] authCodeList;
     private static String[] equipmentNameArray;
     private static String[] equipmentBundleNameArray;
-    private static int[] equipmentQuantityArray;
-    private static  int[] equipmentBundleQuantityArray;
+    private static int[] memberEquipmentQuantityArray;
+    private static  int[] memberEquipmentBundleQuantityArray;
         
     private static Boolean successAdd = false;
     private static Boolean successUpdate = false;
@@ -131,12 +128,12 @@ public class ClimbSafePage {
         if (equipmentList == null || equipmentList.size() == 0) {
             equipmentNameArray = new String[1];
             equipmentNameArray[0] = "Placeholder";
-            equipmentQuantityArray = new int[1];
-            equipmentQuantityArray[0] = 0;
+            memberEquipmentQuantityArray = new int[1];
+            memberEquipmentQuantityArray[0] = 0;
         }
         else{
             equipmentNameArray = new String[equipmentList.size()];
-            equipmentQuantityArray = new int[equipmentList.size()];
+            memberEquipmentQuantityArray = new int[equipmentList.size()];
             for (int i = 0; i < equipmentList.size(); i++) {
                 equipmentNameArray[i] = equipmentList.get(i).getName();
             }
@@ -152,12 +149,12 @@ public class ClimbSafePage {
         if (equipmentBundleList==null || equipmentBundleList.size() == 0){
             equipmentBundleNameArray = new String[1];
             equipmentBundleNameArray[0] = "Placeholder";
-            equipmentBundleQuantityArray = new int[1];
-            equipmentBundleQuantityArray[0] = 0;
+            memberEquipmentBundleQuantityArray = new int[1];
+            memberEquipmentBundleQuantityArray[0] = 0;
         }
         else {
             equipmentBundleNameArray = new String[equipmentBundleList.size()];
-            equipmentBundleQuantityArray = new int[equipmentBundleList.size()];
+            memberEquipmentBundleQuantityArray = new int[equipmentBundleList.size()];
             for (int i = 0; i < equipmentBundleList.size(); i++) {
                 equipmentBundleNameArray[i] = equipmentBundleList.get(i).getName();
             }
@@ -550,6 +547,18 @@ public class ClimbSafePage {
                 nrWeeks.setText(String.valueOf(member.getNrWeeks()));
                 guide.setEnabled(member.getGuideRequired());
                 stayHotel.setEnabled(member.getHotelRequired());
+                for (var bookedItem: TOController.getItemsforMemberEmail(member.getEmail())){
+                    if (bookedItem.getItem().getWeight()==0){ //equipment bundle
+                        for (int i = 0; i<equipmentBundleNameArray.length;i++){
+                            if (equipmentBundleNameArray[i]==bookedItem.getItem().getName()) memberEquipmentBundleQuantityArray[i]= bookedItem.getQuantity();
+                        }
+
+                    }else{  //equipment
+                        for (int i = 0; i<equipmentNameArray.length;i++){
+                            if (equipmentNameArray[i]==bookedItem.getItem().getName()) memberEquipmentQuantityArray[i]= bookedItem.getQuantity();
+                        }
+                    }
+                }
             }
         });
         weekUp.addActionListener(new ActionListener() {
@@ -591,7 +600,7 @@ public class ClimbSafePage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (equipmentVisualList.getSelectedIndex() !=-1)
-                equipmentQuantity.setText(String.valueOf(equipmentQuantityArray[equipmentVisualList.getSelectedIndex()]));
+                equipmentQuantity.setText(String.valueOf(memberEquipmentQuantityArray[equipmentVisualList.getSelectedIndex()]));
             }
         });
         equipmentUp.addActionListener(new ActionListener() {
@@ -600,7 +609,7 @@ public class ClimbSafePage {
                 int num = Integer.parseInt(equipmentQuantity.getText());
                 num += 1;
                 equipmentQuantity.setText(String.valueOf(num));
-                equipmentQuantityArray[equipmentVisualList.getSelectedIndex()] = num;
+                memberEquipmentQuantityArray[equipmentVisualList.getSelectedIndex()] = num;
             }
         });
         equipmentDown.addActionListener(new ActionListener() {
@@ -610,14 +619,14 @@ public class ClimbSafePage {
                 num -= 1;
                 if (num<0) num = 0;
                 equipmentQuantity.setText(String.valueOf(num));
-                equipmentQuantityArray[equipmentVisualList.getSelectedIndex()] = num;
+                memberEquipmentQuantityArray[equipmentVisualList.getSelectedIndex()] = num;
             }
         });
         equipmentBundleVisualList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (equipmentBundleVisualList.getSelectedIndex() !=-1)
-                equipmentBundleQuantity.setText(String.valueOf(equipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()]));
+                equipmentBundleQuantity.setText(String.valueOf(memberEquipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()]));
             }
         });
         equipmentBundleUp.addActionListener(new ActionListener() {
@@ -626,7 +635,7 @@ public class ClimbSafePage {
                 int num = Integer.parseInt(equipmentBundleQuantity.getText());
                 num += 1;
                 equipmentBundleQuantity.setText(String.valueOf(num));
-                equipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()] = num;
+                memberEquipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()] = num;
             }
         });
         equipmentBundleDown.addActionListener(new ActionListener() {
@@ -636,7 +645,7 @@ public class ClimbSafePage {
                 num -= 1;
                 if (num<0) num = 0;
                 equipmentBundleQuantity.setText(String.valueOf(num));
-                equipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()] = num;
+                memberEquipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()] = num;
             }
         });
         registerMember.addActionListener(new ActionListener() {
@@ -648,8 +657,8 @@ public class ClimbSafePage {
                     itemNames.addAll(Arrays.asList(equipmentNameArray));
                     itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
                     List<Integer> itemQuantities = new ArrayList<>();
-                    for (int i : equipmentQuantityArray) itemQuantities.add(i);
-                    for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
+                    for (int i : memberEquipmentQuantityArray) itemQuantities.add(i);
+                    for (int i : memberEquipmentBundleQuantityArray) itemQuantities.add(i);
                     ClimbSafeFeatureSet2Controller.registerMember(email.getText(), String.valueOf(password.getPassword()), name.getText(),
                             emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), stayHotel.isSelected(), itemNames, itemQuantities);
                 } catch (Exception ex) {
@@ -665,8 +674,8 @@ public class ClimbSafePage {
                     itemNames.addAll(Arrays.asList(equipmentNameArray));
                     itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
                     List<Integer> itemQuantities = new ArrayList<>();
-                    for (int i : equipmentQuantityArray) itemQuantities.add(i);
-                    for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
+                    for (int i : memberEquipmentQuantityArray) itemQuantities.add(i);
+                    for (int i : memberEquipmentBundleQuantityArray) itemQuantities.add(i);
                     ClimbSafeFeatureSet2Controller.updateMember(email.getText(), password.getText(), name.getText(),
                             emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), stayHotel.isSelected(), itemNames, itemQuantities);
                 } catch (Exception ex) {
