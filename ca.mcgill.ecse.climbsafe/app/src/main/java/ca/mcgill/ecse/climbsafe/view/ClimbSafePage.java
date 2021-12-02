@@ -938,32 +938,236 @@ public class ClimbSafePage {
 
 
     public static void addGuideCard(){
-        java.net.URL imageURL = getPhoto(0);
 
-        BufferedImage hikerBackground = null;
-        try {
-            if (imageURL != null)
-            hikerBackground = ImageIO.read(imageURL);
-        } catch (IOException ex) {
-            Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
+            java.net.URL imageURL = getPhoto(0);
+
+            BufferedImage hikerBackground = null;
+            try {
+                if (imageURL != null)
+                    hikerBackground = ImageIO.read(imageURL);
+            } catch (IOException ex) {
+                Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            BufferedImage finalBackground = hikerBackground;
+            JPanel card3 = new JPanel() {
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    g.drawImage(finalBackground, 0, 0, getWidth(), getHeight(), this);
+                }
+                public Dimension getPreferredSize() {
+                    Dimension size = super.getPreferredSize();
+                    size.height = 800;
+                    return size;
+                }
+            };
+            //TODO: add elements to card3 to create the page
+            //If you create any JPanels, be sure to use panelName.setOpaque(false)
+            card3.setLayout(new BoxLayout(card3, BoxLayout.Y_AXIS));
+
+            //PANELS
+
+            //Main panels
+            JPanel listandfields = new JPanel();
+            JPanel guideInfo = new JPanel();
+            guideInfo.setLayout(new BoxLayout(guideInfo, BoxLayout.Y_AXIS));
+            JPanel list = new JPanel(); //JCombo box with the list of members
+            JPanel buttons = new JPanel();
+
+
+
+
+            //Sub panels
+            JPanel emails = new JPanel();
+            JPanel names = new JPanel();
+            JPanel passwords = new JPanel();
+            JPanel emergencyContacts = new JPanel();
+            JPanel space = new JPanel();
+            JPanel space2 = new JPanel();
+            JPanel space3 = new JPanel();
+            JPanel space4 = new JPanel();
+            JPanel space5 = new JPanel();
+            JPanel space6 = new JPanel();
+            JPanel space7 = new JPanel();
+            JPanel space8 = new JPanel();
+            JPanel space9 = new JPanel();
+            //Labels + Text fields
+
+            JLabel email = new JLabel("Email: ", SwingConstants.RIGHT);
+            JLabel name = new JLabel    ("Name: ", SwingConstants.RIGHT);
+            JLabel emergencyContact = new JLabel("Emergency contact: ", SwingConstants.RIGHT);
+            JLabel password = new JLabel("Password: ", SwingConstants.RIGHT);
+            JLabel empty = new JLabel("");
+
+            JTextField emailEntry = new JTextField("johndoe@gmail.com");
+            JTextField nameEntry = new JTextField("John Doe");
+            JPasswordField passwordEntry = new JPasswordField("Password: ");
+            JTextField emergencyContactEntry = new JTextField("(xxx) xxx-xxxx");
+
+            //Jcombo Box
+
+            //Fill guide email list
+            List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
+            guideEmailList = new String[toAssignmentList.size()];
+            for (int i = 0; i < toAssignmentList.size(); i++){
+                guideEmailList[i] = toAssignmentList.get(i).getGuideEmail();
+            }
+            JComboBox guides = new JComboBox(guideEmailList);
+            guides.setPreferredSize(new Dimension(guides.getPreferredSize().width+50, guides.getPreferredSize().height));
+
+            //Resize Text fields
+            Dimension textDimensions = new Dimension(600, 25);
+            emailEntry.setPreferredSize(textDimensions);
+            nameEntry.setPreferredSize(textDimensions);
+            passwordEntry.setPreferredSize(textDimensions);
+            emergencyContactEntry.setPreferredSize(textDimensions);
+
+            //Resize Labels
+            email.setPreferredSize(emergencyContact.getPreferredSize());
+            name.setPreferredSize(emergencyContact.getPreferredSize());
+            password.setPreferredSize(emergencyContact.getPreferredSize());
+            emergencyContact.setPreferredSize(emergencyContact.getPreferredSize());
+
+            //BUTTONS
+            JButton registerGuide = new JButton("Register Guide"){
+                public Dimension getPreferredSize() {
+                    Dimension size = super.getPreferredSize();
+                    size.height += 30;
+                    size.width += 50;
+                    return size;
+                }
+            };
+            JButton updateGuide = new JButton("Update Guide"){
+                public Dimension getPreferredSize() {
+                    Dimension size = super.getPreferredSize();
+                    size.height += 30;
+                    size.width += 50;
+                    return size;
+                }
+            };
+            JButton deleteGuide = new JButton("Delete Guide"){
+                public Dimension getPreferredSize() {
+                    Dimension size = super.getPreferredSize();
+                    size.height += 30;
+                    size.width += 50;
+                    return size;
+                }
+            };
+
+            //ADD LABELS TO CORRESPONDING PANELS
+            emails.add(email);
+            emails.add(emailEntry);
+            names.add(name);
+            names.add(nameEntry);
+            passwords.add(password);
+            passwords.add(passwordEntry);
+            emergencyContacts.add(emergencyContact);
+            emergencyContacts.add(emergencyContactEntry);
+
+            //spaces
+            space.add(empty);
+            space2.add(empty);
+            space3.add(empty);
+            space4.add(empty);
+            space5.add(empty);
+            space6.add(empty);
+            space7.add(empty);
+            space8.add(empty);
+            space9.add(empty);
+            //Add sub-panels to main panels
+            guideInfo.add(space9);
+            guideInfo.add(space8);
+            guideInfo.add(space7);
+            guideInfo.add(space6);
+            guideInfo.add(space5);
+            guideInfo.add(emails);
+            guideInfo.add(space);
+            guideInfo.add(names);
+            guideInfo.add(space2);
+            guideInfo.add(passwords);
+            guideInfo.add(space3);
+            guideInfo.add(emergencyContacts);
+            guideInfo.add(space4);
+
+            buttons.add(updateGuide);
+            buttons.add(deleteGuide);
+            buttons.add(registerGuide);
+
+            list.add(guides);
+
+            listandfields.add(list);
+            listandfields.add(guideInfo);
+            //SET OPACITY FALSE
+            //Main panels
+            guideInfo.setOpaque(false);
+            buttons.setOpaque(false);
+            list.setOpaque(false);
+            listandfields.setOpaque(false);
+            //Sub panels
+            emails.setOpaque(false);
+            names.setOpaque(false);
+            passwords.setOpaque(false);
+            emergencyContacts.setOpaque(false);
+            space.setOpaque(false);
+            space2.setOpaque(false);
+            space3.setOpaque(false);
+            space4.setOpaque(false);
+            space5.setOpaque(false);
+            space6.setOpaque(false);
+            space7.setOpaque(false);
+            space8.setOpaque(false);
+            space9.setOpaque(false);
+            //ADD TO CARD
+            card3.add(listandfields);
+            card3.add(buttons);
+
+            tabbedPane.addTab("Guide", card3);
+
+            //ACTION LISTENERS
+            deleteGuide.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        ClimbSafeFeatureSet1Controller.deleteGuide(emailEntry.getText());
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+            });
+
+            updateGuide.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        ClimbSafeFeatureSet3Controller.updateGuide(emailEntry.getText(), passwordEntry.getText(), nameEntry.getText(), emergencyContactEntry.getText());
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+            });
+
+            registerGuide.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        ClimbSafeFeatureSet3Controller.registerGuide(emailEntry.getText(), String.valueOf(passwordEntry.getPassword()), nameEntry.getText(), emergencyContactEntry.getText());
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+            });
+
+            guides.addActionListener(new ActionListener() {//TODO: finish this
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    TONamedUser guide = TOController.getUserWithEmail((String) guides.getSelectedItem());
+                    emailEntry.setText(guide.getEmail());
+                    nameEntry.setText(guide.getName());
+                    passwordEntry.setText(guide.getPassword());
+                    emergencyContactEntry.setText(guide.getEmergencyContact());
+
+                }
+            });
         }
-        BufferedImage finalBackground = hikerBackground;
-        JPanel card3 = new JPanel() {
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(finalBackground, 0, 0, getWidth(), getHeight(), this);
-            }
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height = 800;
-                return size;
-            }
-        };
-        //TODO: add elements to card3 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
-
-        tabbedPane.addTab("Guide", card3);
-    }
 
 
 
