@@ -1,14 +1,31 @@
 package ca.mcgill.ecse.climbsafe.controller;
 
 import java.sql.Date;
-import ca.mcgill.ecse.climbsafe.model.Member;
-import ca.mcgill.ecse.climbsafe.model.Guide;
+
+import ca.mcgill.ecse.climbsafe.model.*;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
-import ca.mcgill.ecse.climbsafe.model.User;
 import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 import ca.mcgill.ecse.climbsafe.persistence.PersistenceObjectStream;
 
 public class ClimbSafeFeatureSet1Controller {
+
+  public static void updateAdmin(String email, String password) throws InvalidInputException {
+
+    String error = "";
+    if (password == null || password.equals("")) error = "The password cannot be empty";
+    if (email == null || email.equals("")) error = "The name cannot be empty";
+
+    if (error.length() > 0) {
+      throw new InvalidInputException(error.trim());
+    } else {
+      ClimbSafe climbSafe2 = ClimbSafeApplication.getClimbSafe();
+      Administrator admin2 = climbSafe2.getAdministrator();
+      admin2.setPassword(password);
+      admin2.setEmail(email);
+    }
+  }
+
+
 
   /**
    * @author Neel Faucher
@@ -84,5 +101,4 @@ public class ClimbSafeFeatureSet1Controller {
   // this method needs to be implemented only by teams with seven team members
   public static void deleteHotel(String name) {
   }
-
 }

@@ -1,9 +1,7 @@
-
 package ca.mcgill.ecse.climbsafe.view;
 
         import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
         import ca.mcgill.ecse.climbsafe.controller.*;
-
 
         import java.awt.*;
         import java.awt.event.ActionEvent;
@@ -12,6 +10,7 @@ package ca.mcgill.ecse.climbsafe.view;
         import java.io.IOException;
         import java.net.MalformedURLException;
         import java.net.URL;
+        import java.sql.Date;
         import java.util.ArrayList;
         import java.util.Arrays;
         import java.util.List;
@@ -20,8 +19,6 @@ package ca.mcgill.ecse.climbsafe.view;
 
         import javax.imageio.ImageIO;
         import javax.swing.*;
-
-
 
 public class ClimbSafePage {
     private static JFrame mainFrame;
@@ -32,8 +29,6 @@ public class ClimbSafePage {
     private static String[] equipmentBundleNameArray;
     private static int[] equipmentQuantityArray;
     private static  int[] equipmentBundleQuantityArray;
-
-
 
     public static void start(){
         mainFrame = new JFrame("ClimbSafe");
@@ -177,10 +172,116 @@ public class ClimbSafePage {
         };
         //TODO: add elements to card1 to create the page
         //If you create any JPanels, be sure to use panelName.setOpaque(false)
+        card1.setLayout(new BoxLayout(card1, BoxLayout.Y_AXIS));
 
+        Dimension dim = new Dimension(217, 20);
+        Dimension dim2 = new Dimension(217, 20);
+
+        JPanel start = new JPanel();
+        JPanel start1 = new JPanel();
+        JPanel start2 = new JPanel();
+        JPanel start3 = new JPanel();
+        JPanel start4 = new JPanel();
+        JPanel start5 = new JPanel();
+        JPanel start6 = new JPanel();
+        JPanel end = new JPanel();
+
+        JLabel text1 = new JLabel("Climbing Season Start Date", SwingConstants.RIGHT);
+        text1.setPreferredSize(dim2);
+        JLabel text2 = new JLabel("Number of Weeks", SwingConstants.RIGHT);
+        text2.setPreferredSize(dim2);
+        JLabel text3 = new JLabel("Price of Guide per Week (Shillings)", SwingConstants.RIGHT);
+        text3.setPreferredSize(dim2);
+        JLabel text4 = new JLabel("Set Admin Email", SwingConstants.RIGHT);
+        text4.setPreferredSize(dim2);
+        JLabel text5 = new JLabel("Set Admin Password", SwingConstants.RIGHT);
+        text5.setPreferredSize(dim2);
+
+        JButton updateAdmin = new JButton("Update Admin") {
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
+
+        JButton updateClimbSafe = new JButton("Update ClimbSafe") {
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
+
+        JTextField climbingSeasonStart = new JTextField("dd/mm/yyyy");
+        climbingSeasonStart.setPreferredSize(dim);
+        JTextField numberWeeks = new JTextField("number");
+        numberWeeks.setPreferredSize(dim);
+        JTextField weeklyCost = new JTextField("$");
+        weeklyCost.setPreferredSize(dim);
+        JTextField adminEmail = new JTextField("email");
+        adminEmail.setPreferredSize(dim);
+        JPasswordField adminPW = new JPasswordField("password");
+        adminPW.setPreferredSize(dim);
+
+        start1.add(text4);
+        start1.add(adminEmail);
+        start2.add(text5);
+        start2.add(adminPW);
+        start3.add(updateAdmin);
+        start4.add(text1);
+        start4.add(climbingSeasonStart);
+        start5.add(text2);
+        start5.add(numberWeeks);
+        start6.add(text3);
+        start6.add(weeklyCost);
+        end.add(updateClimbSafe);
+
+        start.setOpaque(false);
+        start1.setOpaque(false);
+        start2.setOpaque(false);
+        start3.setOpaque(false);
+        start4.setOpaque(false);
+        start5.setOpaque(false);
+        start6.setOpaque(false);
+        end.setOpaque(false);
+
+        card1.add(start1);
+        card1.add(start2);
+        card1.add(start3);
+        card1.add(start4);
+        card1.add(start5);
+        card1.add(start6);
+        card1.add(end);
+
+       updateAdmin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String email = adminEmail.getText();
+                String pw = String.valueOf(adminPW.getPassword());
+                int cost = Integer.parseInt(weeklyCost.getText());
+
+                String startDate = climbingSeasonStart.getText();
+                Date startDate2 = java.sql.Date.valueOf(startDate);
+
+                int noWeeks = Integer.parseInt(numberWeeks.getText());
+                // (Date startDate, int nrWeeks, int priceOfGuidePerWeek) throws InvalidInputException {
+                try {
+                    ClimbSafeFeatureSet1Controller.setup(startDate2, noWeeks, cost);
+                    ClimbSafeFeatureSet1Controller.updateAdmin(email, pw);
+                } catch (InvalidInputException ex) {
+                    ex.printStackTrace();
+                }
+
+
+            }
+        });
         tabbedPane.addTab("Setup NMC", card1);
-    }
 
+    }
 
     /**
      * @author Sebastien Cantin
@@ -210,9 +311,6 @@ public class ClimbSafePage {
                 return size;
             }
         };
-
-
-
 
         JPanel memberPart = new JPanel() {
             public Dimension getPreferredSize() {
@@ -390,8 +488,6 @@ public class ClimbSafePage {
         JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentNameArray);
         updateBundlesNames();
         JComboBox<String> equipmentBundleVisualList = new JComboBox<>(equipmentBundleNameArray);
-
-
 
         card2.add(memberPart);
         card2.add(bottomButtons);
