@@ -37,7 +37,6 @@ public class ClimbSafePage {
     private static String[] equipmentBundleNameArray;
     private static int[] equipmentQuantityArray;
     private static  int[] equipmentBundleQuantityArray;
-    private static String[] assignedMemberList;
     private static String[] memberList;
 
 
@@ -102,6 +101,7 @@ public class ClimbSafePage {
     public static void start(){
         mainFrame = new JFrame("ClimbSafe");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        updateMembers();
 
         JPanel midPane = new JPanel(){
             public Dimension getPreferredSize() {
@@ -391,7 +391,7 @@ public class ClimbSafePage {
                 
                 if(!errorDate && !errorPrice && !errorNoWeeks){
                     try {
-                        ClimbSafeFeatureSet1Controller.setup(startDate2, noWeeks, costCS);
+                        ClimbSafeFeatureSet1Controller.setup((java.sql.Date) startDate2, noWeeks, costCS);
                     } catch (Exception ex) {
                         error = true;
                         new Popup(ex.getMessage(), card1, 1);
@@ -1348,8 +1348,8 @@ public class ClimbSafePage {
         start.setLayout(new BoxLayout(start, BoxLayout.Y_AXIS));
         bundleInput.setLayout(new BoxLayout(bundleInput, BoxLayout.X_AXIS));
 
-        JComboBox<String> bundleList = new JComboBox<>(equipmentBundleNameArray);
-        JComboBox<String> equipmentList = new JComboBox<>(equipmentNameArray);
+        JComboBox<String> bundleList = new JComboBox<>(bundleListNames);
+        JComboBox<String> equipmentList = new JComboBox<>(equipmentListNames);
         JLabel bundleNameLbl = new JLabel("Bundle Name:", SwingConstants.RIGHT);
         JLabel nameLbl  = new JLabel("Name:", SwingConstants.RIGHT);
         JLabel equipmentNameLbl = new JLabel("Equipment:", SwingConstants.RIGHT);
@@ -1361,18 +1361,18 @@ public class ClimbSafePage {
         priceTxt.setPreferredSize(dim);
         JLabel quantityNumber = new JLabel("1", SwingConstants.CENTER);
 
-        JTable table = new JTable(equipmentNameArray.length+1, 2);
+        JTable table = new JTable(equipmentListNames.length+1, 2);
         table.setEnabled(false);
         table.getColumnModel().getColumn(1).setPreferredWidth(100);
         table.getColumnModel().getColumn(0).setPreferredWidth(100);
         table.setValueAt("Equipment",0,0);
         table.setValueAt("Quantity",0,1);
 
-            for (int i = 1; i < equipmentNameArray.length+1; i++) {
-                table.setValueAt(equipmentNameArray[i-1],i,0);
+            for (int i = 1; i < equipmentListNames.length+1; i++) {
+                table.setValueAt(equipmentListNames[i-1],i,0);
              }
-            for (int i = 1; i < equipmentQuantityArray.length+1; i++) {
-                 table.setValueAt(equipmentQuantityArray[i-1],i,1);
+            for (int i = 1; i < equipmentListNames.length+1; i++) {
+                 table.setValueAt(0,i,1);
              }
 
 
@@ -1460,8 +1460,8 @@ public class ClimbSafePage {
         card5.add(bundleInput);
         card5.add(buttons);
 
-        int[] equipmentBundleQuantityArray= new int[equipmentNameArray.length];
-        String[] equipmentArray= new String[equipmentNameArray.length];
+        int[] equipmentBundleQuantityArray= new int[equipmentListNames.length];
+        String[] equipmentArray= new String[equipmentListNames.length];
         quantityUp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1498,7 +1498,7 @@ public class ClimbSafePage {
                     List<String> itemNames = new ArrayList<>();
                     List<Integer> itemQuantity = new ArrayList<>();
 
-                for (int i = 1; i < equipmentNameArray.length+1; i++) {
+                for (int i = 1; i < equipmentListNames.length+1; i++) {
                     if(Integer.parseInt(String.valueOf(table.getValueAt(i,1)))!=0){
                         itemNames.add(String.valueOf(table.getValueAt(i,0)));
                         itemQuantity.add(Integer.parseInt(String.valueOf(table.getValueAt(i,1))));
@@ -1542,6 +1542,7 @@ public class ClimbSafePage {
                 }
             }
         });
+        tabbedPane.addTab("Bundles", card5);
     }
 
 
@@ -1862,7 +1863,7 @@ public class ClimbSafePage {
         JLabel code = new JLabel("Authorization Code:");
 
         JTextField authCode = new JTextField(authCodeList[0]);
-        JComboBox<String> memberNameVisualList = new JComboBox<>(assignedMemberList);
+        JComboBox<String> memberNameVisualList = new JComboBox<>(memberNameList);
 
         JButton weekDown = new JButton("<html>-</html>");
         JButton weekUp = new JButton("<html>+</html>");
@@ -1939,7 +1940,7 @@ public class ClimbSafePage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (assignedMemberList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
+                    if (memberNameList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
                         AssignmentController.payMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()), authCode.getText());
                     new Popup("Succesfully payed for trip", card8, 0);
                 } catch (InvalidInputException ex) {
