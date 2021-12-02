@@ -17,12 +17,12 @@ public class AssignmentController {
  /**
  * This function initiates the assignment for all members
  * @author Neel Faucher
- * @param allMembers list of all members
  * @throws RuntimeException if member does not have assignment, with error message "Assignments could not be completed for all members"
  */
     
-    public static void initiateAllAssignments(List<Member> allMembers) throws InvalidInputException{
+    public static void initiateAllAssignments() throws InvalidInputException{
         List<Guide> allGuides = ClimbSafeApplication.getClimbSafe().getGuides();
+        List<Member> allMembers = ClimbSafeApplication.getClimbSafe().getMembers();
 
         for (Guide guide : allGuides) {
             for (Member member : allMembers) {

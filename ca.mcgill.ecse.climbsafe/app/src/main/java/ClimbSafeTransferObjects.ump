@@ -13,6 +13,7 @@ class TOAssignment {
   status;
   authorizationCode;
   Integer refundedPercentageAmount;
+  bannedStatus;
 }
 class TOBookableItem {
   unique name;

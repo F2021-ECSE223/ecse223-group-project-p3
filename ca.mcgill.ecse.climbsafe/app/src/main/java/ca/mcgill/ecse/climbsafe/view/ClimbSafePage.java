@@ -22,6 +22,7 @@ package ca.mcgill.ecse.climbsafe.view;
         import javax.imageio.ImageIO;
         import javax.swing.*;
         import javax.swing.border.EmptyBorder;
+        import javax.swing.border.TitledBorder;
         import javax.swing.event.ListSelectionEvent;
         import javax.swing.event.ListSelectionListener;
 
@@ -30,8 +31,7 @@ package ca.mcgill.ecse.climbsafe.view;
 public class ClimbSafePage {
     private static JFrame mainFrame;
     private static JTabbedPane tabbedPane;
-    private static String[] memberEmailList;
-    private static String[] authCodeList;
+
 
     private static String[] equipmentNameArray;
     private static String[] equipmentBundleNameArray;
@@ -48,6 +48,20 @@ public class ClimbSafePage {
     private static String[] bundleListNames = new String[equipmentList.size()];
     private static int[] memberEquipmentQuantityArray = new int[equipmentList.size()];
     private static  int[] memberEquipmentBundleQuantityArray = new int[bundleList.size()];
+    private static List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
+    private static String[] memberEmailList = new String[toAssignmentList.size()];
+    private static String[] memberNameList = new String[toAssignmentList.size()];
+    private static String[] guideEmailList = new String[toAssignmentList.size()];
+    private static String[] guideNameList = new String[toAssignmentList.size()];
+    private static String[] hotelNameList = new String[toAssignmentList.size()];
+    private static String[] startWeekList = new String[toAssignmentList.size()];
+    private static String[] endWeekList = new String[toAssignmentList.size()];
+    private static String[] guideCostList = new String[toAssignmentList.size()];
+    private static String[] equipmentCostList = new String[toAssignmentList.size()];
+    private static String[] statusList = new String[toAssignmentList.size()];
+    private static String[] authCodeList = new String[toAssignmentList.size()];
+    private static String[] refundList = new String[toAssignmentList.size()];
+    private static String[] bannedStatusList = new String[toAssignmentList.size()];
 
     private static void updateEquipmentList(){
         equipmentList = TOController.getEquipment();
@@ -73,6 +87,7 @@ public class ClimbSafePage {
             e.delete();
         }
     }
+
 
 
 
@@ -133,7 +148,59 @@ public class ClimbSafePage {
         return imageURL;
     }
 
-
+    /**
+     * @author Abhijeet Praveen
+     * updates the assignment display list in card6 for the assignments
+     * when the assignments are initiated, they will then appear on the member list
+     * any changes to the authcode or assignment status will also be taken care of.
+     */
+    private static void updateAssignment() {
+        toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
+        String[] tempMemberEmailList = new String[toAssignmentList.size()];
+        String[] tempMemberNameList = new String[toAssignmentList.size()];
+        String[] tempGuideEmailList = new String[toAssignmentList.size()];
+        String[] tempGuideNameList = new String[toAssignmentList.size()];
+        String[] tempHotelNameList = new String[toAssignmentList.size()];
+        String[] tempStartWeekList = new String[toAssignmentList.size()];
+        String[] tempEndWeekList = new String[toAssignmentList.size()];
+        String[] tempGuideCostList = new String[toAssignmentList.size()];
+        String[] tempEquipmentCostList = new String[toAssignmentList.size()];
+        String[] tempStatusList = new String[toAssignmentList.size()];
+        String[] tempAuthCodeList = new String[toAssignmentList.size()];
+        String[] tempRefundList = new String[toAssignmentList.size()];
+        String[] tempBannedStatusList = new String[toAssignmentList.size()];
+        for (int i = 0; i < toAssignmentList.size(); i++) {
+            tempMemberEmailList[i] = toAssignmentList.get(i).getMemberEmail();
+            tempMemberNameList[i] = toAssignmentList.get(i).getMemberName();
+            tempGuideEmailList[i] = toAssignmentList.get(i).getGuideEmail();
+            tempGuideNameList[i] = toAssignmentList.get(i).getGuideName();
+            tempHotelNameList[i] = toAssignmentList.get(i).getHotelName();
+            tempStartWeekList[i] = String.valueOf(toAssignmentList.get(i).getStartWeek());
+            tempEndWeekList[i] = String.valueOf(toAssignmentList.get(i).getEndWeek());
+            tempGuideCostList[i] = String.valueOf(toAssignmentList.get(i).getTotalCostForGuide());
+            tempEquipmentCostList[i] = String.valueOf(toAssignmentList.get(i).getTotalCostForEquipment());
+            tempStatusList[i] = toAssignmentList.get(i).getStatus();
+            tempAuthCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
+            tempRefundList[i] = String.valueOf(toAssignmentList.get(i).getRefundedPercentageAmount());
+            tempBannedStatusList[i] = toAssignmentList.get(i).getBannedStatus();
+        }
+        memberEmailList = tempMemberEmailList;
+        memberNameList = tempMemberNameList;
+        guideEmailList = tempGuideEmailList;
+        guideNameList = tempGuideNameList;
+        hotelNameList = tempHotelNameList;
+        startWeekList = tempStartWeekList;
+        endWeekList = tempEndWeekList;
+        guideCostList = tempGuideCostList;
+        equipmentCostList = tempEquipmentCostList;
+        statusList = tempStatusList;
+        authCodeList = tempAuthCodeList;
+        refundList = tempRefundList;
+        bannedStatusList = tempBannedStatusList;
+        for (TOAssignment assignment: toAssignmentList) {
+            assignment.delete();
+        }
+    }
 
     /**
      * @author Sebastien Cantin
@@ -277,7 +344,7 @@ public class ClimbSafePage {
                 int noWeeks = Integer.parseInt(numberWeeks.getText());
                 // (Date startDate, int nrWeeks, int priceOfGuidePerWeek) throws InvalidInputException {
                 try {
-                    ClimbSafeFeatureSet1Controller.setup(startDate2, noWeeks, cost);
+                    ClimbSafeFeatureSet1Controller.setup((java.sql.Date) startDate2, noWeeks, cost);
                 } catch (InvalidInputException ex) {
                     ex.printStackTrace();
                 }
@@ -1229,6 +1296,232 @@ public class ClimbSafePage {
         };
         //TODO: add elements to card6 to create the page
         //If you create any JPanels, be sure to use panelName.setOpaque(false)
+
+        card6.setLayout(new BoxLayout(card6,BoxLayout.Y_AXIS));
+
+
+        updateAssignment();
+
+        JPanel viewAssignments = new JPanel();
+        viewAssignments.setOpaque(false);
+
+        JList<String> displayList = new JList<>(memberEmailList);
+        displayList.setPreferredSize(new Dimension(displayList.getPreferredSize().width +100,displayList.getPreferredSize().height+50));
+        displayList.setBorder(new TitledBorder("Member"));
+
+
+        viewAssignments.add(displayList);
+
+        JPanel allInfoOnRightSide = new JPanel();
+        allInfoOnRightSide.setOpaque(false);
+        allInfoOnRightSide.setLayout(new BoxLayout(allInfoOnRightSide,BoxLayout.Y_AXIS));
+        viewAssignments.add(allInfoOnRightSide);
+
+
+        JPanel panelforMemberEmail = new JPanel();
+        panelforMemberEmail.setOpaque(false);
+        JPanel panelforMemberName = new JPanel();
+        panelforMemberName.setOpaque(false);
+        JPanel panelforGuideEmail = new JPanel();
+        panelforGuideEmail.setOpaque(false);
+        JPanel panelforGuideName = new JPanel();
+        panelforGuideName.setOpaque(false);
+        JPanel panelforHotelName = new JPanel();
+        panelforHotelName.setOpaque(false);
+        JPanel panelforStartWeek = new JPanel();
+        panelforStartWeek.setOpaque(false);
+        JPanel panelforEndWeek = new JPanel();
+        panelforEndWeek.setOpaque(false);
+        JPanel panelforGuideCost = new JPanel();
+        panelforGuideCost.setOpaque(false);
+        JPanel panelforEquipmentCost = new JPanel();
+        panelforEquipmentCost.setOpaque(false);
+        JPanel panelforAssignmentStatus = new JPanel();
+        panelforAssignmentStatus.setOpaque(false);
+        JPanel panelforBanStatus = new JPanel();
+        panelforBanStatus.setOpaque(false);
+        JPanel panelforAuthCode = new JPanel();
+        panelforAuthCode.setOpaque(false);
+        JPanel panelforRefund = new JPanel();
+        panelforRefund.setOpaque(false);
+
+
+
+        allInfoOnRightSide.add(panelforMemberEmail);
+        allInfoOnRightSide.add(panelforMemberName);
+        allInfoOnRightSide.add(panelforGuideEmail);
+        allInfoOnRightSide.add(panelforGuideName);
+        allInfoOnRightSide.add(panelforHotelName);
+        allInfoOnRightSide.add(panelforStartWeek);
+        allInfoOnRightSide.add(panelforEndWeek);
+        allInfoOnRightSide.add(panelforGuideCost);
+        allInfoOnRightSide.add(panelforEquipmentCost);
+        allInfoOnRightSide.add(panelforAssignmentStatus);
+        allInfoOnRightSide.add(panelforBanStatus);
+        allInfoOnRightSide.add(panelforAuthCode);
+        allInfoOnRightSide.add(panelforRefund);
+
+        JLabel labelMemberEmail = new JLabel("Member Email: ");
+        labelMemberEmail.setPreferredSize(new Dimension(150,30));
+        JTextField memberEmail = new JTextField();
+        memberEmail.setEditable(false);
+        memberEmail.setPreferredSize(new Dimension(150,21));
+        panelforMemberEmail.add(labelMemberEmail);
+        panelforMemberEmail.add(memberEmail);
+
+        JLabel labelMemberName = new JLabel("Member Name: ");
+        labelMemberName.setPreferredSize(new Dimension(150,30));
+        JTextField memberName = new JTextField();
+        memberName.setEditable(false);
+        memberName.setPreferredSize(new Dimension(150,21));
+        panelforMemberName.add(labelMemberName);
+        panelforMemberName.add(memberName);
+
+        JLabel labelGuideEmail = new JLabel("Guide Email: ");
+        labelGuideEmail.setPreferredSize(new Dimension(150,30));
+        JTextField guideEmail = new JTextField();
+        guideEmail.setEditable(false);
+        guideEmail.setPreferredSize(new Dimension(150,21));
+        panelforGuideEmail.add(labelGuideEmail);
+        panelforGuideEmail.add(guideEmail);
+
+        JLabel labelGuideName = new JLabel("Guide Name: ");
+        labelGuideName.setPreferredSize(new Dimension(150,30));
+        JTextField guideName = new JTextField();
+        guideName.setEditable(false);
+        guideName.setPreferredSize(new Dimension(150,21));
+        panelforGuideName.add(labelGuideName);
+        panelforGuideName.add(guideName);
+
+        JLabel labelHotelName = new JLabel("Hotel Name: ");
+        labelHotelName.setPreferredSize(new Dimension(150,30));
+        JTextField hotelName = new JTextField();
+        hotelName.setEditable(false);
+        hotelName.setPreferredSize(new Dimension(150,21));
+        panelforHotelName.add(labelHotelName);
+        panelforHotelName.add(hotelName);
+
+        JLabel labelStartWeek = new JLabel("Start Week: ");
+        labelStartWeek.setPreferredSize(new Dimension(150,30));
+        JTextField startWeek = new JTextField();
+        startWeek.setEditable(false);
+        startWeek.setPreferredSize(new Dimension(150,21));
+        panelforStartWeek.add(labelStartWeek);
+        panelforStartWeek.add(startWeek);
+
+        JLabel labelEndWeek = new JLabel("End Week: ");
+        labelEndWeek.setPreferredSize(new Dimension(150,30));
+        JTextField endWeek = new JTextField();
+        endWeek.setEditable(false);
+        endWeek.setPreferredSize(new Dimension(150,21));
+        panelforEndWeek.add(labelEndWeek);
+        panelforEndWeek.add(endWeek);
+
+        JLabel labelGuideCost = new JLabel("Guide Cost: ");
+        labelGuideCost.setPreferredSize(new Dimension(150,30));
+        JTextField guideCost = new JTextField();
+        guideCost.setEditable(false);
+        guideCost.setPreferredSize(new Dimension(150,21));
+        panelforGuideCost.add(labelGuideCost);
+        panelforGuideCost.add(guideCost);
+
+        JLabel labelEquipmentCost = new JLabel("Equipment Cost: ");
+        labelEquipmentCost.setPreferredSize(new Dimension(150,30));
+        JTextField equipmentCost = new JTextField();
+        equipmentCost.setEditable(false);
+        equipmentCost.setPreferredSize(new Dimension(150,21));
+        panelforEquipmentCost.add(labelEquipmentCost);
+        panelforEquipmentCost.add(equipmentCost);
+
+        JLabel labelAssignmentStatus = new JLabel("Assignment Status: ");
+        labelAssignmentStatus.setPreferredSize(new Dimension(150,30));
+        JTextField assignmentStatus = new JTextField();
+        assignmentStatus.setEditable(false);
+        assignmentStatus.setPreferredSize(new Dimension(150,21));
+        panelforAssignmentStatus.add(labelAssignmentStatus);
+        panelforAssignmentStatus.add(assignmentStatus);
+
+        JLabel labelBanStatus = new JLabel("Ban Status: ");
+        labelBanStatus.setPreferredSize(new Dimension(150,30));
+        JTextField banStatus = new JTextField();
+        banStatus.setEditable(false);
+        banStatus.setPreferredSize(new Dimension(150,21));
+        panelforBanStatus.add(labelBanStatus);
+        panelforBanStatus.add(banStatus);
+
+        JLabel labelAuthCode = new JLabel("Authentication Code: ");
+        labelAuthCode.setPreferredSize(new Dimension(150,30));
+        JTextField authCode = new JTextField();
+        authCode.setEditable(false);
+        authCode.setPreferredSize(new Dimension(150,21));
+        panelforAuthCode.add(labelAuthCode);
+        panelforAuthCode.add(authCode);
+
+        JLabel labelRefund = new JLabel("Refund: ");
+        labelRefund.setPreferredSize(new Dimension(150,30));
+        JTextField refund = new JTextField();
+        refund.setEditable(false);
+        refund.setPreferredSize(new Dimension(150,21));
+        panelforRefund.add(labelRefund);
+        panelforRefund.add(refund);
+
+
+        displayList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                for (int i = 0; i < memberEmailList.length; i++) {
+                    if (displayList.getSelectedValue().equals(memberEmailList[i])) {
+                        memberEmail.setText(memberEmailList[i]);
+                        memberName.setText(memberNameList[i]);
+                        guideEmail.setText(guideEmailList[i]);
+                        guideName.setText(guideNameList[i]);
+                        hotelName.setText(hotelNameList[i]);
+                        startWeek.setText(startWeekList[i]);
+                        endWeek.setText(endWeekList[i]);
+                        guideCost.setText(guideCostList[i]);
+                        equipmentCost.setText(equipmentCostList[i]);
+                        assignmentStatus.setText(statusList[i]);
+                        authCode.setText(authCodeList[i]);
+                        refund.setText(refundList[i]);
+                        banStatus.setText(bannedStatusList[i]);
+                    }
+                }
+            }
+        });
+
+
+
+        JButton initiateButton = new JButton("Initiate Assignments"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 5;
+                size.width += 5;
+                return size;
+            }
+        };
+        initiateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    AssignmentController.initiateAllAssignments();
+                    updateAssignment();
+                    displayList.setListData(memberEmailList);
+                    displayList.setPreferredSize(new Dimension(displayList.getPreferredSize().width +120,displayList.getPreferredSize().height+80));
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        });
+
+
+        JPanel panelforInitiateButton = new JPanel();
+        panelforInitiateButton.setOpaque(false);
+        panelforInitiateButton.add(initiateButton);
+
+        card6.add(viewAssignments);
+        card6.add(panelforInitiateButton);
+
+
 
         tabbedPane.addTab("Assignments", card6);
     }
