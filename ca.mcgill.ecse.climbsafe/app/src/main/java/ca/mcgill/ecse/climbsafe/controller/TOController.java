@@ -8,6 +8,7 @@ import ca.mcgill.ecse.climbsafe.model.NamedUser;
 import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TOController {
     /**

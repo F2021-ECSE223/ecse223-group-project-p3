@@ -53,7 +53,6 @@ public class ClimbSafePage {
                 equipmentList) {
             e.delete();
         }
-        ClimbSafePersistence.save();
     }
 
 
