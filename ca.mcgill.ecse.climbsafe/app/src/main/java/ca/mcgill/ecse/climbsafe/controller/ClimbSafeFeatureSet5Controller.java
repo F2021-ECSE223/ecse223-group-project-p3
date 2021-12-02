@@ -2,6 +2,8 @@ package ca.mcgill.ecse.climbsafe.controller;
 
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.*;
+import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,12 +87,17 @@ public class ClimbSafeFeatureSet5Controller {
                 for (BundleItem item : bundleItems) {
                     bundleItems.add(item);
                 }
-
+                ClimbSafePersistence.save(climbSafe);
             } catch (RuntimeException e) {
                 throw new InvalidInputException(e.getMessage());
             }
 
 
+        }
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
         }
     }
 
@@ -199,12 +206,16 @@ public class ClimbSafeFeatureSet5Controller {
                 for (BundleItem item : bundleItems) {
                     bundleItems.add(item);
                 }
-
+                ClimbSafePersistence.save(climbSafe);
             } catch (RuntimeException e) {
                 throw new InvalidInputException(e.getMessage());
             }
 
-
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
         }
     }
+}
 	

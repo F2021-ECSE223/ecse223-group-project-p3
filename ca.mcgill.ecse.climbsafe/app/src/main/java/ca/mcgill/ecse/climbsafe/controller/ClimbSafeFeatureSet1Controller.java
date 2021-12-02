@@ -5,6 +5,8 @@ import ca.mcgill.ecse.climbsafe.model.Member;
 import ca.mcgill.ecse.climbsafe.model.Guide;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.User;
+import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
+import ca.mcgill.ecse.climbsafe.persistence.PersistenceObjectStream;
 
 public class ClimbSafeFeatureSet1Controller {
 
@@ -34,6 +36,11 @@ public class ClimbSafeFeatureSet1Controller {
     ClimbSafeApplication.getClimbSafe().setNrWeeks(nrWeeks);
     ClimbSafeApplication.getClimbSafe().setStartDate(startDate);
     ClimbSafeApplication.getClimbSafe().setPriceOfGuidePerWeek(priceOfGuidePerWeek);
+    try {
+      ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+    }catch (Exception e){
+      throw new InvalidInputException(e.getMessage());
+    }
   }
 
   /**
@@ -43,10 +50,15 @@ public class ClimbSafeFeatureSet1Controller {
    *        If the user is a guide, then the user will be deleted.
    */
 
-  public static void deleteGuide(String email) {
+  public static void deleteGuide(String email) throws InvalidInputException {
       User user = User.getWithEmail(email);
       if (user instanceof Guide) {
         user.delete();
+        try {
+          ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+          throw new InvalidInputException(e.getMessage());
+        }
       }
   }
 
@@ -57,10 +69,15 @@ public class ClimbSafeFeatureSet1Controller {
    *        If the user is a member, then the member will be deleted.
    */
 
-  public static void deleteMember(String email) {
+  public static void deleteMember(String email) throws InvalidInputException {
     User user = User.getWithEmail(email);
     if (user instanceof Member) {
       user.delete();
+      try {
+        ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+      }catch (Exception e){
+        throw new InvalidInputException(e.getMessage());
+      }
     }
   }
 

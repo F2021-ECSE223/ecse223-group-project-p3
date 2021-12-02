@@ -37,7 +37,6 @@ Feature: Register Member (p9)
     When a new member attempts to register with "<email>" , "<password>" , "<name>", "<emergencyContact>", "<nrWeeks>", "<bookableItems>", "<requestedQuantities>", "<guideRequired>", and "<hotelRequired>" (p9)
     Then the following "<error>" shall be raised. (p9)
     Then there are 2 members in the system. (p9)
-    Then there is no member account for "<email>" (p9)
 
     Examples: 
       | email          | password  | name  | emergencyContact | nrWeeks | bookableItems  | requestedQuantities | guideRequired | hotelRequired | error                                                                                                                       |

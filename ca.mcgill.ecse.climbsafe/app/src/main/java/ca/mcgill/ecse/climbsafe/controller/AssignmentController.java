@@ -1,6 +1,7 @@
 package ca.mcgill.ecse.climbsafe.controller;
 import ca.mcgill.ecse.climbsafe.model.*;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
+import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 
 import java.util.List;
 
@@ -13,13 +14,14 @@ import java.util.List;
  */
 public class AssignmentController {
     
-    
  /**
  * This function initiates the assignment for all members
  * @author Neel Faucher
  * @param allMembers list of all members
+ * @throws RuntimeException if member does not have assignment, with error message "Assignments could not be completed for all members"
  */
-    public static void initiateAllAssignments(List<Member> allMembers) {
+    
+    public static void initiateAllAssignments(List<Member> allMembers) throws InvalidInputException{
         List<Guide> allGuides = ClimbSafeApplication.getClimbSafe().getGuides();
 
         for (Guide guide : allGuides) {
@@ -33,12 +35,11 @@ public class AssignmentController {
                                 currentStart = a.getEndWeek();
                             }
                         }
-                        startWeek = currentStart;
+                        startWeek = currentStart + 1;
                     }
                     if (member.isGuideRequired()) {
-
-                        if (ClimbSafeApplication.getClimbSafe().getNrWeeks() - startWeek >= member.getNrWeeks()) {
-                            int endWeek = startWeek + member.getNrWeeks();
+                        if (ClimbSafeApplication.getClimbSafe().getNrWeeks() - startWeek +1 >= member.getNrWeeks()) {
+                            int endWeek = startWeek + member.getNrWeeks()-1;
                             Assignment newA = new Assignment(startWeek, endWeek, member, ClimbSafeApplication.getClimbSafe());
                             newA.setGuide(guide);
                         }
@@ -49,6 +50,17 @@ public class AssignmentController {
                 }
             }
         }
+        for (Member m : ClimbSafeApplication.getClimbSafe().getMembers()){
+            if (!m.hasAssignment()){
+                String error = "Assignments could not be completed for all members";
+                throw new InvalidInputException(error);
+            }
+        }
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
+        }
     }
     
     /**
@@ -57,18 +69,43 @@ public class AssignmentController {
      * @throws InvalidInputException if any error happens it will throw this exception in two cases.
      *  1. The member's email does not exist
      *  2. The authcode is invalid
+     *  3. Trip has already been paid for
+     *  4. Cannot pay for the trip due to a ban
+     *  5. Cannot pay for a trip which ahs been cancelled
+     *  6. Cannot pay for a trip which has finished
      */
-    public static void payMemberTrip(String email, String authCode){
+    public static void payMemberTrip(String email, String authCode) throws InvalidInputException{
         Member member = (Member) User.getWithEmail(email);
         if (member == null) {
-            String error = "Member with email address" + email + "does not exist";
+            String error = "Member with email address " + email + " does not exist";
             throw new InvalidInputException(error);
         }
-        if(authCode == null){
-            String error = "Invalid authorization code";
-            throw new InvalidInputException(error);
+
+        if(authCode == null || authCode.equals("")){
+                String error = "Invalid authorization code";
+                throw new InvalidInputException(error);
         }
+
+        if(member.getAssignment().getAssignmentStatusFullName().equals("Paid")||member.getAssignment().getAssignmentStatusFullName().equals("Started")){
+            throw new InvalidInputException("Trip has already been paid for");
+        }
+        if (member.getBanStatusFullName().equals("Banned")){
+            throw new InvalidInputException("Cannot pay for the trip due to a ban");
+        }
+        if (member.getAssignment().getAssignmentStatusFullName().equals("Cancelled")){
+            throw new InvalidInputException("Cannot pay for a trip which has been cancelled");
+        }
+        if (member.getAssignment().getAssignmentStatusFullName().equals("Finished")){
+            throw new InvalidInputException("Cannot pay for a trip which has finished");
+        }
+
+        member.getAssignment().setAuthCode(authCode);
         member.getAssignment().pay();
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+
+        }
     }
     
     /**
@@ -88,6 +125,11 @@ public class AssignmentController {
             //Cannot start the trip due to a ban
             if(a.getMember().getBanStatusFullName().equals("Banned")){throw new InvalidInputException("Cannot start the trip due to a ban");}
             a.startWeek(weekNumber);
+        }
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
         }
     }
     /**
@@ -116,7 +158,15 @@ public class AssignmentController {
             if(memberAssignmentStatus.equals("Cancelled")){
                 throw new InvalidInputException("Cannot finish a trip which has been cancelled");
             }
+//            if(memberAssignmentStatus.equals("Finished")){
+//                throw new InvalidInputException("Cannot finish a trip which has been cancelled");
+//            }
             member.getAssignment().finishTrip();
+        }
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
         }
     }
     /**
@@ -133,7 +183,7 @@ public class AssignmentController {
     public static void cancelMemberTrip(String email) throws InvalidInputException {
         Member member = (Member) User.getWithEmail(email);
         if (member==null) {
-            String error = "Member with email address" + email + "does not exist";
+            String error = "Member with email address " + email + " does not exist";
             throw new InvalidInputException(error);
         }
         if(member.getBanStatusFullName().equals("Banned")) {
@@ -143,5 +193,10 @@ public class AssignmentController {
             throw new InvalidInputException("Cannot cancel a trip which has finished");
         }
         member.getAssignment().cancel();
+        try {
+            ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+        }catch (Exception e){
+            throw new InvalidInputException(e.getMessage());
+        }
     }
 }

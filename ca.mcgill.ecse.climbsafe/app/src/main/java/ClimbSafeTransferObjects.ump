@@ -10,4 +10,30 @@ class TOAssignment {
   Integer endWeek;
   Integer totalCostForGuide;
   Integer totalCostForEquipment;
+  status;
+  authorizationCode;
+  Integer refundedPercentageAmount;
+}
+class TOBookableItem {
+  unique name;
+  Integer discount;
+  Integer weight;
+  Integer pricePerWeek;
+ }
+class TOClimbSafe{
+  Integer nrWeeks;
+}
+class TONamedUser{
+  email;
+  password;
+  name;
+  emergencyContact;
+  hotelRequired;
+  guideRequired;
+  nrWeeks;
+}
+class TOBookedItem{
+  Integer quantity;
+  memberEmail;
+  TOBookableItem item;
 }

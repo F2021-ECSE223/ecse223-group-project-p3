@@ -8,7 +8,7 @@ import ca.mcgill.ecse.climbsafe.model.BookableItem;
 import ca.mcgill.ecse.climbsafe.model.BookedItem;
 import ca.mcgill.ecse.climbsafe.model.Assignment;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
-
+import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 
 
 import java.util.ArrayList;
@@ -41,6 +41,11 @@ public class ClimbSafeFeatureSet6Controller {
     if(bookableItem instanceof Equipment){
       Equipment equipment = (Equipment) Equipment.getWithName(name);
       equipment.delete();
+      try {
+        ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+      }catch (Exception e){
+        throw new InvalidInputException(e.getMessage());
+      }
     }
   }
 
@@ -54,11 +59,16 @@ public class ClimbSafeFeatureSet6Controller {
    *        BookableItem class from the model, then we use the delete method from the EquipmentBundle
    *        class to delete it.
    */
-  public static void deleteEquipmentBundle(String name) {
+  public static void deleteEquipmentBundle(String name) throws InvalidInputException{
     BookableItem bookableItem = BookableItem.getWithName(name);
     if(bookableItem instanceof EquipmentBundle){
       EquipmentBundle equipmentBundle = (EquipmentBundle) EquipmentBundle.getWithName(name);
       equipmentBundle.delete();
+      try {
+        ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+      }catch (Exception e){
+        throw new InvalidInputException(e.getMessage());
+      }
     }
   }
 
@@ -98,9 +108,9 @@ public class ClimbSafeFeatureSet6Controller {
         guideEmail = null;
       }
       assignments.add(new TOAssignment(assignment.getMember().getEmail(),assignment.getMember().getName(),
-              guideEmail, guideName,hotelName,
-              assignment.getStartWeek(), assignment.getEndWeek(),
-              getTotalGuideCost(assignment),getTotalEquipmentCost(assignment)));
+              guideEmail,guideName, hotelName,assignment.getStartWeek(),assignment.getEndWeek(),getTotalGuideCost(assignment),
+              getTotalEquipmentCost(assignment),assignment.getAssignmentStatusFullName(), assignment.getAuthCode(),
+              assignment.getMember().getRefund()));
     }
     return assignments;
   }

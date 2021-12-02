@@ -4,6 +4,7 @@ import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.model.ClimbSafe;
 import ca.mcgill.ecse.climbsafe.model.Guide;
 import ca.mcgill.ecse.climbsafe.model.User;
+import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 
 public class ClimbSafeFeatureSet3Controller {
   /**
@@ -44,6 +45,11 @@ public class ClimbSafeFeatureSet3Controller {
 
     try {
       c.addGuide(email,password,name,emergencyContact);
+      try {
+        ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+      }catch (Exception e){
+        throw new InvalidInputException(e.getMessage());
+      }
     }
     catch (RuntimeException e) {
       error = e.getMessage();
@@ -96,7 +102,11 @@ public class ClimbSafeFeatureSet3Controller {
         error = "Email is already associated to an account that is not a guide";
         throw new InvalidInputException(error.trim());
       }
-
+      try {
+        ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
+      }catch (Exception e){
+        throw new InvalidInputException(e.getMessage());
+      }
     }
     catch (RuntimeException e ){
       throw new InvalidInputException(e.getMessage());

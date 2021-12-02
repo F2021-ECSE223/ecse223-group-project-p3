@@ -2,12 +2,17 @@
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
 
 package ca.mcgill.ecse.climbsafe.model;
+import java.io.Serializable;
 import ca.mcgill.ecse.climbsafe.model.Member;
 import java.util.*;
 
-// line 45 "../../../../../ClimbSafeStates.ump"
-// line 40 "../../../../../climbSafe.ump"
-public class Member extends NamedUser
+// line 52 "../../../../../../ClimbSafePersistence.ump"
+// line 142 "../../../../../../ClimbSafePersistence.ump"
+// line 45 "../../../../../../ClimbSafeStates.ump"
+// line 65 "../../../../../../ClimbSafeStates.ump"
+// line 45 "../../../../../../model.ump"
+// line 138 "../../../../../../model.ump"
+public class Member extends NamedUser implements Serializable
 {
 
   //------------------------
@@ -350,5 +355,13 @@ public class Member extends NamedUser
             "hotelRequired" + ":" + getHotelRequired()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "climbSafe = "+(getClimbSafe()!=null?Integer.toHexString(System.identityHashCode(getClimbSafe())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "assignment = "+(getAssignment()!=null?Integer.toHexString(System.identityHashCode(getAssignment())):"null");
-  }
+  }  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 55 "../../../../../../ClimbSafePersistence.ump"
+  private static final long serialVersionUID = 6L ;
+
+  
 }

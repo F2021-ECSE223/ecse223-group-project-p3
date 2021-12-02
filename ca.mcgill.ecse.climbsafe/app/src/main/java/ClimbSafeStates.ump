@@ -52,4 +52,22 @@ class Member{
     Banned{
     }
   }
+}//$?[End_of_model]$?
+
+namespace -;
+
+
+class Assignment
+{
+  position 50 30 109 45;
+}
+
+class Member
+{
+  position 50 130 109 45;
+}
+
+class Assignment
+{
+  position 50 30 109 45;
 }
