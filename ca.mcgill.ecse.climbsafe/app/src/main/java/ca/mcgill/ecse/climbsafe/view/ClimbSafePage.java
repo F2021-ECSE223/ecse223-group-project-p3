@@ -62,6 +62,8 @@ public class ClimbSafePage {
     private static String[] authCodeList = new String[toAssignmentList.size()];
     private static String[] refundList = new String[toAssignmentList.size()];
     private static String[] bannedStatusList = new String[toAssignmentList.size()];
+    private static List<TOBookableItem> bundleListC = TOController.getBundles();
+    private static String[] bundleListNamesC = new String[equipmentList.size()];
 
     private static void updateEquipmentList(){
         equipmentList = TOController.getEquipment();
@@ -1466,7 +1468,7 @@ public class ClimbSafePage {
                 }
             }
         });
-
+    }
 
 
     public static void addAssignmentCard(){
