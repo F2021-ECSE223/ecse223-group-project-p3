@@ -300,7 +300,6 @@ public class ClimbSafePage {
                 // (Date startDate, int nrWeeks, int priceOfGuidePerWeek) throws InvalidInputException {
                 try {
                     ClimbSafeFeatureSet1Controller.setup(startDate2, noWeeks, cost);
-                    ClimbSafeFeatureSet1Controller.updateAdmin(email, pw);
                 } catch (InvalidInputException ex) {
                     ex.printStackTrace();
                 }
@@ -308,6 +307,30 @@ public class ClimbSafePage {
 
             }
         });
+
+       updateClimbSafe.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+
+               String email = adminEmail.getText();
+               String pw = String.valueOf(adminPW.getPassword());
+               int cost = Integer.parseInt(weeklyCost.getText());
+
+               String startDate = climbingSeasonStart.getText();
+               Date startDate2 = java.sql.Date.valueOf(startDate);
+
+               int noWeeks = Integer.parseInt(numberWeeks.getText());
+               // (Date startDate, int nrWeeks, int priceOfGuidePerWeek) throws InvalidInputException {
+               try {
+                   ClimbSafeFeatureSet1Controller.updateAdmin(email, pw);
+               } catch (InvalidInputException ex) {
+                   ex.printStackTrace();
+               }
+
+
+           }
+       });
+        tabbedPane.addTab("Setup NMC", card1);
         tabbedPane.addTab("Setup NMC", card1);
 
     }
