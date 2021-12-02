@@ -1796,6 +1796,16 @@ public class ClimbSafePage implements KeyListener{
     }
 
 
+    /**
+     * @author Abhijeet Praveen
+     * added the UI page (tab) for view assignments
+     * Using JList to view all Members
+     * Based on the member selected
+     * the info on the right side
+     * will be filled with the info of the member
+     * the right side is filled with JLabels and JTextFields
+     * corresponding to the info of the member.
+     */
     public static void addAssignmentCard(){
         java.net.URL imageURL = getPhoto(1);
 
@@ -1818,8 +1828,7 @@ public class ClimbSafePage implements KeyListener{
                 return size;
             }
         };
-        //TODO: add elements to card6 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
+
 
         card6.setLayout(new BoxLayout(card6,BoxLayout.Y_AXIS));
 
@@ -2031,8 +2040,9 @@ public class ClimbSafePage implements KeyListener{
                     updateAssignment();
                     displayList.setListData(memberEmailList);
                     displayList.setPreferredSize(new Dimension(displayList.getPreferredSize().width +120,displayList.getPreferredSize().height+80));
+                    new Popup("Assignments Initiated Successfully",card6,0);
                 } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
+                    new Popup(ex.getMessage(), card6,1);
                 }
             }
         });
