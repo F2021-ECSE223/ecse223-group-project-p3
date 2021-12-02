@@ -1133,7 +1133,9 @@ public class ClimbSafePage implements KeyListener{
                 public void actionPerformed(ActionEvent e) {
                     try {
                         ClimbSafeFeatureSet1Controller.deleteGuide(emailEntry.getText());
+                        new Popup("Guide deleted successfully!");
                     } catch (Exception ex) {
+                        new Popup(ex.getMessage(),card3,1);
                         System.out.println(ex.getMessage());
                     }
                 }
@@ -1144,8 +1146,10 @@ public class ClimbSafePage implements KeyListener{
                 public void actionPerformed(ActionEvent e) {
                     try {
                         ClimbSafeFeatureSet3Controller.updateGuide(emailEntry.getText(), passwordEntry.getText(), nameEntry.getText(), emergencyContactEntry.getText());
+                        new Popup("Guide updated successfully!", card3, 0);
                     } catch (Exception ex) {
-                        System.out.println(ex.getMessage());
+                        new Popup(ex.getMessage(),card3,1);
+                        System.out.println(ex.getMessage())
                     }
                 }
             });
@@ -1155,7 +1159,9 @@ public class ClimbSafePage implements KeyListener{
                 public void actionPerformed(ActionEvent e) {
                     try {
                         ClimbSafeFeatureSet3Controller.registerGuide(emailEntry.getText(), String.valueOf(passwordEntry.getPassword()), nameEntry.getText(), emergencyContactEntry.getText());
+                        new Popup("Guide registered successfully!", card3, 0);
                     } catch (Exception ex) {
+                        new Popup(ex.getMessage(),card3,1);
                         System.out.println(ex.getMessage());
                     }
                 }
@@ -1164,15 +1170,21 @@ public class ClimbSafePage implements KeyListener{
             guides.addActionListener(new ActionListener() {//TODO: finish this
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                   try{
                     TONamedUser guide = TOController.getUserWithEmail((String) guides.getSelectedItem());
                     emailEntry.setText(guide.getEmail());
                     nameEntry.setText(guide.getName());
                     passwordEntry.setText(guide.getPassword());
                     emergencyContactEntry.setText(guide.getEmergencyContact());
 
+                    } catch (Exception ex){
+                       new Popup(ex.getMessage(),card3,1);
+                       System.out.println(ex.getMessage());    
+                   }
                 }
             });
         }
+
 
 
 
