@@ -28,7 +28,7 @@ package ca.mcgill.ecse.climbsafe.view;
 
 
 
-public class ClimbSafePage {
+public class ClimbSafePage implements KeyListener{
     private static JFrame mainFrame;
     private static JTabbedPane tabbedPane;
 
@@ -65,6 +65,11 @@ public class ClimbSafePage {
     private static String[] bannedStatusList = new String[toAssignmentList.size()];
     private static List<TOBookableItem> bundleListC = TOController.getBundles();
     private static String[] bundleListNamesC = new String[equipmentList.size()];
+        
+    private static final KeyListener ClimbSafePage = new ClimbSafePage();
+    private static String cen = "";
+    private static String cew = "";
+    private static String cep = "";
 
         private static void updateEquipmentList(){
         equipmentList = TOController.getEquipment();
@@ -1337,10 +1342,12 @@ public class ClimbSafePage {
 
         //List to display all equipments currently in the climbsafe
         JLabel allEquipmentDisplayTitle = new JLabel("All Equipments");
-        allEquipmentDisplayTitle.setBounds(10,20, 150,20);
+        allEquipmentDisplayTitle.setBounds(65,20, 150,20);
         JList<String> allEquipmentsDisplay = new JList<>();
         allEquipmentsDisplay.setListData(equipmentListNames);
-        allEquipmentsDisplay.setBounds(10,40,150,200);
+        allEquipmentsDisplay.setBounds(allEquipmentDisplayTitle.getX() - 28,allEquipmentDisplayTitle.getY() + 20,150,300);
+        DefaultListCellRenderer renderer =  (DefaultListCellRenderer)allEquipmentsDisplay.getCellRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
 
         //all everything to card 4
         card4.add(allEquipmentDisplayTitle);
@@ -1350,6 +1357,17 @@ public class ClimbSafePage {
         card4.add(deleteEquipmentPanel);
         card4.setLayout(null);
         card4.setVisible(true);
+
+        //set listeners and conditions for autofill
+        equipmentNameUpdateField.setName("equipmentNameUpdateField");
+        equipmentNameUpdateField.setFocusTraversalKeysEnabled(false);
+        equipmentNameUpdateField.addKeyListener(ClimbSafePage);
+        equipmentPriceUpdateField.setName("equipmentPriceUpdateField");
+        equipmentPriceUpdateField.setFocusTraversalKeysEnabled(false);
+        equipmentPriceUpdateField.addKeyListener(ClimbSafePage);
+        equipmentWeightUpdateField.setName("equipmentWeightUpdateField");
+        equipmentWeightUpdateField.setFocusTraversalKeysEnabled(false);
+        equipmentWeightUpdateField.addKeyListener(ClimbSafePage);
 
         //update current equipment name, weight and price
         TOBookableItem eq = null;
@@ -1365,6 +1383,18 @@ public class ClimbSafePage {
             currentEquipmentWeight.setText("Current weight: " + eq.getWeight());
             currentEquipmentPrice.setText("Current Price: " + eq.getPricePerWeek());
         }
+
+        card4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                allEquipmentsDisplay.clearSelection();
+                currentEquipmentName.setText("");
+                currentEquipmentWeight.setText("");
+                currentEquipmentPrice.setText("");
+                allEquipmentsDisplay.repaint();
+                allEquipmentsDisplay.revalidate();
+            }
+        });
 
         /**
          * @author Romen Poirier Taksev
@@ -1384,6 +1414,9 @@ public class ClimbSafePage {
                 currentEquipmentWeight.setText("Current weight: " + eq1.getWeight());
                 currentEquipmentPrice.setText("Current Price: " + eq1.getPricePerWeek());
                 equipmentDeleteText.setText("Delete " + eqName1 + "?");
+                cen = eqName1;
+                cew = String.valueOf(eq1.getWeight());
+                cep = String.valueOf(eq1.getPricePerWeek());
             }
         });
 
@@ -2187,4 +2220,33 @@ public class ClimbSafePage {
         tabbedPane.addTab("Trip Management", card8);
 
         }
+        
+        @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == 9){
+            autofill(e.getSource());
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    /**
+     * @author Romen Poirier Taksev
+     * @param caller
+     */
+    public void autofill(Object caller){
+        JTextField field = (JTextField) caller;
+        String name = field.getName();
+        switch (name) {
+            case "equipmentNameUpdateField" -> field.setText(cen);
+            case "equipmentWeightUpdateField" -> field.setText(cew);
+            case "equipmentPriceUpdateField" -> field.setText(cep);
+        }
+    }
 }
