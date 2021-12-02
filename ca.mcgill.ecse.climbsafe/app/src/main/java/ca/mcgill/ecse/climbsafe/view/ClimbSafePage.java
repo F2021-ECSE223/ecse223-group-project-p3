@@ -30,11 +30,12 @@ public class ClimbSafePage {
     private static JFrame mainFrame;
     private static JTabbedPane tabbedPane;
     private static String[] memberEmailList;
+    private static String[] assignedMemberEmailList;
     private static String[] authCodeList;
     private static String[] equipmentNameArray;
     private static String[] equipmentBundleNameArray;
-    private static int[] equipmentQuantityArray;
-    private static  int[] equipmentBundleQuantityArray;
+    private static int[] memberEquipmentQuantityArray;
+    private static  int[] memberEquipmentBundleQuantityArray;
         
     private static Boolean successAdd = false;
     private static Boolean successUpdate = false;
@@ -75,6 +76,7 @@ public class ClimbSafePage {
         midPane.setLayout(new BoxLayout(midPane, BoxLayout.Y_AXIS)); //sets so that elements are added vertically to panel
         midPane.setBackground(new Color(207,226,255));
 
+        updateMembers();
         JPanel head = new JPanel();
         head.setOpaque(false);
         JLabel header = new JLabel("Neptan Mountain Climbing");
@@ -126,12 +128,12 @@ public class ClimbSafePage {
         if (equipmentList == null || equipmentList.size() == 0) {
             equipmentNameArray = new String[1];
             equipmentNameArray[0] = "Placeholder";
-            equipmentQuantityArray = new int[1];
-            equipmentQuantityArray[0] = 0;
+            memberEquipmentQuantityArray = new int[1];
+            memberEquipmentQuantityArray[0] = 0;
         }
         else{
             equipmentNameArray = new String[equipmentList.size()];
-            equipmentQuantityArray = new int[equipmentList.size()];
+            memberEquipmentQuantityArray = new int[equipmentList.size()];
             for (int i = 0; i < equipmentList.size(); i++) {
                 equipmentNameArray[i] = equipmentList.get(i).getName();
             }
@@ -147,12 +149,12 @@ public class ClimbSafePage {
         if (equipmentBundleList==null || equipmentBundleList.size() == 0){
             equipmentBundleNameArray = new String[1];
             equipmentBundleNameArray[0] = "Placeholder";
-            equipmentBundleQuantityArray = new int[1];
-            equipmentBundleQuantityArray[0] = 0;
+            memberEquipmentBundleQuantityArray = new int[1];
+            memberEquipmentBundleQuantityArray[0] = 0;
         }
         else {
             equipmentBundleNameArray = new String[equipmentBundleList.size()];
-            equipmentBundleQuantityArray = new int[equipmentBundleList.size()];
+            memberEquipmentBundleQuantityArray = new int[equipmentBundleList.size()];
             for (int i = 0; i < equipmentBundleList.size(); i++) {
                 equipmentBundleNameArray[i] = equipmentBundleList.get(i).getName();
             }
@@ -166,17 +168,29 @@ public class ClimbSafePage {
      */
     private static void updatePay() {
         List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
-        memberEmailList = new String[toAssignmentList.size()];
+        assignedMemberEmailList = new String[toAssignmentList.size()];
         authCodeList = new String[toAssignmentList.size()];
         for (int i = 0; i < toAssignmentList.size(); i++) {
-            memberEmailList[i] = toAssignmentList.get(i).getMemberEmail();
+            assignedMemberEmailList[i] = toAssignmentList.get(i).getMemberEmail();
             authCodeList[i] = toAssignmentList.get(i).getAuthorizationCode();
         }
         if (toAssignmentList.size() == 0) {
-            memberEmailList = new String[1];
-            memberEmailList[0] = "Placeholder";
+            assignedMemberEmailList = new String[1];
+            assignedMemberEmailList[0] = "Placeholder";
             authCodeList = new String[1];
             authCodeList[0] = "Placeholder";
+        }
+    }
+
+    private static void updateMembers() {
+        List<TONamedUser> memberList = TOController.getMembers();
+        memberEmailList = new String[memberList.size()];
+        for (int i = 0; i < memberList.size(); i++) {
+            memberEmailList[i] = memberList.get(i).getEmail();
+        }
+        if (memberList.size() == 0) {
+            memberEmailList = new String[1];
+            memberEmailList[0] = "Placeholder";
         }
     }
 
@@ -247,6 +261,7 @@ public class ClimbSafePage {
                 return size;
             }
         };
+        JPanel names = new JPanel();
         JPanel leftColumn = new JPanel(){};
         JPanel col1 = new JPanel(){};
         JPanel col2 = new JPanel(){};
@@ -272,6 +287,7 @@ public class ClimbSafePage {
         JPanel row4 = new JPanel();
 
 
+        names.setOpaque(false);
         memberPart.setOpaque(false);
         leftColumn.setOpaque(false);
         col1.setOpaque(false);
@@ -292,9 +308,11 @@ public class ClimbSafePage {
         row4.setOpaque(false);
 
         card2.setLayout(new BoxLayout(card2, BoxLayout.Y_AXIS));
+        names.setLayout(new BoxLayout(names, BoxLayout.Y_AXIS));
         leftColumn.setLayout(new BoxLayout(leftColumn, BoxLayout.Y_AXIS));
         rightColumn.setLayout(new BoxLayout(rightColumn, BoxLayout.Y_AXIS));
 
+        JLabel emailsLabel = new JLabel("Select Member: ", SwingConstants.LEFT);
         JLabel emailLabel = new JLabel("Email:", SwingConstants.RIGHT);
         JLabel nameLabel = new JLabel("Name:",SwingConstants.RIGHT);
         JLabel passwordLabel = new JLabel("Password:",SwingConstants.RIGHT);
@@ -302,7 +320,6 @@ public class ClimbSafePage {
         JLabel lengthLabel = new JLabel("Length of Stay:", SwingConstants.RIGHT);
         JLabel nrWeeks = new JLabel("1 week(s)");
         JLabel stayHotelLabel = new JLabel("Stay at Hotel:",SwingConstants.RIGHT);
-        JLabel hotelText = new JLabel("+ 3 days");
         JLabel guideLabel = new JLabel("Add Guide:",SwingConstants.RIGHT);
         JLabel equipmentLabel = new JLabel("Equipment:",SwingConstants.RIGHT);
         JLabel contentLabel1 = new JLabel("Content:",SwingConstants.RIGHT);
@@ -401,19 +418,28 @@ public class ClimbSafePage {
             }
         };
 
+        JComboBox members = new JComboBox(memberEmailList);
+        members.setPreferredSize(new Dimension(members.getPreferredSize().width +50,members.getPreferredSize().height));
         updateEquipmentNames();
         JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentNameArray);
+        equipmentVisualList.setPreferredSize(new Dimension(equipmentVisualList.getPreferredSize().width+50, equipmentVisualList.getPreferredSize().height));
         updateBundlesNames();
         JComboBox<String> equipmentBundleVisualList = new JComboBox<>(equipmentBundleNameArray);
-
+        equipmentBundleVisualList.setPreferredSize(new Dimension(equipmentBundleVisualList.getPreferredSize().width+50, equipmentBundleVisualList.getPreferredSize().height));
 
 
         card2.add(memberPart);
         card2.add(bottomButtons);
 
+
+
+        memberPart.add(names);
         memberPart.add(leftColumn);
         memberPart.add(rightColumn);
 
+
+        names.add(emailsLabel);
+        names.add(members);
         leftColumn.add(col1);
         leftColumn.add(new JLabel(" "));
         leftColumn.add(col2);
@@ -457,7 +483,6 @@ public class ClimbSafePage {
         col6.add(stayHotelLabel);
         col6.add(before);
         before.add(stayHotel);
-        before.add(hotelText);
         col7.add(guideLabel);
         col7.add(guideNeeded);
         guideNeeded.add(guide);
@@ -511,6 +536,31 @@ public class ClimbSafePage {
 
 
 
+        members.addActionListener(new ActionListener() {//TODO: finish this
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TONamedUser member = TOController.getUserWithEmail((String) members.getSelectedItem());
+                email.setText(member.getEmail());
+                name.setText(member.getName());
+                password.setText(member.getPassword());
+                emergencyContact.setText(member.getEmergencyContact());
+                nrWeeks.setText(String.valueOf(member.getNrWeeks()));
+                guide.setEnabled(member.getGuideRequired());
+                stayHotel.setEnabled(member.getHotelRequired());
+                for (var bookedItem: TOController.getItemsforMemberEmail(member.getEmail())){
+                    if (bookedItem.getItem().getWeight()==0){ //equipment bundle
+                        for (int i = 0; i<equipmentBundleNameArray.length;i++){
+                            if (equipmentBundleNameArray[i]==bookedItem.getItem().getName()) memberEquipmentBundleQuantityArray[i]= bookedItem.getQuantity();
+                        }
+
+                    }else{  //equipment
+                        for (int i = 0; i<equipmentNameArray.length;i++){
+                            if (equipmentNameArray[i]==bookedItem.getItem().getName()) memberEquipmentQuantityArray[i]= bookedItem.getQuantity();
+                        }
+                    }
+                }
+            }
+        });
         weekUp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -539,8 +589,6 @@ public class ClimbSafePage {
                 else stayHotel.setText("<html><span>&#10007;</span></html>");
             }
         });
-
-
         guide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -552,7 +600,7 @@ public class ClimbSafePage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (equipmentVisualList.getSelectedIndex() !=-1)
-                equipmentQuantity.setText(String.valueOf(equipmentQuantityArray[equipmentVisualList.getSelectedIndex()]));
+                equipmentQuantity.setText(String.valueOf(memberEquipmentQuantityArray[equipmentVisualList.getSelectedIndex()]));
             }
         });
         equipmentUp.addActionListener(new ActionListener() {
@@ -561,7 +609,7 @@ public class ClimbSafePage {
                 int num = Integer.parseInt(equipmentQuantity.getText());
                 num += 1;
                 equipmentQuantity.setText(String.valueOf(num));
-                equipmentQuantityArray[equipmentVisualList.getSelectedIndex()] = num;
+                memberEquipmentQuantityArray[equipmentVisualList.getSelectedIndex()] = num;
             }
         });
         equipmentDown.addActionListener(new ActionListener() {
@@ -571,14 +619,14 @@ public class ClimbSafePage {
                 num -= 1;
                 if (num<0) num = 0;
                 equipmentQuantity.setText(String.valueOf(num));
-                equipmentQuantityArray[equipmentVisualList.getSelectedIndex()] = num;
+                memberEquipmentQuantityArray[equipmentVisualList.getSelectedIndex()] = num;
             }
         });
         equipmentBundleVisualList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (equipmentBundleVisualList.getSelectedIndex() !=-1)
-                equipmentBundleQuantity.setText(String.valueOf(equipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()]));
+                equipmentBundleQuantity.setText(String.valueOf(memberEquipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()]));
             }
         });
         equipmentBundleUp.addActionListener(new ActionListener() {
@@ -587,7 +635,7 @@ public class ClimbSafePage {
                 int num = Integer.parseInt(equipmentBundleQuantity.getText());
                 num += 1;
                 equipmentBundleQuantity.setText(String.valueOf(num));
-                equipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()] = num;
+                memberEquipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()] = num;
             }
         });
         equipmentBundleDown.addActionListener(new ActionListener() {
@@ -597,7 +645,7 @@ public class ClimbSafePage {
                 num -= 1;
                 if (num<0) num = 0;
                 equipmentBundleQuantity.setText(String.valueOf(num));
-                equipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()] = num;
+                memberEquipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()] = num;
             }
         });
         registerMember.addActionListener(new ActionListener() {
@@ -609,8 +657,8 @@ public class ClimbSafePage {
                     itemNames.addAll(Arrays.asList(equipmentNameArray));
                     itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
                     List<Integer> itemQuantities = new ArrayList<>();
-                    for (int i : equipmentQuantityArray) itemQuantities.add(i);
-                    for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
+                    for (int i : memberEquipmentQuantityArray) itemQuantities.add(i);
+                    for (int i : memberEquipmentBundleQuantityArray) itemQuantities.add(i);
                     ClimbSafeFeatureSet2Controller.registerMember(email.getText(), String.valueOf(password.getPassword()), name.getText(),
                             emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), stayHotel.isSelected(), itemNames, itemQuantities);
                 } catch (Exception ex) {
@@ -626,8 +674,8 @@ public class ClimbSafePage {
                     itemNames.addAll(Arrays.asList(equipmentNameArray));
                     itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
                     List<Integer> itemQuantities = new ArrayList<>();
-                    for (int i : equipmentQuantityArray) itemQuantities.add(i);
-                    for (int i : equipmentBundleQuantityArray) itemQuantities.add(i);
+                    for (int i : memberEquipmentQuantityArray) itemQuantities.add(i);
+                    for (int i : memberEquipmentBundleQuantityArray) itemQuantities.add(i);
                     ClimbSafeFeatureSet2Controller.updateMember(email.getText(), password.getText(), name.getText(),
                             emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), stayHotel.isSelected(), itemNames, itemQuantities);
                 } catch (Exception ex) {
@@ -684,8 +732,8 @@ public class ClimbSafePage {
                 return size;
             }
         };
-        //TODO: add elements to card3 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
+
+
 
         tabbedPane.addTab("Guide", card3);
     }
@@ -1194,7 +1242,7 @@ public class ClimbSafePage {
         JLabel code = new JLabel("Authorization Code:");
 
         JTextField authCode = new JTextField(authCodeList[0]);
-        JComboBox<String> memberNameVisualList = new JComboBox<>(memberEmailList);
+        JComboBox<String> memberNameVisualList = new JComboBox<>(assignedMemberEmailList);
 
         JButton weekDown = new JButton("<html>-</html>");
         JButton weekUp = new JButton("<html>+</html>");
@@ -1210,7 +1258,7 @@ public class ClimbSafePage {
         finishCancel.setOpaque(false);
 
         memberNameVisualList.setPreferredSize(new Dimension(memberNameVisualList.getPreferredSize().width+50, memberNameVisualList.getPreferredSize().height));
-        authCode.setPreferredSize(new Dimension(authCode.getPreferredSize().width+50, authCode.getPreferredSize().height));
+        authCode.setPreferredSize(new Dimension(authCode.getPreferredSize().width+100, authCode.getPreferredSize().height));
 
         weekLabel.setBorder(new EmptyBorder(0,10,0,10));
 
@@ -1271,7 +1319,7 @@ public class ClimbSafePage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (memberEmailList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
+                    if (assignedMemberEmailList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
                         AssignmentController.payMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()), authCode.getText());
                 } catch (InvalidInputException ex) {
                     ex.printStackTrace();

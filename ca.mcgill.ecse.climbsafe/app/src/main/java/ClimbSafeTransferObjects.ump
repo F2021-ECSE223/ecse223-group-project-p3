@@ -31,5 +31,9 @@ class TONamedUser{
   hotelRequired;
   guideRequired;
   nrWeeks;
-
+}
+class TOBookedItem{
+  Integer quantity;
+  memberEmail;
+  TOBookableItem item;
 }
