@@ -39,7 +39,6 @@ public class ClimbSafePage {
     private static  int[] equipmentBundleQuantityArray;
     private static String[] assignedMemberList;
     private static String[] memberList;
-    private static String[] authCodeList;
 
 
     private static String updateErrorMsg = "";
@@ -261,6 +260,12 @@ public class ClimbSafePage {
                 return size;
             }
         };
+       /**
+        * @author Neel Faucher
+        * Setup NMC page UI, with routing to Update Admin and Setup NMC controllers, 
+        * and checks to see whether the user's inputs are valid with appropriate popup messages
+        */
+
         //TODO: add elements to card1 to create the page
         //If you create any JPanels, be sure to use panelName.setOpaque(false)
         card1.setLayout(new BoxLayout(card1, BoxLayout.Y_AXIS));
@@ -306,11 +311,11 @@ public class ClimbSafePage {
             }
         };
 
-        JTextField climbingSeasonStart = new JTextField("dd/mm/yyyy");
+        JTextField climbingSeasonStart = new JTextField("yyyy-mm-dd");
         climbingSeasonStart.setPreferredSize(dim);
         JTextField numberWeeks = new JTextField("number");
         numberWeeks.setPreferredSize(dim);
-        JTextField weeklyCost = new JTextField("$");
+        JTextField weeklyCost = new JTextField();
         weeklyCost.setPreferredSize(dim);
         JTextField adminEmail = new JTextField("email");
         adminEmail.setPreferredSize(dim);
@@ -347,54 +352,95 @@ public class ClimbSafePage {
         card1.add(start6);
         card1.add(end);
 
-       updateAdmin.addActionListener(new ActionListener() {
+       updateClimbSafe.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String email = adminEmail.getText();
-                String pw = String.valueOf(adminPW.getPassword());
-                int cost = Integer.parseInt(weeklyCost.getText());
+                boolean error = false;
+                boolean errorDate = false;
+                boolean errorPrice = false;
+                boolean errorNoWeeks = false;
+                String startDate;
+                Date startDate2 = null;
+                int costCS = 0;
+                int noWeeks = 0;
 
-                String startDate = climbingSeasonStart.getText();
-                Date startDate2 = java.sql.Date.valueOf(startDate);
-
-                int noWeeks = Integer.parseInt(numberWeeks.getText());
-                // (Date startDate, int nrWeeks, int priceOfGuidePerWeek) throws InvalidInputException {
-                try {
-                    ClimbSafeFeatureSet1Controller.setup((java.sql.Date) startDate2, noWeeks, cost);
-                } catch (InvalidInputException ex) {
-                    ex.printStackTrace();
+                try{
+                    startDate = climbingSeasonStart.getText();
+                    startDate2 = java.sql.Date.valueOf(startDate);
+                }
+                catch (Exception ex){
+                    errorDate = true;
+                    new Popup("Please respect the format for date", card1, 1);
+                }
+                try{
+                    costCS = Integer.parseInt(weeklyCost.getText());
+                }
+                catch (Exception ex){
+                    errorPrice = true;
+                    new Popup("Please respect format for the price per week", card1, 1);
                 }
 
-
+                try {
+                    noWeeks = Integer.parseInt(numberWeeks.getText());
+                }
+                catch (Exception exc) {
+                    errorNoWeeks = true;
+                    new Popup("Please respect format for number of weeks", card1, 1);
+                }
+                
+                if(!errorDate && !errorPrice && !errorNoWeeks){
+                    try {
+                        ClimbSafeFeatureSet1Controller.setup(startDate2, noWeeks, costCS);
+                    } catch (Exception ex) {
+                        error = true;
+                        new Popup(ex.getMessage(), card1, 1);
+                    }
+                    if(!error){
+                        new Popup("Successfully updated ClimbSafe", card1, 0);
+                    }
+                }
             }
         });
 
-       updateClimbSafe.addActionListener(new ActionListener() {
+       updateAdmin.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
+               Boolean error = false;
+               Boolean errorEmail = false;
+               Boolean errorPW = false;
+               String email = "";
+               String pw = "";
 
-               String email = adminEmail.getText();
-               String pw = String.valueOf(adminPW.getPassword());
-               int cost = Integer.parseInt(weeklyCost.getText());
-
-               String startDate = climbingSeasonStart.getText();
-               Date startDate2 = java.sql.Date.valueOf(startDate);
-
-               int noWeeks = Integer.parseInt(numberWeeks.getText());
-               // (Date startDate, int nrWeeks, int priceOfGuidePerWeek) throws InvalidInputException {
-               try {
-                   ClimbSafeFeatureSet1Controller.updateAdmin(email, pw);
-               } catch (InvalidInputException ex) {
-                   ex.printStackTrace();
+               try{
+                   email = adminEmail.getText();
                }
-
-
+               catch (Exception ex){
+                   errorEmail = true;
+                   new Popup("Please respect email format", card1, 1);
+               }
+               try {
+                   pw = String.valueOf(adminPW.getPassword());
+               }
+               catch (Exception ex){
+                   errorPW = true;
+                   new Popup("Please respect password format", card1, 1);
+               }
+               if(!errorEmail && !errorPW){
+                   try {
+                       ClimbSafeFeatureSet1Controller.updateAdmin(email, pw);
+                   } catch (Exception ex) {
+                       error = true;
+                       new Popup(ex.getMessage(), card1, 1);
+                   }
+                   if(!error){
+                       new Popup("Successfully updated admin", card1, 0);
+                   }
+               }
            }
        });
-        tabbedPane.addTab("Setup NMC", card1);
-        tabbedPane.addTab("Setup NMC", card1);
 
+        tabbedPane.addTab("Setup NMC", card1);
     }
 
     /**
