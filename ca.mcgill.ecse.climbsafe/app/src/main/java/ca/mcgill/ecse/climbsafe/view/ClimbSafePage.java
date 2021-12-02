@@ -267,7 +267,7 @@ public class ClimbSafePage implements KeyListener{
         };
        /**
         * @author Neel Faucher
-        * Setup NMC page UI, with routing to Update Admin and Setup NMC controllers, 
+        * Setup NMC page UI, with routing to Update Admin and Setup NMC controllers,
         * and checks to see whether the user's inputs are valid with appropriate popup messages
         */
 
@@ -301,8 +301,8 @@ public class ClimbSafePage implements KeyListener{
         JButton updateAdmin = new JButton("Update Admin") {
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
-                size.height += 50;
-                size.width += 50;
+                size.height = 75;
+                size.width = 250;
                 return size;
             }
         };
@@ -310,8 +310,8 @@ public class ClimbSafePage implements KeyListener{
         JButton updateClimbSafe = new JButton("Update ClimbSafe") {
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
-                size.height += 50;
-                size.width += 50;
+                size.height = 75;
+                size.width = 250;
                 return size;
             }
         };
@@ -396,7 +396,7 @@ public class ClimbSafePage implements KeyListener{
                 
                 if(!errorDate && !errorPrice && !errorNoWeeks){
                     try {
-                        ClimbSafeFeatureSet1Controller.setup((java.sql.Date) startDate2, noWeeks, costCS);
+                        ClimbSafeFeatureSet1Controller.setup(startDate2, noWeeks, costCS);
                     } catch (Exception ex) {
                         error = true;
                         new Popup(ex.getMessage(), card1, 1);
@@ -446,6 +446,7 @@ public class ClimbSafePage implements KeyListener{
        });
 
         tabbedPane.addTab("Setup NMC", card1);
+
     }
 
     /**
