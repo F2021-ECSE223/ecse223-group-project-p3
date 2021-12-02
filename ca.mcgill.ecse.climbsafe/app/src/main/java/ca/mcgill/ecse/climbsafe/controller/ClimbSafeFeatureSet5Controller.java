@@ -69,6 +69,7 @@ public class ClimbSafeFeatureSet5Controller {
 
 
         if (error.length() > 0) {
+            System.out.println(error + "ttt");
             throw new InvalidInputException(error.trim());
         }
 
@@ -80,15 +81,24 @@ public class ClimbSafeFeatureSet5Controller {
 
             }
             try {
-                EquipmentBundle bundle = climbSafe.addBundle(name, discount);
-                for (int i = 0; i < equipment.size(); i++) {
-                    bundleItems.add(new BundleItem(equipmentQuantities.get(i), climbSafe, bundle, equipment.get(i)));
+                if(BookableItem.getWithName(name) == null){
+                    EquipmentBundle bundle = new EquipmentBundle(name, discount,climbSafe);
+                    bundleItems = bundle.getBundleItems();
+                    for (int i = 0; i < equipment.size(); i++) {
+                        if(bundleItems.size()==0){
+                            bundle.addBundleItem(equipmentQuantities.get(i),climbSafe, equipment.get(i));
+                        }else if(bundleItems.get(i).getEquipment()!=equipment.get(i)){
+                            if(bundleItems.get(i).getQuantity()!=equipmentQuantities.get(i)){
+                                bundle.addBundleItem(equipmentQuantities.get(i),climbSafe, equipment.get(i));
+                            }
+                        }
+
+                    }
                 }
-                for (BundleItem item : bundleItems) {
-                    bundleItems.add(item);
-                }
+
                 ClimbSafePersistence.save(climbSafe);
             } catch (RuntimeException e) {
+                System.out.println(e+" ggg");
                 throw new InvalidInputException(e.getMessage());
             }
 
@@ -97,6 +107,7 @@ public class ClimbSafeFeatureSet5Controller {
         try {
             ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
         }catch (Exception e){
+            System.out.println(e +" yoo");
             throw new InvalidInputException(e.getMessage());
         }
     }
@@ -200,11 +211,18 @@ public class ClimbSafeFeatureSet5Controller {
                 bundle.setDiscount(newDiscount);
                 bundle.setName(newName);
 
-                for (int i = 0; i < newEquipmentNames.size(); i++) {
-                    bundleItems.add(new BundleItem(newEquipmentQuantities.get(i), climbSafe, bundle, equipment.get(i)));
-                }
-                for (BundleItem item : bundleItems) {
-                    bundleItems.add(item);
+                if(BookableItem.getWithName(newName) == null){
+                    bundleItems = bundle.getBundleItems();
+                    for (int i = 0; i < equipment.size(); i++) {
+                        if(bundleItems.size()==0){
+                            bundle.addBundleItem(newEquipmentQuantities.get(i),climbSafe, equipment.get(i));
+                        }else if(bundleItems.get(i).getEquipment()!=equipment.get(i)){
+                            if(bundleItems.get(i).getQuantity()!=newEquipmentQuantities.get(i)){
+                                bundle.addBundleItem(newEquipmentQuantities.get(i),climbSafe, equipment.get(i));
+                            }
+                        }
+
+                    }
                 }
                 ClimbSafePersistence.save(climbSafe);
             } catch (RuntimeException e) {
