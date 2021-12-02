@@ -88,8 +88,17 @@ public class TOController {
         var itemList =  new ArrayList<TOBookedItem>();
         var member = (Member)Member.getWithEmail(aEmail);
         for (var item: member.getBookedItems()){
-            if (item.getItem() instanceof Equipment) itemList.add(new TOBookedItem(item.getQuantity(), aEmail, new TOBookableItem(item.getItem().getName(),0,((Equipment) item.getItem()).getWeight(),((Equipment) item.getItem()).getPricePerWeek())));
-            else itemList.add(new TOBookedItem(item.getQuantity(), aEmail, new TOBookableItem(item.getItem().getName(), ((EquipmentBundle)item.getItem()).getDiscount(),0,0)));
+            if (item.getItem() instanceof Equipment){
+                if (TOBookableItem.getWithName(item.getItem().getName())==null)
+                itemList.add(new TOBookedItem(item.getQuantity(), aEmail, new TOBookableItem(item.getItem().getName(),0,((Equipment) item.getItem()).getWeight(),((Equipment) item.getItem()).getPricePerWeek())));
+                else itemList.add(new TOBookedItem(item.getQuantity(), aEmail,TOBookableItem.getWithName(item.getItem().getName())));
+            }
+            else {
+                if (TOBookableItem.getWithName(item.getItem().getName())==null)
+                itemList.add(new TOBookedItem(item.getQuantity(), aEmail, new TOBookableItem(item.getItem().getName(), ((EquipmentBundle) item.getItem()).getDiscount(), 0, 0)));
+                else itemList.add(new TOBookedItem(item.getQuantity(), aEmail,TOBookableItem.getWithName(item.getItem().getName())));
+
+            }
         }
         return itemList;
     }
