@@ -1181,7 +1181,7 @@ public class ClimbSafePage {
         BufferedImage hikerBackground = null;
         try {
             if (imageURL != null)
-            hikerBackground = ImageIO.read(imageURL);
+                hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1200,8 +1200,205 @@ public class ClimbSafePage {
         //TODO: add elements to card5 to create the page
         //If you create any JPanels, be sure to use panelName.setOpaque(false)
 
-        tabbedPane.addTab("Equipment Bundles", card5);
-    }
+        Dimension dim = new Dimension(130, 20);
+
+        JPanel start = new JPanel();
+        JPanel bundle = new JPanel();
+        JPanel name = new JPanel();
+        JPanel equipment = new JPanel();
+        JPanel price = new JPanel();
+        JPanel rightTable = new JPanel();
+        JPanel bundleInput = new JPanel();
+        JPanel buttons = new JPanel();
+
+        card5.setLayout(new BoxLayout(card5, BoxLayout.Y_AXIS));
+        start.setLayout(new BoxLayout(start, BoxLayout.Y_AXIS));
+        bundleInput.setLayout(new BoxLayout(bundleInput, BoxLayout.X_AXIS));
+
+        JComboBox<String> bundleList = new JComboBox<>(equipmentBundleNameArray);
+        JComboBox<String> equipmentList = new JComboBox<>(equipmentNameArray);
+        JLabel bundleNameLbl = new JLabel("Bundle Name:", SwingConstants.RIGHT);
+        JLabel nameLbl  = new JLabel("Name:", SwingConstants.RIGHT);
+        JLabel equipmentNameLbl = new JLabel("Equipment:", SwingConstants.RIGHT);
+        JLabel pricelbl = new JLabel("Price:", SwingConstants.RIGHT);
+        JTextField nameTxt = new JTextField("");
+        nameTxt.setPreferredSize(dim);
+
+        JTextField priceTxt = new JTextField("");
+        priceTxt.setPreferredSize(dim);
+        JLabel quantityNumber = new JLabel("1", SwingConstants.CENTER);
+
+        JTable table = new JTable(equipmentNameArray.length+1, 2);
+        table.setEnabled(false);
+        table.getColumnModel().getColumn(1).setPreferredWidth(100);
+        table.getColumnModel().getColumn(0).setPreferredWidth(100);
+        table.setValueAt("Equipment",0,0);
+        table.setValueAt("Quantity",0,1);
+
+            for (int i = 1; i < equipmentNameArray.length+1; i++) {
+                table.setValueAt(equipmentNameArray[i-1],i,0);
+             }
+            for (int i = 1; i < equipmentQuantityArray.length+1; i++) {
+                 table.setValueAt(equipmentQuantityArray[i-1],i,1);
+             }
+
+
+        JButton quantityDown = new JButton("<html>-</html>");
+        JButton quantityUp = new JButton("<html>+</html>");
+        JButton save = new JButton("Save"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 1;
+                size.width += 10;
+                return size;
+            }};
+        JButton register = new JButton("Add Bundle"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
+        JButton update = new JButton("Update Bundle"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
+        JButton cancel = new JButton("Cancel Bundle"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
+        JButton refreshBundle = new JButton("Refresh Bookable Item Lists"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 50;
+                size.width += 50;
+                return size;
+            }
+        };
+
+
+
+        start.setOpaque(false);
+        rightTable.setOpaque(false);
+        buttons.setOpaque(false);
+        bundle.setOpaque(false);
+        name.setOpaque(false);
+        equipment.setOpaque(false);
+        price.setOpaque(false);
+        bundleInput.setOpaque(false);
+
+        bundle.add(bundleNameLbl);
+        bundle.add(bundleList);
+        name.add(nameLbl);
+        name.add(nameTxt);
+
+        equipment.add(equipmentNameLbl);
+        equipment.add(equipmentList);
+        equipment.add(quantityDown);
+        equipment.add(quantityNumber);
+        equipment.add(quantityUp);
+        equipment.add(save);
+        price.add(pricelbl);
+        price.add(priceTxt);
+
+        rightTable.add(table,SwingConstants.CENTER);
+        start.add(bundle);
+        start.add(name);
+        start.add(equipment);
+        start.add(price);
+
+        bundleInput.add(start);
+        bundleInput.add(rightTable);
+
+        buttons.add(register);
+        buttons.add(update);
+        buttons.add(cancel);
+        buttons.add(refreshBundle);
+
+        card5.add(bundleInput);
+        card5.add(buttons);
+
+        int[] equipmentBundleQuantityArray= new int[equipmentNameArray.length];
+        String[] equipmentArray= new String[equipmentNameArray.length];
+        quantityUp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int num = Integer.parseInt(quantityNumber.getText());
+                num += 1;
+                quantityNumber.setText(String.valueOf(num));
+                equipmentBundleQuantityArray[equipmentList.getSelectedIndex()] = num;
+            }
+        });
+        quantityDown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int num = Integer.parseInt(quantityNumber.getText());
+                num -= 1;
+                if (num<0) num = 0;
+                quantityNumber.setText(String.valueOf(num));
+                equipmentBundleQuantityArray[equipmentList.getSelectedIndex()] = num;
+            }
+        });
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int num = Integer.parseInt(quantityNumber.getText());
+                quantityNumber.setText(String.valueOf(num));
+                equipmentBundleQuantityArray[equipmentList.getSelectedIndex()] = num;
+              table.setValueAt(equipmentBundleQuantityArray[equipmentList.getSelectedIndex()],equipmentList.getSelectedIndex()+1,1);
+
+            }
+        });
+        register.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    List<String> itemNames = new ArrayList<>();
+                    List<Integer> itemQuantity = new ArrayList<>();
+
+                for (int i = 1; i < equipmentNameArray.length+1; i++) {
+                    if(Integer.parseInt(String.valueOf(table.getValueAt(i,1)))!=0){
+                        itemNames.add(String.valueOf(table.getValueAt(i,0)));
+                        itemQuantity.add(Integer.parseInt(String.valueOf(table.getValueAt(i,1))));
+                    }
+                }
+                    ClimbSafeFeatureSet5Controller.addEquipmentBundle(nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+
+
+            }
+        });
+        bundleList.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> itemNames = new ArrayList<>();
+                List<Integer> itemQuantity = new ArrayList<>();
+                TOBookableItem eq = null;
+                String eqName = (String) bundleList.getSelectedItem();
+                for (TOBookableItem tob: bundleListC) {
+                    if(tob.getName().equals(eqName)){
+                        eq = tob;
+                    }
+                }
+                
+
+                if(eq != null){
+                    nameTxt.setText(eqName);
+                    priceTxt.setText(String.valueOf(eq.getDiscount()));
+                }
+            }
+        });
 
 
 
