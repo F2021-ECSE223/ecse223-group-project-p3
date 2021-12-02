@@ -1,7 +1,7 @@
 
 package ca.mcgill.ecse.climbsafe.view;
 
-        import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
+
         import ca.mcgill.ecse.climbsafe.controller.*;
 
 
@@ -20,6 +20,7 @@ package ca.mcgill.ecse.climbsafe.view;
 
         import javax.imageio.ImageIO;
         import javax.swing.*;
+        import javax.swing.border.EmptyBorder;
         import javax.swing.event.ListSelectionEvent;
         import javax.swing.event.ListSelectionListener;
 
@@ -87,7 +88,6 @@ public class ClimbSafePage {
         addEquipmentCard();
         addBundleCard();
         addAssignmentCard();
-        addPayCard();
         addTripCard();
 
         midPane.add(tabbedPane);
@@ -517,8 +517,7 @@ public class ClimbSafePage {
                 String[] txt = nrWeeks.getText().split(" ");
                 int num = Integer.parseInt(txt[0]);
                 num += 1;
-                //TODO Create climbsafe TO?
-                int len = ClimbSafeApplication.getClimbSafe().getNrWeeks();
+                int len = TOController.getClimbSafe().getNrWeeks();
                 if (num > len) num = len;
                 nrWeeks.setText(num+" week(s)");
             }
@@ -658,7 +657,7 @@ public class ClimbSafePage {
             }
         });
 
-        tabbedPane.addTab("Register, Update and Delete Member", card2);
+        tabbedPane.addTab("Member", card2);
     }
 
 
@@ -688,7 +687,7 @@ public class ClimbSafePage {
         //TODO: add elements to card3 to create the page
         //If you create any JPanels, be sure to use panelName.setOpaque(false)
 
-        tabbedPane.addTab("Register, Update and Delete Guide", card3);
+        tabbedPane.addTab("Guide", card3);
     }
 
 
@@ -957,6 +956,7 @@ public class ClimbSafePage {
                     equipmentWeightField.setText("");
                     equipmentPriceField.setText("");
                 }
+
                 successMsgAddLabel.setVisible(successAdd);
                 errorMsgLabel.setText(addErrorMsg);
                 addErrorMsg = "";
@@ -1011,6 +1011,7 @@ public class ClimbSafePage {
                     equipmentWeightUpdateField.setText("");
                     equipmentPriceUpdateField.setText("");
                 }
+
                 successMsgUpdateLabel.setText(String.format("Successfully updated equipment %s.", oldName));
                 successMsgUpdateLabel.setVisible(successUpdate);
                 errorMsgUpdateLabel.setText(updateErrorMsg);
@@ -1056,6 +1057,7 @@ public class ClimbSafePage {
                     }
                     allEquipmentsDisplay.setListData(equipmentListNames);
                 }
+
                 successMsgDeleteLabel.setText(String.format("Successfully deleted equipment %s.", oldName));
                 successMsgDeleteLabel.setVisible(successDelete);
                 errorMsgDeleteLabel.setText(deleteErrorMsg);
@@ -1066,7 +1068,7 @@ public class ClimbSafePage {
         });
 
 
-        tabbedPane.addTab("Add, Update and Delete Equipment", card4);
+        tabbedPane.addTab("Equipment", card4);
     }
 
 
@@ -1096,7 +1098,7 @@ public class ClimbSafePage {
         //TODO: add elements to card5 to create the page
         //If you create any JPanels, be sure to use panelName.setOpaque(false)
 
-        tabbedPane.addTab("Add, Update and Delete Equipment Bundle", card5);
+        tabbedPane.addTab("Equipment Bundles", card5);
     }
 
 
@@ -1126,96 +1128,10 @@ public class ClimbSafePage {
         //TODO: add elements to card6 to create the page
         //If you create any JPanels, be sure to use panelName.setOpaque(false)
 
-        tabbedPane.addTab("Initiate and View Assignments", card6);
+        tabbedPane.addTab("Assignments", card6);
     }
 
 
-    /**
-     * @author Sebastien Cantin
-     * fills in the tab in the UI associated to paying for a member's trip
-     */
-    public static void addPayCard(){
-        updatePay();
-        java.net.URL imageURL = getPhoto(1);
-
-        BufferedImage hikerBackground = null;
-        try {
-            if (imageURL != null)
-            hikerBackground = ImageIO.read(imageURL);
-        } catch (IOException ex) {
-            Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        BufferedImage finalBackground = hikerBackground;
-        JPanel card7 = new JPanel() {
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(finalBackground, 0, 0, getWidth(), getHeight(), this);
-            }
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height = 800;
-                return size;
-            }
-        };
-        card7.setLayout(new BoxLayout(card7, BoxLayout.Y_AXIS));
-
-        JPanel fields = new JPanel(new FlowLayout(FlowLayout.CENTER, 20,5)){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.width += 100;
-                return size;
-            }
-        };
-        JPanel buttons = new JPanel();
-        fields.setOpaque(false);
-        buttons.setOpaque(false);
-
-        JLabel members= new JLabel("Member Names:");
-        JLabel code = new JLabel("Authorization Code:");
-        JButton pay = new JButton("Pay Member Trip");
-        JButton refresh = new JButton("Refresh Member Names");
-        JComboBox<String> memberNameVisualList = new JComboBox<>(memberEmailList);
-        JTextField authCode = new JTextField(authCodeList[0]);
-        fields.add(members);
-        fields.add(memberNameVisualList);
-        fields.add(code);
-        fields.add(authCode);
-        buttons.add(pay);
-        buttons.add(refresh);
-        card7.add(fields);
-        card7.add(buttons);
-
-        authCode.setPreferredSize(new Dimension(authCode.getPreferredSize().width+50, authCode.getPreferredSize().height));
-
-        memberNameVisualList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                authCode.setText(authCodeList[memberNameVisualList.getSelectedIndex()]);
-            }
-        });
-        pay.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if (memberEmailList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
-                    AssignmentController.payMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()), authCode.getText());
-                } catch (InvalidInputException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        refresh.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updatePay();
-                authCode.setText(authCodeList[0]);
-            }
-        });
-
-
-
-        tabbedPane.addTab("Pay for Member's Trip", card7);
-    }
 
 
     /**
@@ -1223,7 +1139,8 @@ public class ClimbSafePage {
      * Fills in the tab in the UI associated to starting, finishing and cancelling trips
      */
     private static void addTripCard() {
-    java.net.URL imageURL = getPhoto(1);
+        updatePay();
+        java.net.URL imageURL = getPhoto(1);
 
         BufferedImage hikerBackground = null;
         try {
@@ -1246,31 +1163,73 @@ public class ClimbSafePage {
         };
         card8.setLayout(new BoxLayout(card8, BoxLayout.Y_AXIS));
 
-        JPanel start = new JPanel();
-        JPanel middle = new JPanel();
-        JPanel finishCancel = new JPanel();
+        JPanel start = new JPanel(){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.width += 200;
+                size.height -=300;
+                return size;
+            }
+        };
+        JPanel middle = new JPanel(){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.width += 200;
+                size.height -=300;
+                return size;
+            }
+        };
+        JPanel finishCancel = new JPanel(){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.width += 200;
 
+                return size;
+            }
+        };
+
+        JLabel weekLabel = new JLabel("Start all trips for a week:");
         JLabel weekNumber = new JLabel("Week number: 1");
+        JLabel members= new JLabel("Member Names:");
+        JLabel code = new JLabel("Authorization Code:");
+
+        JTextField authCode = new JTextField(authCodeList[0]);
         JComboBox<String> memberNameVisualList = new JComboBox<>(memberEmailList);
 
         JButton weekDown = new JButton("<html>-</html>");
         JButton weekUp = new JButton("<html>+</html>");
         JButton startWeek = new JButton("Start Week");
+        JButton pay = new JButton("Pay Member Trip");
         JButton finish = new JButton("Finish Member's Trip");
         JButton cancel = new JButton("Cancel Member's Trip");
+        JButton refresh = new JButton("Refresh Member Names");
 
 
         start.setOpaque(false);
         middle.setOpaque(false);
         finishCancel.setOpaque(false);
 
+        memberNameVisualList.setPreferredSize(new Dimension(memberNameVisualList.getPreferredSize().width+50, memberNameVisualList.getPreferredSize().height));
+        authCode.setPreferredSize(new Dimension(authCode.getPreferredSize().width+50, authCode.getPreferredSize().height));
+
+        weekLabel.setBorder(new EmptyBorder(0,10,0,10));
+
+        code.setBorder(new EmptyBorder(0,25,0,0));
+
+
+        start.add(weekLabel);
         start.add(weekDown);
         start.add(weekNumber);
         start.add(weekUp);
         start.add(startWeek);
+        middle.add(members);
         middle.add(memberNameVisualList);
+        middle.add(code);
+        middle.add(authCode);
+        finishCancel.add(pay);
         finishCancel.add(finish);
         finishCancel.add(cancel);
+        finishCancel.add(refresh);
         card8.add(start);
         card8.add(middle);
         card8.add(finishCancel);
@@ -1286,14 +1245,14 @@ public class ClimbSafePage {
                 weekNumber.setText("Week Number: "+num);
             }
         });
-        weekDown.addActionListener(new ActionListener() {
+        weekUp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String[] txt = weekNumber.getText().split(" ");
                 int num = Integer.parseInt(txt[2]);
                 num += 1;
-                //TODO Create climbsafe TO?
-                int len = ClimbSafeApplication.getClimbSafe().getNrWeeks();
+                int len = TOController.getClimbSafe().getNrWeeks();
+                System.out.println(len);
                 if (num > len) num = len;
                 weekNumber.setText("Week Number: "+num);
             }
@@ -1303,6 +1262,17 @@ public class ClimbSafePage {
             public void actionPerformed(ActionEvent e) {
                 try {
                     AssignmentController.startAllTrips(Integer.parseInt(weekNumber.getText().split(" ")[2]));
+                } catch (InvalidInputException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        pay.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (memberEmailList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
+                        AssignmentController.payMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()), authCode.getText());
                 } catch (InvalidInputException ex) {
                     ex.printStackTrace();
                 }
@@ -1330,8 +1300,15 @@ public class ClimbSafePage {
                 }
             }
         });
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePay();
+                authCode.setText(authCodeList[0]);
+            }
+        });
 
-        tabbedPane.addTab("Start trips, finish a trip and cancel a trip", card8);
+        tabbedPane.addTab("Trip Management", card8);
 
         }
 }
