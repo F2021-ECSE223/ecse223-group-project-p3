@@ -67,6 +67,8 @@ public class ClimbSafePage implements KeyListener {
     private static String[] bannedStatusList = new String[toAssignmentList.size()];
     private static List<TOBookableItem> bundleListC = TOController.getBundles();
     private static String[] bundleListNamesC = new String[equipmentList.size()];
+    private static JComboBox<String> equipmentListL = null;
+    private static JPanel rightTableB = null;
 
     private static final KeyListener ClimbSafePage = new ClimbSafePage();
     private static String cen = "";
@@ -1148,11 +1150,12 @@ public class ClimbSafePage implements KeyListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     ClimbSafeFeatureSet1Controller.deleteGuide(emailEntry.getText());
+                    new Popup("Guide deleted successfully!", card3, 0);
 
                 } catch (Exception ex) {
                     new Popup(ex.getMessage(), card3, 1);
                 }
-                new Popup("Guide deleted successfully!", card3, 0);
+               
                 updateGuideList();
                 if(guides!=null){
                     guides.removeAllItems();
@@ -1459,7 +1462,7 @@ public class ClimbSafePage implements KeyListener {
                 new Popup(String.format("Successfully added %s to ClimbSafe.", equipmentNameField.getText()), card4, 0);
                 updateEquipmentList();
                 allEquipmentsDisplay.setListData(equipmentListNames);
-                if(equipmentVisualListF != null){ equipmentVisualListF.addItem(equipmentNameField.getText());}
+                reinit();
             }
             else{
                 new Popup(addErrorMsg, card4, 1);
@@ -1504,13 +1507,7 @@ public class ClimbSafePage implements KeyListener {
                 new Popup(String.format("Successfully updated equipment %s.", oldName), card4, 0);
                 updateEquipmentList();
                 allEquipmentsDisplay.setListData(equipmentListNames);
-                if(equipmentVisualListF != null){
-                    equipmentVisualListF.removeAllItems();
-                    for (String s :
-                            equipmentListNames) {
-                        equipmentVisualListF.addItem(s);
-                    }
-                }
+                reinit();
             }
             else{
                 new Popup(updateErrorMsg, card4, 1);
@@ -1551,13 +1548,7 @@ public class ClimbSafePage implements KeyListener {
                 new Popup(String.format("Successfully deleted equipment %s.", oldName), card4, 0);
                 updateEquipmentList();
                 allEquipmentsDisplay.setListData(equipmentListNames);
-                if(equipmentVisualListF != null){
-                    equipmentVisualListF.removeAllItems();
-                    for (String s :
-                            equipmentListNames) {
-                        equipmentVisualListF.addItem(s);
-                    }
-                }
+                reinit();
             }
             else{
                 new Popup(deleteErrorMsg, card4, 1);
@@ -1577,6 +1568,46 @@ public class ClimbSafePage implements KeyListener {
 
         tabbedPane.addTab("Equipment", card4);
     }
+    
+    /**
+    *@author Romen Poirier Taksev
+    *reinitilizes lists and tables
+    **/
+    private static void reinit(){
+        if(equipmentVisualListF != null){
+            equipmentVisualListF.removeAllItems();
+            for (String s :
+                    equipmentListNames) {
+                equipmentVisualListF.addItem(s);
+            }
+        }
+        if(equipmentListL != null){
+            equipmentListL.removeAllItems();
+            for (String s :
+                    equipmentListNames) {
+                equipmentListL.addItem(s);
+            }
+        }
+        if(rightTableB != null){
+            JTable table = new JTable(equipmentListNames.length+1, 2);
+            table.setEnabled(false);
+            table.getColumnModel().getColumn(1).setPreferredWidth(100);
+            table.getColumnModel().getColumn(0).setPreferredWidth(100);
+            table.setValueAt("Equipment",0,0);
+            table.setValueAt("Quantity",0,1);
+            for (int i = 1; i < equipmentListNames.length+1; i++) {
+                table.setValueAt(equipmentListNames[i-1],i,0);
+            }
+            for (int i = 1; i < equipmentListNames.length+1; i++) {
+                table.setValueAt(0,i,1);
+            }
+            rightTableB.removeAll();
+            rightTableB.add(table, SwingConstants.CENTER);
+            rightTableB.repaint();
+            rightTableB.revalidate();
+        }
+    }
+
 
 
 
@@ -1620,6 +1651,7 @@ public class ClimbSafePage implements KeyListener {
 
         JComboBox<String> bundleList = new JComboBox<>(bundleListNames);
         JComboBox<String> equipmentList = new JComboBox<>(equipmentListNames);
+        equipmentListL = equipmentList;
         JLabel bundleNameLbl = new JLabel("Bundle Name:", SwingConstants.RIGHT);
         JLabel nameLbl  = new JLabel("Name:", SwingConstants.RIGHT);
         JLabel equipmentNameLbl = new JLabel("Equipment:", SwingConstants.RIGHT);
@@ -1704,6 +1736,7 @@ public class ClimbSafePage implements KeyListener {
         price.add(priceTxt);
 
         rightTable.add(table,SwingConstants.CENTER);
+        rightTableB = rightTable;
         start.add(bundle);
         start.add(name);
         start.add(equipment);
