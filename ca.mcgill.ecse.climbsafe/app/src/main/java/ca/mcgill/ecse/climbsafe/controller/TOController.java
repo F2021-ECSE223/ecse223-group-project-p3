@@ -51,6 +51,8 @@ public class TOController {
      */
     public static TONamedUser getUserWithEmail(String email){
         NamedUser user = (NamedUser) NamedUser.getWithEmail(email);
+        if(user == null) return null;
+        System.out.println(user.getEmail()+" "+ (user instanceof Member)+" "+ (user instanceof Guide));
         if (user instanceof Member){
             Member member = (Member) user;
             return new TONamedUser(member.getEmail(), member.getPassword(), member.getName(), member.getEmergencyContact(), member.getHotelRequired(),member.getGuideRequired(),member.getNrWeeks(), "member");
