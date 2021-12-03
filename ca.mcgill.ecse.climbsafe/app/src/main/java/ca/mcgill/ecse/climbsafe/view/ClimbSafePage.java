@@ -2,7 +2,9 @@
 package ca.mcgill.ecse.climbsafe.view;
 
 
+import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.controller.*;
+import ca.mcgill.ecse.climbsafe.model.*;
 
 
 import java.awt.*;
@@ -11,10 +13,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,15 +27,12 @@ import javax.swing.event.ListSelectionListener;
 
 
 
-public class ClimbSafePage implements KeyListener {
+public class ClimbSafePage{
     private static JFrame mainFrame;
     private static JTabbedPane tabbedPane;
 
 
-    private static String[] equipmentNameArray;
     private static String[] equipmentBundleNameArray;
-    private static int[] equipmentQuantityArray;
-    private static  int[] equipmentBundleQuantityArray;
     private static String[] memberList;
     private static String[] guideList;
     private static JComboBox<String> memberNameVisualList = new JComboBox<>();
@@ -48,7 +45,6 @@ public class ClimbSafePage implements KeyListener {
     private static List<TOBookableItem> equipmentList = TOController.getEquipment();
     private static String[] equipmentListNames = new String[equipmentList.size()];
     private static List<TOBookableItem> bundleList = TOController.getEquipment();
-    private static String[] bundleListNames = new String[equipmentList.size()];
     private static int[] memberEquipmentQuantityArray = new int[equipmentList.size()];
     private static  int[] memberEquipmentBundleQuantityArray = new int[bundleList.size()];
     private static List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
@@ -66,15 +62,9 @@ public class ClimbSafePage implements KeyListener {
     private static String[] refundList = new String[toAssignmentList.size()];
     private static String[] bannedStatusList = new String[toAssignmentList.size()];
     private static List<TOBookableItem> bundleListC = TOController.getBundles();
-    private static String[] bundleListNamesC = new String[equipmentList.size()];
     private static JComboBox<String> equipmentListP = null;
     private static JPanel rightTableB = null;
     private static JTable etb = null;
-
-    private static final KeyListener ClimbSafePage = new ClimbSafePage();
-    private static String cen = "";
-    private static String cew = "";
-    private static String cep = "";
 
     private static void updateEquipmentList(){
         equipmentList = TOController.getEquipment();
@@ -92,13 +82,14 @@ public class ClimbSafePage implements KeyListener {
     }
     private static void updateBundleList(){
         bundleList = TOController.getBundles();
+        bundleListC = TOController.getBundles();
         String[] tempList = new String[bundleList.size()];
         int[] tempList2 = new int[bundleList.size()];
         for(int i = 0; i < bundleList.size(); i++){
             tempList[i] = bundleList.get(i).getName();
         }
         memberEquipmentBundleQuantityArray = tempList2;
-        bundleListNames = tempList;
+        equipmentBundleNameArray = tempList;
         for (TOBookableItem e :
                 bundleList) {
             e.delete();
@@ -201,8 +192,10 @@ public class ClimbSafePage implements KeyListener {
         String[] tempHotelNameList = new String[toAssignmentList.size()];
         String[] tempStartWeekList = new String[toAssignmentList.size()];
         String[] tempEndWeekList = new String[toAssignmentList.size()];
+        //
         String[] tempGuideCostList = new String[toAssignmentList.size()];
         String[] tempEquipmentCostList = new String[toAssignmentList.size()];
+        //
         String[] tempStatusList = new String[toAssignmentList.size()];
         String[] tempAuthCodeList = new String[toAssignmentList.size()];
         String[] tempRefundList = new String[toAssignmentList.size()];
@@ -660,7 +653,7 @@ public class ClimbSafePage implements KeyListener {
         members.setPreferredSize(new Dimension(members.getPreferredSize().width +50,members.getPreferredSize().height));
         JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentListNames);
         equipmentVisualList.setPreferredSize(new Dimension(equipmentVisualList.getPreferredSize().width+50, equipmentVisualList.getPreferredSize().height));
-        JComboBox<String> equipmentBundleVisualList = new JComboBox<>(bundleListNames);
+        JComboBox<String> equipmentBundleVisualList = new JComboBox<>(equipmentBundleNameArray);
         equipmentVisualListF = equipmentVisualList;
         equipmentBundleVisualListF = equipmentBundleVisualList;
         equipmentBundleVisualList.setPreferredSize(new Dimension(equipmentBundleVisualList.getPreferredSize().width+50, equipmentBundleVisualList.getPreferredSize().height));
@@ -785,13 +778,13 @@ public class ClimbSafePage implements KeyListener {
                 else stayHotel.setText("<html><span>&#10007;</span></html>");
                 for (var bookedItem: TOController.getItemsforMemberEmail(member.getEmail())){
                     if (bookedItem.getItem().getWeight()==0){ //equipment bundle
-                        for (int i = 0; i< bundleListNames.length; i++){
-                            if (bundleListNames[i]==bookedItem.getItem().getName()) memberEquipmentBundleQuantityArray[i]= bookedItem.getQuantity();
+                        for (int i = 0; i< equipmentBundleNameArray.length; i++){
+                            if (Objects.equals(equipmentBundleNameArray[i], bookedItem.getItem().getName())) memberEquipmentBundleQuantityArray[i]= bookedItem.getQuantity();
                         }
 
                     }else{  //equipment
                         for (int i = 0; i< equipmentListNames.length; i++){
-                            if (equipmentListNames[i]==bookedItem.getItem().getName()) memberEquipmentQuantityArray[i]= bookedItem.getQuantity();
+                            if (Objects.equals(equipmentListNames[i], bookedItem.getItem().getName())) memberEquipmentQuantityArray[i]= bookedItem.getQuantity();
                         }
                     }
                 }
@@ -891,11 +884,14 @@ public class ClimbSafePage implements KeyListener {
         registerMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                updateBundleList();
+                System.out.println(Arrays.toString(equipmentBundleNameArray));
+                updateEquipmentList();
                 try {
                     List<String> itemNames = new ArrayList<>();
+
                     itemNames.addAll(Arrays.asList(equipmentListNames));
-                    itemNames.addAll(Arrays.asList(bundleListNames));
+                    itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
                     List<Integer> itemQuantities = new ArrayList<>();
                     for (int i : memberEquipmentQuantityArray) itemQuantities.add(i);
                     for (int i : memberEquipmentBundleQuantityArray) itemQuantities.add(i);
@@ -921,7 +917,7 @@ public class ClimbSafePage implements KeyListener {
                 try {
                     List<String> itemNames = new ArrayList<>();
                     itemNames.addAll(Arrays.asList(equipmentListNames));
-                    itemNames.addAll(Arrays.asList(bundleListNames));
+                    itemNames.addAll(Arrays.asList(equipmentBundleNameArray));
                     List<Integer> itemQuantities = new ArrayList<>();
                     for (int i : memberEquipmentQuantityArray) itemQuantities.add(i);
                     for (int i : memberEquipmentBundleQuantityArray) itemQuantities.add(i);
@@ -1640,6 +1636,8 @@ public class ClimbSafePage implements KeyListener {
             }
         };
 
+        updateBundleList();
+
         Dimension dim = new Dimension(130, 20);
 
         JPanel start = new JPanel();
@@ -1655,7 +1653,7 @@ public class ClimbSafePage implements KeyListener {
         start.setLayout(new BoxLayout(start, BoxLayout.Y_AXIS));
         bundleInput.setLayout(new BoxLayout(bundleInput, BoxLayout.X_AXIS));
 
-        JComboBox<String> bundleList = new JComboBox<>(bundleListNames);
+        JComboBox<String> bundleListDropdown = new JComboBox<>(equipmentBundleNameArray);
         JComboBox<String> equipmentList = new JComboBox<>(equipmentListNames);
         equipmentListP = equipmentList;
         JLabel bundleNameLbl = new JLabel("Bundle Name:", SwingConstants.RIGHT);
@@ -1729,7 +1727,7 @@ public class ClimbSafePage implements KeyListener {
         bundleInput.setOpaque(false);
 
         bundle.add(bundleNameLbl);
-        bundle.add(bundleList);
+        bundle.add(bundleListDropdown);
         name.add(nameLbl);
         name.add(nameTxt);
 
@@ -1808,12 +1806,12 @@ public class ClimbSafePage implements KeyListener {
                 }catch(Exception ex){
                     new Popup(ex.getMessage(),card5,1);
                 }
-                updateBundleNameList();
-                bundleList.removeAllItems();
+                updateBundleList();
+                bundleListDropdown.removeAllItems();
                 if (equipmentBundleVisualListF != null){
                 equipmentBundleVisualListF.removeAllItems();
                 for (String s : equipmentBundleNameArray) {
-                    bundleList.addItem(s);
+                    bundleListDropdown.addItem(s);
                     equipmentBundleVisualListF.addItem(s);
                 }}
 
@@ -1823,13 +1821,14 @@ public class ClimbSafePage implements KeyListener {
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
                     etb.setValueAt(0,i,1);
                 }
-
+                updateBundleList();
             }
         });
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
+                    updateBundleList();
                     List<String> itemNames = new ArrayList<>();
                     List<Integer> itemQuantity = new ArrayList<>();
 
@@ -1839,63 +1838,66 @@ public class ClimbSafePage implements KeyListener {
                             itemQuantity.add(Integer.parseInt(String.valueOf(etb.getValueAt(i,1))));
                         }
                     }
-                    ClimbSafeFeatureSet5Controller.updateEquipmentBundle((String)bundleList.getSelectedItem(),nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
+                    System.out.println("1"+itemNames);
+                    System.out.println("2"+itemQuantity);
+                    ClimbSafeFeatureSet5Controller.updateEquipmentBundle((String)bundleListDropdown.getSelectedItem(),nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
                     new Popup("Successfully updated equipment bundle.", card5, 0);
                 }catch(Exception ex){
                     new Popup(ex.getMessage(), card5, 1);
                 }
-                updateBundleNameList();
+                updateBundleList();
                 if (equipmentBundleVisualListF != null){
                     equipmentBundleVisualListF.removeAllItems();
                     for (String s : equipmentBundleNameArray) {
-                        bundleList.addItem(s);
+                        bundleListDropdown.addItem(s);
                         equipmentBundleVisualListF.addItem(s);
                     }}
-                bundleList.removeAllItems();
-                for (String s : equipmentBundleNameArray) bundleList.addItem(s);
+                bundleListDropdown.removeAllItems();
+                for (String s : equipmentBundleNameArray) bundleListDropdown.addItem(s);
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
                     etb.setValueAt(equipmentListNames[i-1],i,0);
                 }
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
                     etb.setValueAt(0,i,1);
                 }
-
+                updateBundleList();
             }
         });
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    ClimbSafeFeatureSet6Controller.deleteEquipmentBundle((String)bundleList.getSelectedItem());
+                    ClimbSafeFeatureSet6Controller.deleteEquipmentBundle((String)bundleListDropdown.getSelectedItem());
                     new Popup("Equipment Bundle has been deleted",card5,0);
                 }catch (Exception ex){
                     new Popup(ex.getMessage(),card5,1);
                 }
-                updateBundleNameList();
+                updateBundleList();
                 if (equipmentBundleVisualListF != null){
                     equipmentBundleVisualListF.removeAllItems();
                     for (String s : equipmentBundleNameArray) {
-                        bundleList.addItem(s);
+                        bundleListDropdown.addItem(s);
                         equipmentBundleVisualListF.addItem(s);
                     }}
-                bundleList.removeAllItems();
-                for (String s : equipmentBundleNameArray) bundleList.addItem(s);
+                bundleListDropdown.removeAllItems();
+                for (String s : equipmentBundleNameArray) bundleListDropdown.addItem(s);
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
                     etb.setValueAt(equipmentListNames[i-1],i,0);
                 }
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
                     etb.setValueAt(0,i,1);
                 }
-
+                updateBundleList();
+                System.out.println(Arrays.toString(equipmentBundleNameArray));
             }
         });
-        bundleList.addActionListener(new ActionListener() {
+        bundleListDropdown.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<String> itemNames = new ArrayList<>();
                 List<Integer> itemQuantity = new ArrayList<>();
                 TOBookableItem eq = null;
-                String eqName = (String) bundleList.getSelectedItem();
+                String eqName = (String) bundleListDropdown.getSelectedItem();
                 for (TOBookableItem tob: bundleListC) {
                     if(tob.getName().equals(eqName)){
                         eq = tob;
@@ -1909,25 +1911,6 @@ public class ClimbSafePage implements KeyListener {
         });
         tabbedPane.addTab("Bundles", card5);
     }
-
-    /**
-     * @author Rooshnie Velautham
-     * updates the bundles in the dropdown menu
-     */
-    public static void updateBundleNameList(){
-        List<TOBookableItem> equipmentBundleList = TOController.getBundles();
-        if (equipmentBundleList==null){
-            equipmentBundleNameArray = new String[1];
-            equipmentBundleNameArray[0] = "Placeholder";
-        }
-        else {
-            equipmentBundleNameArray = new String[equipmentBundleList.size()];
-            for (int i = 0; i < equipmentBundleList.size(); i++) {
-                equipmentBundleNameArray[i] = equipmentBundleList.get(i).getName();
-            }
-        }
-    }
-
 
     /**
      * @author Abhijeet Praveen
@@ -2383,32 +2366,4 @@ public class ClimbSafePage implements KeyListener {
 
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == 9){
-            autofill(e.getSource());
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
-    /**
-     * @author Romen Poirier Taksev
-     * @param caller
-     */
-    public void autofill(Object caller){
-        JTextField field = (JTextField) caller;
-        String name = field.getName();
-        switch (name) {
-            case "equipmentNameUpdateField" -> field.setText(cen);
-            case "equipmentWeightUpdateField" -> field.setText(cew);
-            case "equipmentPriceUpdateField" -> field.setText(cep);
-        }
-    }
 }
