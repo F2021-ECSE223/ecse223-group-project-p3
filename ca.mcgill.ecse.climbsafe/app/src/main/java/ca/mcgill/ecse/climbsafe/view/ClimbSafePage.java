@@ -555,8 +555,9 @@ public class ClimbSafePage implements KeyListener {
         JLabel nameLabel = new JLabel("Name:",SwingConstants.RIGHT);
         JLabel passwordLabel = new JLabel("Password:",SwingConstants.RIGHT);
         JLabel emergencyContactLabel = new JLabel("Emergency Contact:",SwingConstants.RIGHT);
-        JLabel lengthLabel = new JLabel("Length of Stay:", SwingConstants.RIGHT);
-        JLabel nrWeeks = new JLabel("1 week(s)");
+        JLabel lengthLabel = new JLabel("Number of weeks:", SwingConstants.RIGHT);
+        JLabel nrWeeks = new JLabel("1");
+        nrWeeks.setPreferredSize(new Dimension(20,10));
         JLabel stayHotelLabel = new JLabel("Stay at Hotel:",SwingConstants.RIGHT);
         JLabel hotelText = new JLabel("+ 3 days");
         JLabel guideLabel = new JLabel("Add Guide:",SwingConstants.RIGHT);
@@ -592,14 +593,14 @@ public class ClimbSafePage implements KeyListener {
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
                 size.height -= 5;
-                size.width -= 10;
+                size.width -= 20;
                 return size;
             }};
         JButton weekUp = new JButton("<html>+</html>"){
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
                 size.height -= 5;
-                size.width -= 10;
+                size.width -= 20;
                 return size;
             }};
         JButton equipmentUp = new JButton("<html>+</html>"){
@@ -659,6 +660,7 @@ public class ClimbSafePage implements KeyListener {
         JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentListNames);
         equipmentVisualList.setPreferredSize(new Dimension(equipmentVisualList.getPreferredSize().width+50, equipmentVisualList.getPreferredSize().height));
         JComboBox<String> equipmentBundleVisualList = new JComboBox<>(bundleListNames);
+        equipmentVisualListF = equipmentVisualList;
         equipmentBundleVisualListF = equipmentBundleVisualList;
         equipmentBundleVisualList.setPreferredSize(new Dimension(equipmentBundleVisualList.getPreferredSize().width+50, equipmentBundleVisualList.getPreferredSize().height));
 
@@ -804,7 +806,7 @@ public class ClimbSafePage implements KeyListener {
                 num += 1;
                 int len = TOController.getClimbSafe().getNrWeeks();
                 if (num > len) num = len;
-                nrWeeks.setText(num+" week(s)");
+                nrWeeks.setText(String.valueOf(num));
             }
         });
         weekDown.addActionListener(new ActionListener() {
@@ -814,7 +816,7 @@ public class ClimbSafePage implements KeyListener {
                 int num = Integer.parseInt(txt[0]);
                 num -= 1;
                 if (num<1) num = 1;
-                nrWeeks.setText(num+" week(s)");
+                nrWeeks.setText(String.valueOf(num));
             }
         });
         stayHotel.addActionListener(new ActionListener() {
