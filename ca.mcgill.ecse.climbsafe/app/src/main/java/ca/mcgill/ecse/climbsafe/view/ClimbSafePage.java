@@ -69,6 +69,7 @@ public class ClimbSafePage implements KeyListener {
     private static String[] bundleListNamesC = new String[equipmentList.size()];
     private static JComboBox<String> equipmentListP = null;
     private static JPanel rightTableB = null;
+    private static JTable etb = null;
 
     private static final KeyListener ClimbSafePage = new ClimbSafePage();
     private static String cen = "";
@@ -1605,6 +1606,7 @@ public class ClimbSafePage implements KeyListener {
             }
             rightTableB.removeAll();
             rightTableB.add(table, SwingConstants.CENTER);
+            etb = table;
             rightTableB.repaint();
             rightTableB.revalidate();
         }
@@ -1673,6 +1675,7 @@ public class ClimbSafePage implements KeyListener {
         table.getColumnModel().getColumn(0).setPreferredWidth(100);
         table.setValueAt("Equipment",0,0);
         table.setValueAt("Quantity",0,1);
+        etb = table;
 
         for (int i = 1; i < equipmentListNames.length+1; i++) {
             table.setValueAt(equipmentListNames[i-1],i,0);
@@ -1783,8 +1786,7 @@ public class ClimbSafePage implements KeyListener {
                 int num = Integer.parseInt(quantityNumber.getText());
                 quantityNumber.setText(String.valueOf(num));
                 equipmentBundleQuantityArray[equipmentList.getSelectedIndex()] = num;
-                table.setValueAt(equipmentBundleQuantityArray[equipmentList.getSelectedIndex()],equipmentList.getSelectedIndex()+1,1);
-                reinit();
+                etb.setValueAt(equipmentBundleQuantityArray[equipmentList.getSelectedIndex()],equipmentList.getSelectedIndex()+1,1);
 
             }
         });
@@ -1796,9 +1798,9 @@ public class ClimbSafePage implements KeyListener {
                     List<Integer> itemQuantity = new ArrayList<>();
 
                     for (int i = 1; i < equipmentListNames.length+1; i++) {
-                        if(Integer.parseInt(String.valueOf(table.getValueAt(i,1)))!=0){
-                            itemNames.add(String.valueOf(table.getValueAt(i,0)));
-                            itemQuantity.add(Integer.parseInt(String.valueOf(table.getValueAt(i,1))));
+                        if(Integer.parseInt(String.valueOf(etb.getValueAt(i,1)))!=0){
+                            itemNames.add(String.valueOf(etb.getValueAt(i,0)));
+                            itemQuantity.add(Integer.parseInt(String.valueOf(etb.getValueAt(i,1))));
                         }
                     }
                     ClimbSafeFeatureSet5Controller.addEquipmentBundle(nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
@@ -1816,10 +1818,10 @@ public class ClimbSafePage implements KeyListener {
                 }}
 
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
-                    table.setValueAt(equipmentListNames[i-1],i,0);
+                    etb.setValueAt(equipmentListNames[i-1],i,0);
                 }
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
-                    table.setValueAt(0,i,1);
+                    etb.setValueAt(0,i,1);
                 }
 
             }
@@ -1832,9 +1834,9 @@ public class ClimbSafePage implements KeyListener {
                     List<Integer> itemQuantity = new ArrayList<>();
 
                     for (int i = 1; i < equipmentListNames.length+1; i++) {
-                        if(Integer.parseInt(String.valueOf(table.getValueAt(i,1)))!=0){
-                            itemNames.add(String.valueOf(table.getValueAt(i,0)));
-                            itemQuantity.add(Integer.parseInt(String.valueOf(table.getValueAt(i,1))));
+                        if(Integer.parseInt(String.valueOf(etb.getValueAt(i,1)))!=0){
+                            itemNames.add(String.valueOf(etb.getValueAt(i,0)));
+                            itemQuantity.add(Integer.parseInt(String.valueOf(etb.getValueAt(i,1))));
                         }
                     }
                     ClimbSafeFeatureSet5Controller.updateEquipmentBundle((String)bundleList.getSelectedItem(),nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
@@ -1851,10 +1853,10 @@ public class ClimbSafePage implements KeyListener {
                 bundleList.removeAllItems();
                 for (String s : equipmentBundleNameArray) bundleList.addItem(s);
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
-                    table.setValueAt(equipmentListNames[i-1],i,0);
+                    etb.setValueAt(equipmentListNames[i-1],i,0);
                 }
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
-                    table.setValueAt(0,i,1);
+                    etb.setValueAt(0,i,1);
                 }
 
             }
@@ -1878,10 +1880,10 @@ public class ClimbSafePage implements KeyListener {
                 bundleList.removeAllItems();
                 for (String s : equipmentBundleNameArray) bundleList.addItem(s);
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
-                    table.setValueAt(equipmentListNames[i-1],i,0);
+                    etb.setValueAt(equipmentListNames[i-1],i,0);
                 }
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
-                    table.setValueAt(0,i,1);
+                    etb.setValueAt(0,i,1);
                 }
 
             }
