@@ -1610,8 +1610,10 @@ public class ClimbSafePage implements KeyListener {
         }
     }
 
-
-
+/**
+     * @author Rooshnie Velautham
+     * fills in the tab in the UI responsible for adding, updating and deleting equipment bundles
+     */
 
     public static void addBundleCard(){
         java.net.URL imageURL = getPhoto(1);
@@ -1653,7 +1655,6 @@ public class ClimbSafePage implements KeyListener {
 
         JComboBox<String> bundleList = new JComboBox<>(bundleListNames);
         JComboBox<String> equipmentList = new JComboBox<>(equipmentListNames);
-        equipmentListL = equipmentList;
         JLabel bundleNameLbl = new JLabel("Bundle Name:", SwingConstants.RIGHT);
         JLabel nameLbl  = new JLabel("Name:", SwingConstants.RIGHT);
         JLabel equipmentNameLbl = new JLabel("Equipment:", SwingConstants.RIGHT);
@@ -1738,7 +1739,6 @@ public class ClimbSafePage implements KeyListener {
         price.add(priceTxt);
 
         rightTable.add(table,SwingConstants.CENTER);
-        rightTableB = rightTable;
         start.add(bundle);
         start.add(name);
         start.add(equipment);
@@ -1804,15 +1804,14 @@ public class ClimbSafePage implements KeyListener {
                     new Popup(ex.getMessage(),card5,1);
                 }
                 updateBundleNameList();
-                if (equipmentBundleVisualListF != null){
-                    equipmentBundleVisualListF.removeAllItems();
-                    for (String s : equipmentBundleNameArray) {
-                        bundleList.addItem(s);
-                        equipmentBundleVisualListF.addItem(s);
-                    }}
                 bundleList.removeAllItems();
+                if (equipmentBundleVisualListF != null){
                 equipmentBundleVisualListF.removeAllItems();
-                for (String s : equipmentBundleNameArray) bundleList.addItem(s);
+                for (String s : equipmentBundleNameArray) {
+                    bundleList.addItem(s);
+                    equipmentBundleVisualListF.addItem(s);
+                }}
+
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
                     table.setValueAt(equipmentListNames[i-1],i,0);
                 }
@@ -1905,6 +1904,10 @@ public class ClimbSafePage implements KeyListener {
         tabbedPane.addTab("Bundles", card5);
     }
 
+    /**
+     * @author Rooshnie Velautham
+     * updates the bundles in the dropdown menu
+     */
     public static void updateBundleNameList(){
         List<TOBookableItem> equipmentBundleList = TOController.getBundles();
         if (equipmentBundleList==null){
@@ -1918,6 +1921,7 @@ public class ClimbSafePage implements KeyListener {
             }
         }
     }
+
 
     /**
      * @author Abhijeet Praveen
