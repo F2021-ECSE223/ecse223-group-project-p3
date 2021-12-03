@@ -30,7 +30,24 @@ public class TOController {
         var bookableItems = new ArrayList<TOBookableItem>();
         for (var bundle: ClimbSafeApplication.getClimbSafe().getBundles()){
             TOBookableItem item = TOBookableItem.getWithName(bundle.getName());
-            bookableItems.add(Objects.requireNonNullElseGet(item, () -> new TOBookableItem(bundle.getName(), bundle.getDiscount(), 0, 0)));
+            int totalBundleCost = 0;
+            int totalBundleWeight = 0;
+            List<BundleItem> bundleItems = bundle.getBundleItems();
+            for (BundleItem bi :
+                    bundleItems) {
+                Equipment fff = bi.getEquipment();
+                if(fff != null){
+                    totalBundleCost += (bi.getQuantity() * fff.getPricePerWeek());
+                    totalBundleWeight += (bi.getQuantity() * fff.getWeight());
+                }
+            }
+            int finalTotalBundleCost = totalBundleCost;
+            int finalTotalBundleWeight = totalBundleWeight;
+            if(item != null){
+                item.setPricePerWeek(finalTotalBundleCost);
+                item.setWeight(finalTotalBundleWeight);
+            }
+            bookableItems.add(Objects.requireNonNullElseGet(item, () -> new TOBookableItem(bundle.getName(), bundle.getDiscount(), finalTotalBundleWeight, finalTotalBundleCost)));
 
         }
         return bookableItems;
