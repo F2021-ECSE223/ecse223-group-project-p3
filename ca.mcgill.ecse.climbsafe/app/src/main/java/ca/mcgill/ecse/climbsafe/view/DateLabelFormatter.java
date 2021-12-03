@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.btms.view;
+package ca.mcgill.ecse.climbsafe.view;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

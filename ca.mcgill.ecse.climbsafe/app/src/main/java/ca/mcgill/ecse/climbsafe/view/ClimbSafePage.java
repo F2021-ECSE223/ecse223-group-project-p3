@@ -6,8 +6,7 @@ package ca.mcgill.ecse.climbsafe.view;
 
 
         import java.awt.*;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
+        import java.awt.event.*;
         import java.awt.image.BufferedImage;
         import java.io.IOException;
         import java.net.MalformedURLException;
@@ -28,7 +27,7 @@ package ca.mcgill.ecse.climbsafe.view;
 
 
 
-public class ClimbSafePage implements KeyListener{
+public class ClimbSafePage implements KeyListener {
     private static JFrame mainFrame;
     private static JTabbedPane tabbedPane;
 
@@ -396,7 +395,7 @@ public class ClimbSafePage implements KeyListener{
                 
                 if(!errorDate && !errorPrice && !errorNoWeeks){
                     try {
-                        ClimbSafeFeatureSet1Controller.setup(startDate2, noWeeks, costCS);
+                        ClimbSafeFeatureSet1Controller.setup((java.sql.Date) startDate2, noWeeks, costCS);
                     } catch (Exception ex) {
                         error = true;
                         new Popup(ex.getMessage(), card1, 1);
@@ -912,7 +911,6 @@ public class ClimbSafePage implements KeyListener{
                     new Popup("Member updated successfully",card2,0);
                 } catch (Exception ex) {
                     new Popup(ex.getMessage(),card2,1);
-                    System.out.println(ex.getMessage());
                 }
             }
         });
@@ -1134,10 +1132,9 @@ public class ClimbSafePage implements KeyListener{
                 public void actionPerformed(ActionEvent e) {
                     try {
                         ClimbSafeFeatureSet1Controller.deleteGuide(emailEntry.getText());
-                        new Popup("Guide deleted successfully!");
+                        new Popup("Guide deleted successfully!", card3, 0);
                     } catch (Exception ex) {
                         new Popup(ex.getMessage(),card3,1);
-                        System.out.println(ex.getMessage());
                     }
                 }
             });
@@ -1150,7 +1147,6 @@ public class ClimbSafePage implements KeyListener{
                         new Popup("Guide updated successfully!", card3, 0);
                     } catch (Exception ex) {
                         new Popup(ex.getMessage(),card3,1);
-                        System.out.println(ex.getMessage())
                     }
                 }
             });
@@ -1163,7 +1159,6 @@ public class ClimbSafePage implements KeyListener{
                         new Popup("Guide registered successfully!", card3, 0);
                     } catch (Exception ex) {
                         new Popup(ex.getMessage(),card3,1);
-                        System.out.println(ex.getMessage());
                     }
                 }
             });
@@ -1180,7 +1175,6 @@ public class ClimbSafePage implements KeyListener{
 
                     } catch (Exception ex){
                        new Popup(ex.getMessage(),card3,1);
-                       System.out.println(ex.getMessage());    
                    }
                 }
             });
@@ -2181,7 +2175,6 @@ public class ClimbSafePage implements KeyListener{
                 int num = Integer.parseInt(txt[2]);
                 num += 1;
                 int len = TOController.getClimbSafe().getNrWeeks();
-                System.out.println(len);
                 if (num > len) num = len;
                 weekNumber.setText("Week Number: "+num);
             }
