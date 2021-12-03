@@ -162,13 +162,12 @@ public class ClimbSafePage implements KeyListener {
         return imageURL;
     }
 
-        private static void updateMembers(){
+       private static void updateMembers() {
         var TOMembersList = TOController.getMembers();
         memberList = new String[TOMembersList.size()];
-        for (int i = 0; i<TOMembersList.size();i++) {
+        for (int i = 0; i < TOMembersList.size(); i++) {
             memberList[i] = TOMembersList.get(i).getEmail();
         }
-
     }
         
         /**
@@ -492,8 +491,7 @@ public class ClimbSafePage implements KeyListener {
             }
         };
 
-
-
+        updateMembers();
 
         JPanel memberPart = new JPanel() {
             public Dimension getPreferredSize() {
@@ -664,10 +662,7 @@ public class ClimbSafePage implements KeyListener {
         equipmentVisualList.setPreferredSize(new Dimension(equipmentVisualList.getPreferredSize().width+50, equipmentVisualList.getPreferredSize().height));
         JComboBox<String> equipmentBundleVisualList = new JComboBox<>(bundleListNames);
         equipmentBundleVisualList.setPreferredSize(new Dimension(equipmentBundleVisualList.getPreferredSize().width+50, equipmentBundleVisualList.getPreferredSize().height));
-        //combo box fields
-        equipmentVisualListF = equipmentVisualList;
-        equipmentBundleVisualListF = equipmentBundleVisualList;
-        
+
 
 
         card2.add(memberPart);
@@ -771,14 +766,11 @@ public class ClimbSafePage implements KeyListener {
 
         weekUp.setHorizontalAlignment(SwingConstants.CENTER);
 
-
-
-
-
-        members.addActionListener(new ActionListener() {//TODO: finish this
+        members.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TONamedUser member = TOController.getUserWithEmail((String) members.getSelectedItem());
+                if(member == null) return;
                 email.setText(member.getEmail());
                 name.setText(member.getName());
                 password.setText(member.getPassword());
@@ -909,10 +901,18 @@ public class ClimbSafePage implements KeyListener {
                     ClimbSafeFeatureSet2Controller.registerMember(email.getText(), String.valueOf(password.getPassword()), name.getText(),
                             emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), stayHotel.isSelected(), itemNames, itemQuantities);
                     new Popup("Member registered successfully",card2,0);
+                    updateMembers();
+                    System.out.println("never Fail");
+                    members.removeAllItems();
+                    for (var m : memberList){
+                        System.out.println(m);
+                        members.addItem(m);
+                    }
                 } catch (Exception ex) {
                     new Popup(ex.getMessage(),card2,1);
                 }
             }
+
         });
         updateMember.addActionListener(new ActionListener() {
             @Override
@@ -937,7 +937,14 @@ public class ClimbSafePage implements KeyListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     ClimbSafeFeatureSet1Controller.deleteMember(email.getText());
+                    for (var member: TOController.getMembers())System.out.println(member.getEmail());
                     new Popup("Member deleted successfully",card2,0);
+                    updateMembers();
+                    members.removeAllItems();
+                    for (var m : memberList){
+                        members.addItem(m);
+                        System.out.println(m);
+                    }
                 } catch (Exception ex) {
                     new Popup(ex.getMessage(),card2,0);
                 }
