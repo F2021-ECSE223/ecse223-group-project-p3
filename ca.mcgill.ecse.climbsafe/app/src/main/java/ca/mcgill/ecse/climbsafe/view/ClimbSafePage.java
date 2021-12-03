@@ -281,8 +281,7 @@ public class ClimbSafePage{
          * and checks to see whether the user's inputs are valid with appropriate popup messages
          */
 
-        //TODO: add elements to card1 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
+
         card1.setLayout(new BoxLayout(card1, BoxLayout.Y_AXIS));
 
         Dimension dim = new Dimension(217, 20);
@@ -303,7 +302,7 @@ public class ClimbSafePage{
         text2.setPreferredSize(dim2);
         JLabel text3 = new JLabel("Price of Guide per Week (Shillings)", SwingConstants.RIGHT);
         text3.setPreferredSize(dim2);
-        JLabel text4 = new JLabel("Set Admin Email", SwingConstants.RIGHT);
+        JLabel text4 = new JLabel("Admin Email", SwingConstants.RIGHT);
         text4.setPreferredSize(dim2);
         JLabel text5 = new JLabel("Set Admin Password", SwingConstants.RIGHT);
         text5.setPreferredSize(dim2);
@@ -328,13 +327,14 @@ public class ClimbSafePage{
 
         JTextField climbingSeasonStart = new JTextField("yyyy-mm-dd");
         climbingSeasonStart.setPreferredSize(dim);
-        JTextField numberWeeks = new JTextField("number");
+        JTextField numberWeeks = new JTextField("0");
         numberWeeks.setPreferredSize(dim);
         JTextField weeklyCost = new JTextField();
         weeklyCost.setPreferredSize(dim);
-        JTextField adminEmail = new JTextField("email");
+        JTextField adminEmail = new JTextField("admin@nmc.nt");
+        adminEmail.setEditable(false);
         adminEmail.setPreferredSize(dim);
-        JPasswordField adminPW = new JPasswordField("password");
+        JPasswordField adminPW = new JPasswordField("admin");
         adminPW.setPreferredSize(dim);
 
         start1.add(text4);
@@ -899,7 +899,6 @@ public class ClimbSafePage{
                             emergencyContact.getText(),Integer.parseInt(nrWeeks.getText().split(" ")[0]),guide.isSelected(), stayHotel.isSelected(), itemNames, itemQuantities);
                     new Popup("Member registered successfully",card2,0);
                     updateMembers();
-                    System.out.println("never Fail");
                     members.removeAllItems();
                     for (var m : memberList){
                         System.out.println(m);
