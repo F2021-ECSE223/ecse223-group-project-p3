@@ -1602,8 +1602,6 @@ public class ClimbSafePage implements KeyListener {
                 return size;
             }
         };
-        //TODO: add elements to card5 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
 
         Dimension dim = new Dimension(130, 20);
 
@@ -1625,11 +1623,11 @@ public class ClimbSafePage implements KeyListener {
         JLabel bundleNameLbl = new JLabel("Bundle Name:", SwingConstants.RIGHT);
         JLabel nameLbl  = new JLabel("Name:", SwingConstants.RIGHT);
         JLabel equipmentNameLbl = new JLabel("Equipment:", SwingConstants.RIGHT);
-        JLabel pricelbl = new JLabel("Price:", SwingConstants.RIGHT);
+        JLabel pricelbl = new JLabel("Discount:", SwingConstants.RIGHT);
         JTextField nameTxt = new JTextField("");
         nameTxt.setPreferredSize(dim);
 
-        JTextField priceTxt = new JTextField("");
+        JTextField priceTxt = new JTextField("0");
         priceTxt.setPreferredSize(dim);
         JLabel quantityNumber = new JLabel("1", SwingConstants.CENTER);
 
@@ -1673,7 +1671,7 @@ public class ClimbSafePage implements KeyListener {
                 return size;
             }
         };
-        JButton cancel = new JButton("Cancel Bundle"){
+        JButton cancel = new JButton("Delete Bundle"){
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
                 size.height += 50;
@@ -1681,16 +1679,6 @@ public class ClimbSafePage implements KeyListener {
                 return size;
             }
         };
-        JButton refreshBundle = new JButton("Refresh Bookable Item Lists"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height += 50;
-                size.width += 50;
-                return size;
-            }
-        };
-
-
 
         start.setOpaque(false);
         rightTable.setOpaque(false);
@@ -1727,7 +1715,6 @@ public class ClimbSafePage implements KeyListener {
         buttons.add(register);
         buttons.add(update);
         buttons.add(cancel);
-        buttons.add(refreshBundle);
 
         card5.add(bundleInput);
         card5.add(buttons);
@@ -1777,10 +1764,50 @@ public class ClimbSafePage implements KeyListener {
                     }
                 }
                     ClimbSafeFeatureSet5Controller.addEquipmentBundle(nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
+                    new Popup("Equipment Bundle has been added",card5,0);
+                }catch(Exception ex){
+                    new Popup(ex.getMessage(),card5,1);
+                }
+                updateBundleNameList();
+                bundleList.removeAllItems();
+                equipmentBundleVisualListF.addItem(s);
+                for (String s : equipmentBundleNameArray) bundleList.addItem(s);
+                for (String s : equipmentBundleNameArray) equipmentBundleVisualListF.addItem(s);
+                for (int i = 1; i < equipmentListNames.length+1; i++) {
+                    table.setValueAt(equipmentListNames[i-1],i,0);
+                }
+                for (int i = 1; i < equipmentListNames.length+1; i++) {
+                    table.setValueAt(0,i,1);
+                }
+
+            }
+        });
+        update.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    List<String> itemNames = new ArrayList<>();
+                    List<Integer> itemQuantity = new ArrayList<>();
+
+                    for (int i = 1; i < equipmentListNames.length+1; i++) {
+                        if(Integer.parseInt(String.valueOf(table.getValueAt(i,1)))!=0){
+                            itemNames.add(String.valueOf(table.getValueAt(i,0)));
+                            itemQuantity.add(Integer.parseInt(String.valueOf(table.getValueAt(i,1))));
+                        }
+                    }
+                    ClimbSafeFeatureSet5Controller.updateEquipmentBundle((String)bundleList.getSelectedItem(),nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
                 }catch(Exception ex){
                     ex.printStackTrace();
                 }
-
+                updateBundleNameList();
+                bundleList.removeAllItems();
+                for (String s : equipmentBundleNameArray) bundleList.addItem(s);
+                for (int i = 1; i < equipmentListNames.length+1; i++) {
+                    table.setValueAt(equipmentListNames[i-1],i,0);
+                }
+                for (int i = 1; i < equipmentListNames.length+1; i++) {
+                    table.setValueAt(0,i,1);
+                }
 
             }
         });
@@ -1789,9 +1816,20 @@ public class ClimbSafePage implements KeyListener {
             public void actionPerformed(ActionEvent e) {
                try{
                    ClimbSafeFeatureSet6Controller.deleteEquipmentBundle((String)bundleList.getSelectedItem());
+                   new Popup("Equipment Bundle has been deleted",card5,0);
                }catch (Exception ex){
-                   ex.printStackTrace();
+                   new Popup(ex.getMessage(),card5,1);
                }
+                updateBundleNameList();
+                bundleList.removeAllItems();
+                for (String s : equipmentBundleNameArray) bundleList.addItem(s);
+                for (int i = 1; i < equipmentListNames.length+1; i++) {
+                    table.setValueAt(equipmentListNames[i-1],i,0);
+                }
+                for (int i = 1; i < equipmentListNames.length+1; i++) {
+                    table.setValueAt(0,i,1);
+                }
+
             }
         });
         bundleList.addActionListener(new ActionListener() {
@@ -1806,8 +1844,6 @@ public class ClimbSafePage implements KeyListener {
                         eq = tob;
                     }
                 }
-                
-
                 if(eq != null){
                     nameTxt.setText(eqName);
                     priceTxt.setText(String.valueOf(eq.getDiscount()));
@@ -1817,6 +1853,19 @@ public class ClimbSafePage implements KeyListener {
         tabbedPane.addTab("Bundles", card5);
     }
 
+        public static void updateBundleNameList(){
+        List<TOBookableItem> equipmentBundleList = TOController.getBundles();
+        if (equipmentBundleList==null){
+            equipmentBundleNameArray = new String[1];
+            equipmentBundleNameArray[0] = "Placeholder";
+        }
+        else {
+            equipmentBundleNameArray = new String[equipmentBundleList.size()];
+            for (int i = 0; i < equipmentBundleList.size(); i++) {
+                equipmentBundleNameArray[i] = equipmentBundleList.get(i).getName();
+            }
+        }
+    }
 
     /**
      * @author Abhijeet Praveen
