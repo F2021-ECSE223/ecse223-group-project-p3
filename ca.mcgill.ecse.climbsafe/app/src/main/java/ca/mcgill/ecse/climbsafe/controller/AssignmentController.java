@@ -118,13 +118,19 @@ public class AssignmentController {
         List<Assignment> assignments = climbsafe.getAssignments();
         for (Assignment a :
                 assignments) {
+            Boolean canStart = true;
             //Cannot start a trip which has finished
-            if(a.getAssignmentStatusFullName().equals("Finished")){throw new InvalidInputException("Cannot start a trip which has finished");}
+            if(a.getAssignmentStatusFullName().equals("Finished")){//throw new InvalidInputException("Cannot start a trip which has finished");
+                canStart= false; }
             //Cannot start a trip which has been cancelled
-            if(a.getAssignmentStatusFullName().equals("Cancelled")){throw new InvalidInputException("Cannot start a trip which has been cancelled");}
+            if(a.getAssignmentStatusFullName().equals("Cancelled")){//throw new InvalidInputException("Cannot start a trip which has been cancelled");
+                canStart= false;}
             //Cannot start the trip due to a ban
-            if(a.getMember().getBanStatusFullName().equals("Banned")){throw new InvalidInputException("Cannot start the trip due to a ban");}
-            a.startWeek(weekNumber);
+            if(a.getMember().getBanStatusFullName().equals("Banned")){//throw new InvalidInputException("Cannot start the trip due to a ban");
+                canStart= false;}
+            if(canStart){
+                a.startWeek(weekNumber);
+            }
         }
         try {
             ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
