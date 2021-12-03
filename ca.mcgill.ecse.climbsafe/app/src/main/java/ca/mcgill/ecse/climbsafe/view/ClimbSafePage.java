@@ -1840,8 +1840,9 @@ public class ClimbSafePage implements KeyListener {
                         }
                     }
                     ClimbSafeFeatureSet5Controller.updateEquipmentBundle((String)bundleList.getSelectedItem(),nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
+                    new Popup("Successfully updated equipment bundle.", card5, 0);
                 }catch(Exception ex){
-                    ex.printStackTrace();
+                    new Popup(ex.getMessage(), card5, 1);
                 }
                 updateBundleNameList();
                 if (equipmentBundleVisualListF != null){
