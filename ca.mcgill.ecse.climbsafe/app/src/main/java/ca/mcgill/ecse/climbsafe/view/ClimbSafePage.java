@@ -1007,6 +1007,10 @@ public class ClimbSafePage implements KeyListener {
         JPanel space7 = new JPanel();
         JPanel space8 = new JPanel();
         JPanel space9 = new JPanel();
+        JPanel space10 = new JPanel();
+        JPanel space11 = new JPanel();
+        JPanel space12 = new JPanel();
+        JPanel space13 = new JPanel();
         //Labels + Text fields
 
         JLabel email = new JLabel("Email: ", SwingConstants.RIGHT);
@@ -1073,30 +1077,25 @@ public class ClimbSafePage implements KeyListener {
         emergencyContacts.add(emergencyContact);
         emergencyContacts.add(emergencyContactEntry);
 
-        //spaces
-        space.add(empty);
-        space2.add(empty);
-        space3.add(empty);
-        space4.add(empty);
-        space5.add(empty);
-        space6.add(empty);
-        space7.add(empty);
-        space8.add(empty);
-        space9.add(empty);
+
+
         //Add sub-panels to main panels
-        guideInfo.add(space9);
+        guideInfo.add(space4);
         guideInfo.add(space8);
         guideInfo.add(space7);
         guideInfo.add(space6);
         guideInfo.add(space5);
         guideInfo.add(emails);
+        guideInfo.add(space11);
         guideInfo.add(space);
         guideInfo.add(names);
         guideInfo.add(space2);
+        guideInfo.add(space12);
         guideInfo.add(passwords);
         guideInfo.add(space3);
+        guideInfo.add(space9);
         guideInfo.add(emergencyContacts);
-        guideInfo.add(space4);
+
 
         buttons.add(registerGuide);
         buttons.add(updateGuide);
@@ -1127,6 +1126,11 @@ public class ClimbSafePage implements KeyListener {
         space7.setOpaque(false);
         space8.setOpaque(false);
         space9.setOpaque(false);
+        space10.setOpaque(false);
+        space11.setOpaque(false);
+        space12.setOpaque(false);
+        space13.setOpaque(false);
+
         //ADD TO CARD
         card3.add(listandfields);
         card3.add(buttons);
@@ -1206,6 +1210,7 @@ public class ClimbSafePage implements KeyListener {
 
 
     }
+
 
 
 
