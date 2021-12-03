@@ -3,9 +3,11 @@
  */
 package ca.mcgill.ecse.climbsafe.application;
 
-import java.awt.*;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.sql.Date;
+
+import ca.mcgill.ecse.climbsafe.controller.ClimbSafeFeatureSet1Controller;
+import ca.mcgill.ecse.climbsafe.model.Administrator;
 import ca.mcgill.ecse.climbsafe.model.ClimbSafe;
 import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 import ca.mcgill.ecse.climbsafe.view.ClimbSafePage;
@@ -14,13 +16,13 @@ public class ClimbSafeApplication {
   private static ClimbSafe climbSafe;
 
   public String getGreeting() {
-    return "Hello World!";
+    return "Welcome to the program";
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
+    ClimbSafePage.start();
     System.out.println(new ClimbSafeApplication().getGreeting());
 
-    new ClimbSafePage();
   }
 
   public static ClimbSafe getClimbSafe() {

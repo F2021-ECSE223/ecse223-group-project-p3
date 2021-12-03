@@ -32,13 +32,15 @@ public class ClimbSafeFeatureSet2Controller {
     String error = "";
 
     if(nrWeeks <= 0 || nrWeeks > ClimbSafeApplication.getClimbSafe().getNrWeeks()) {
-      error = "The number of weeks must be greater than zero and less than or equal to the number of climbing weeks in the climbing season";
+      throw new InvalidInputException("The number of weeks must be greater than zero and less than or equal to the number of climbing weeks in the climbing season");
     }
 
     User user = User.getWithEmail(email);
-    if (user instanceof Guide) error = "A guide with this email already exists";
-    if (user instanceof Member) error = "A member with this email already exists";
+    if (user instanceof Guide) throw new InvalidInputException("A guide with this email already exists");
+    if (user instanceof Member) throw new InvalidInputException("A member with this email already exists");
 
+    System.out.println(itemNames);
+    System.out.println(itemQuantities);
     for (String itemName:itemNames){
       BookableItem bookableItem = BookableItem.getWithName(itemName);
       if(bookableItem==null) error = "Requested item not found";

@@ -108,9 +108,9 @@ public class ClimbSafeFeatureSet6Controller {
         guideEmail = null;
       }
       assignments.add(new TOAssignment(assignment.getMember().getEmail(),assignment.getMember().getName(),
-              guideEmail, guideName,hotelName,
-              assignment.getStartWeek(), assignment.getEndWeek(),
-              getTotalGuideCost(assignment),getTotalEquipmentCost(assignment)));
+              guideEmail,guideName, hotelName,assignment.getStartWeek(),assignment.getEndWeek(),getTotalGuideCost(assignment),
+              getTotalEquipmentCost(assignment),assignment.getAssignmentStatusFullName(), assignment.getAuthCode(),
+              assignment.getMember().getRefund(),assignment.getMember().getBanStatusFullName()));
     }
     return assignments;
   }

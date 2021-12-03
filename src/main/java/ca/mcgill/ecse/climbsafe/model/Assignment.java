@@ -2,19 +2,16 @@
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
 
 package ca.mcgill.ecse.climbsafe.model;
-import ca.mcgill.ecse.climbsafe.model.Assignment;
 import java.io.Serializable;
+import ca.mcgill.ecse.climbsafe.model.Assignment;
 
+// line 107 "../../../../../../ClimbSafePersistence.ump"
+// line 167 "../../../../../../ClimbSafePersistence.ump"
 // line 1 "../../../../../../ClimbSafeStates.ump"
 // line 60 "../../../../../../ClimbSafeStates.ump"
 // line 70 "../../../../../../ClimbSafeStates.ump"
-// line 52 "../../../../../../ClimbSafePersistence.ump"
-// line 83 "../../../../../../ClimbSafePersistence.ump"
-// line 93 "../../../../../../ClimbSafePersistence.ump"
-// line 103 "../../../../../../ClimbSafePersistence.ump"
-// line 113 "../../../../../../ClimbSafePersistence.ump"
-// line 84 "../../../../../../model.ump"
-// line 160 "../../../../../../model.ump"
+// line 95 "../../../../../../model.ump"
+// line 176 "../../../../../../model.ump"
 public class Assignment implements Serializable
 {
 
@@ -420,8 +417,8 @@ public class Assignment implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 55 "../../../../../../ClimbSafePersistence.ump"
-  private static final long serialVersionUID = 8896099581655989380L ;
+  // line 110 "../../../../../../ClimbSafePersistence.ump"
+  private static final long serialVersionUID = 11L ;
 
   
 }

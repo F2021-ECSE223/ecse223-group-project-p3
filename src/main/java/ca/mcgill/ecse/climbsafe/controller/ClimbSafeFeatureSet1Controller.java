@@ -1,15 +1,40 @@
 package ca.mcgill.ecse.climbsafe.controller;
 
 import java.sql.Date;
-import ca.mcgill.ecse.climbsafe.model.Member;
-import ca.mcgill.ecse.climbsafe.model.Guide;
+import ca.mcgill.ecse.climbsafe.model.*;
 import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
-import ca.mcgill.ecse.climbsafe.model.User;
 import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 import ca.mcgill.ecse.climbsafe.persistence.PersistenceObjectStream;
 
 public class ClimbSafeFeatureSet1Controller {
+/**
+ * The method will update the administrator's details
+ * @author Neel Faucher
+ * @param email the administrator's email will be updated to the input email
+ * @param password the administrator's password will be updated to the input password
+ */
 
+    public static void updateAdmin(String email, String password) throws InvalidInputException {
+
+    String error = "";
+    if (password == null || password.equals("")) error = "The password cannot be empty";
+    if (email == null || email.equals("")) error = "The name cannot be empty";
+
+      if (email.indexOf("@") <= 0 ||
+              email.indexOf("@") != email.lastIndexOf("@") ||
+              email.indexOf("@") >= email.lastIndexOf(".") - 1 ||
+              email.lastIndexOf(".") >= email.length() - 1) error = "Invalid email";
+
+
+    if (error.length() > 0) {
+      throw new InvalidInputException(error.trim());
+    } else {
+      ClimbSafe climbSafe2 = ClimbSafeApplication.getClimbSafe();
+      Administrator admin2 = climbSafe2.getAdministrator();
+      admin2.setPassword(password);
+      admin2.setEmail(email);
+    }
+  }
   /**
    * @author Neel Faucher
    * @param startDate the method will check whether the startDate follows conventions of public class Date and is valid

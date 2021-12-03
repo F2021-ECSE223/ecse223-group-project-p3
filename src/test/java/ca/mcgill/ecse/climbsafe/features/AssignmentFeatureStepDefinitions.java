@@ -118,7 +118,7 @@ public class AssignmentFeatureStepDefinitions {
   public void the_administrator_attempts_to_initiate_the_assignment_process() {
     // Write code here that turns the phrase above into concrete actions
       try {
-          AssignmentController.initiateAllAssignments(climbSafe.getMembers());
+          AssignmentController.initiateAllAssignments();
       }catch(Exception e){
           error = e.getMessage();
       }

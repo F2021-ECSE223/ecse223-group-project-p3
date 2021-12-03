@@ -17,12 +17,12 @@ public class AssignmentController {
  /**
  * This function initiates the assignment for all members
  * @author Neel Faucher
- * @param allMembers list of all members
  * @throws RuntimeException if member does not have assignment, with error message "Assignments could not be completed for all members"
  */
     
-    public static void initiateAllAssignments(List<Member> allMembers) throws InvalidInputException{
+    public static void initiateAllAssignments() throws InvalidInputException{
         List<Guide> allGuides = ClimbSafeApplication.getClimbSafe().getGuides();
+        List<Member> allMembers = ClimbSafeApplication.getClimbSafe().getMembers();
 
         for (Guide guide : allGuides) {
             for (Member member : allMembers) {
@@ -85,6 +85,7 @@ public class AssignmentController {
                 String error = "Invalid authorization code";
                 throw new InvalidInputException(error);
         }
+
         if(member.getAssignment().getAssignmentStatusFullName().equals("Paid")||member.getAssignment().getAssignmentStatusFullName().equals("Started")){
             throw new InvalidInputException("Trip has already been paid for");
         }
@@ -117,13 +118,19 @@ public class AssignmentController {
         List<Assignment> assignments = climbsafe.getAssignments();
         for (Assignment a :
                 assignments) {
+            Boolean canStart = true;
             //Cannot start a trip which has finished
-            if(a.getAssignmentStatusFullName().equals("Finished")){throw new InvalidInputException("Cannot start a trip which has finished");}
+            if(a.getAssignmentStatusFullName().equals("Finished")){//throw new InvalidInputException("Cannot start a trip which has finished");
+                canStart= false; }
             //Cannot start a trip which has been cancelled
-            if(a.getAssignmentStatusFullName().equals("Cancelled")){throw new InvalidInputException("Cannot start a trip which has been cancelled");}
+            if(a.getAssignmentStatusFullName().equals("Cancelled")){//throw new InvalidInputException("Cannot start a trip which has been cancelled");
+                canStart= false;}
             //Cannot start the trip due to a ban
-            if(a.getMember().getBanStatusFullName().equals("Banned")){throw new InvalidInputException("Cannot start the trip due to a ban");}
-            a.startWeek(weekNumber);
+            if(a.getMember().getBanStatusFullName().equals("Banned")){//throw new InvalidInputException("Cannot start the trip due to a ban");
+                canStart= false;}
+            if(canStart){
+                a.startWeek(weekNumber);
+            }
         }
         try {
             ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());

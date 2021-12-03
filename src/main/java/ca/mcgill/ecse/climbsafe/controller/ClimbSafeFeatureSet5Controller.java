@@ -5,6 +5,7 @@ import ca.mcgill.ecse.climbsafe.model.*;
 import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ClimbSafeFeatureSet5Controller {
@@ -69,6 +70,7 @@ public class ClimbSafeFeatureSet5Controller {
 
 
         if (error.length() > 0) {
+            System.out.println(error + "ttt");
             throw new InvalidInputException(error.trim());
         }
 
@@ -80,15 +82,24 @@ public class ClimbSafeFeatureSet5Controller {
 
             }
             try {
-                EquipmentBundle bundle = climbSafe.addBundle(name, discount);
-                for (int i = 0; i < equipment.size(); i++) {
-                    bundleItems.add(new BundleItem(equipmentQuantities.get(i), climbSafe, bundle, equipment.get(i)));
+                if(BookableItem.getWithName(name) == null){
+                    EquipmentBundle bundle = new EquipmentBundle(name, discount,climbSafe);
+                    bundleItems = bundle.getBundleItems();
+                    for (int i = 0; i < equipment.size(); i++) {
+                        if(bundleItems.size()==0){
+                            bundle.addBundleItem(equipmentQuantities.get(i),climbSafe, equipment.get(i));
+                        }else if(bundleItems.get(i).getEquipment()!=equipment.get(i)){
+                            if(bundleItems.get(i).getQuantity()!=equipmentQuantities.get(i)){
+                                bundle.addBundleItem(equipmentQuantities.get(i),climbSafe, equipment.get(i));
+                            }
+                        }
+
+                    }
                 }
-                for (BundleItem item : bundleItems) {
-                    bundleItems.add(item);
-                }
+
                 ClimbSafePersistence.save(climbSafe);
             } catch (RuntimeException e) {
+                System.out.println(e+" ggg");
                 throw new InvalidInputException(e.getMessage());
             }
 
@@ -97,6 +108,7 @@ public class ClimbSafeFeatureSet5Controller {
         try {
             ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
         }catch (Exception e){
+            System.out.println(e +" yoo");
             throw new InvalidInputException(e.getMessage());
         }
     }
@@ -121,7 +133,6 @@ public class ClimbSafeFeatureSet5Controller {
         String error = "";
         ClimbSafe climbSafe = ClimbSafeApplication.getClimbSafe();
         List<Equipment> equipment = new ArrayList<Equipment>();
-        List<BundleItem> bundleItems = new ArrayList<BundleItem>();
         EquipmentBundle bundle=null;
 
         for (String str : newEquipmentNames) {
@@ -196,21 +207,17 @@ public class ClimbSafeFeatureSet5Controller {
             }
         }
 
+        ClimbSafeFeatureSet6Controller.deleteEquipmentBundle(oldName);
+        EquipmentBundle newBundle = new EquipmentBundle(newName, newDiscount, climbSafe);
             try {
-                bundle.setDiscount(newDiscount);
-                bundle.setName(newName);
-
-                for (int i = 0; i < newEquipmentNames.size(); i++) {
-                    bundleItems.add(new BundleItem(newEquipmentQuantities.get(i), climbSafe, bundle, equipment.get(i)));
-                }
-                for (BundleItem item : bundleItems) {
-                    bundleItems.add(item);
+                for(int i = 0; i < equipment.size(); i++){
+                    newBundle.addBundleItem(newEquipmentQuantities.get(i), climbSafe, equipment.get(i));
                 }
                 ClimbSafePersistence.save(climbSafe);
             } catch (RuntimeException e) {
+                System.out.println(Arrays.toString(e.getStackTrace()));
                 throw new InvalidInputException(e.getMessage());
             }
-
         try {
             ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
         }catch (Exception e){
