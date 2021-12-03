@@ -589,12 +589,14 @@ public class ClimbSafePage implements KeyListener {
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
                 size.height -= 5;
+                size.width -= 10;
                 return size;
             }};
         JButton weekUp = new JButton("<html>+</html>"){
             public Dimension getPreferredSize() {
                 Dimension size = super.getPreferredSize();
                 size.height -= 5;
+                size.width -= 10;
                 return size;
             }};
         JButton equipmentUp = new JButton("<html>+</html>"){
@@ -645,14 +647,7 @@ public class ClimbSafePage implements KeyListener {
                 return size;
             }
         };
-        JButton refreshMember = new JButton("Refresh Bookable Item Lists"){
-            public Dimension getPreferredSize() {
-                Dimension size = super.getPreferredSize();
-                size.height += 50;
-                size.width += 50;
-                return size;
-            }
-        };
+        
 
         updateEquipmentList();
         updateBundleList();
@@ -734,7 +729,6 @@ public class ClimbSafePage implements KeyListener {
         bottomButtons.add(registerMember);
         bottomButtons.add(updateMember);
         bottomButtons.add(deleteMember);
-        bottomButtons.add(refreshMember);
 
 
 
@@ -950,17 +944,7 @@ public class ClimbSafePage implements KeyListener {
                 }
             }
         });
-        refreshMember.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateEquipmentList();
-                equipmentVisualList.removeAllItems();
-                for (String s : equipmentListNames) equipmentVisualList.addItem(s);
-                updateBundleList();
-                equipmentBundleVisualList.removeAllItems();
-                for (String s : bundleListNames) equipmentBundleVisualList.addItem(s);
-            }
-        });
+        
 
         tabbedPane.addTab("Member", card2);
     }
@@ -2221,10 +2205,9 @@ public class ClimbSafePage implements KeyListener {
         JButton weekDown = new JButton("<html>-</html>");
         JButton weekUp = new JButton("<html>+</html>");
         JButton startWeek = new JButton("Start Week");
-        JButton pay = new JButton("Pay Member Trip");
-        JButton finish = new JButton("Finish Member's Trip");
-        JButton cancel = new JButton("Cancel Member's Trip");
-        JButton refresh = new JButton("Refresh Member Names");
+        JButton pay = new JButton("Pay Trip");
+        JButton finish = new JButton("Finish Trip");
+        JButton cancel = new JButton("Cancel Trip");
 
 
         start.setOpaque(false);
@@ -2251,7 +2234,6 @@ public class ClimbSafePage implements KeyListener {
         finishCancel.add(pay);
         finishCancel.add(finish);
         finishCancel.add(cancel);
-        finishCancel.add(refresh);
         card8.add(start);
         card8.add(middle);
         card8.add(finishCancel);
@@ -2328,13 +2310,7 @@ public class ClimbSafePage implements KeyListener {
                 }
             }
         });
-        refresh.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateAssignment();
-                authCode.setText(authCodeList[0]);
-            }
-        });
+        
 
         tabbedPane.addTab("Trip Management", card8);
 
