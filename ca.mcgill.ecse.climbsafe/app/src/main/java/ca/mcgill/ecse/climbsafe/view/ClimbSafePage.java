@@ -1585,7 +1585,10 @@ public class ClimbSafePage implements KeyListener {
         tabbedPane.addTab("Equipment", card4);
     }
 
-
+   /**
+     * @author Rooshnie Velautham
+     * fills in the tab in the UI responsible for adding, updating and deleting equipment bundles
+     */
 
     public static void addBundleCard(){
         java.net.URL imageURL = getPhoto(1);
@@ -1859,7 +1862,10 @@ public class ClimbSafePage implements KeyListener {
         });
         tabbedPane.addTab("Bundles", card5);
     }
-
+    /**
+     * @author Rooshnie Velautham
+     * updates the bundles in the dropdown menu
+     */
     public static void updateBundleNameList(){
         List<TOBookableItem> equipmentBundleList = TOController.getBundles();
         if (equipmentBundleList==null){
