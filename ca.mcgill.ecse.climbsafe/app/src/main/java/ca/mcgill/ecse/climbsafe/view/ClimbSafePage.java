@@ -37,7 +37,7 @@ public class ClimbSafePage implements KeyListener {
     private static int[] equipmentQuantityArray;
     private static  int[] equipmentBundleQuantityArray;
     private static String[] memberList;
-
+    private static String[] guideList;
 
     private static String updateErrorMsg = "";
     private static String addErrorMsg = "";
@@ -168,6 +168,19 @@ public class ClimbSafePage implements KeyListener {
         }
 
     }
+        
+        /**
+     * @author Edward Habelrih
+     * updates the guide display list in card3 for the guides
+     */
+    private static void updateGuideList(){
+        var TOGuideList = TOController.getGuides();
+        guideList = new String[TOGuideList.size()];
+        for (int i = 0; i<TOGuideList.size();i++) {
+            guideList[i] = TOGuideList.get(i).getEmail();
+        }
+    }
+        
     /**
      * @author Abhijeet Praveen
      * updates the assignment display list in card6 for the assignments
