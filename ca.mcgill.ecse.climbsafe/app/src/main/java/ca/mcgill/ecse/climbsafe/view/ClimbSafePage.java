@@ -1784,6 +1784,7 @@ public class ClimbSafePage implements KeyListener {
                 quantityNumber.setText(String.valueOf(num));
                 equipmentBundleQuantityArray[equipmentList.getSelectedIndex()] = num;
                 table.setValueAt(equipmentBundleQuantityArray[equipmentList.getSelectedIndex()],equipmentList.getSelectedIndex()+1,1);
+                reinit();
 
             }
         });
