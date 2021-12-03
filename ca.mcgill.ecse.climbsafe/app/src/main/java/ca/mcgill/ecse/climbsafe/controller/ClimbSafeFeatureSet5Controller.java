@@ -5,6 +5,7 @@ import ca.mcgill.ecse.climbsafe.model.*;
 import ca.mcgill.ecse.climbsafe.persistence.ClimbSafePersistence;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ClimbSafeFeatureSet5Controller {
@@ -132,7 +133,6 @@ public class ClimbSafeFeatureSet5Controller {
         String error = "";
         ClimbSafe climbSafe = ClimbSafeApplication.getClimbSafe();
         List<Equipment> equipment = new ArrayList<Equipment>();
-        List<BundleItem> bundleItems = new ArrayList<BundleItem>();
         EquipmentBundle bundle=null;
 
         for (String str : newEquipmentNames) {
@@ -207,28 +207,17 @@ public class ClimbSafeFeatureSet5Controller {
             }
         }
 
+        ClimbSafeFeatureSet6Controller.deleteEquipmentBundle(oldName);
+        EquipmentBundle newBundle = new EquipmentBundle(newName, newDiscount, climbSafe);
             try {
-                bundle.setDiscount(newDiscount);
-                bundle.setName(newName);
-
-                if(BookableItem.getWithName(newName) == null){
-                    bundleItems = bundle.getBundleItems();
-                    for (int i = 0; i < equipment.size(); i++) {
-                        if(bundleItems.size()==0){
-                            bundle.addBundleItem(newEquipmentQuantities.get(i),climbSafe, equipment.get(i));
-                        }else if(bundleItems.get(i).getEquipment()!=equipment.get(i)){
-                            if(bundleItems.get(i).getQuantity()!=newEquipmentQuantities.get(i)){
-                                bundle.addBundleItem(newEquipmentQuantities.get(i),climbSafe, equipment.get(i));
-                            }
-                        }
-
-                    }
+                for(int i = 0; i < equipment.size(); i++){
+                    newBundle.addBundleItem(newEquipmentQuantities.get(i), climbSafe, equipment.get(i));
                 }
                 ClimbSafePersistence.save(climbSafe);
             } catch (RuntimeException e) {
+                System.out.println(Arrays.toString(e.getStackTrace()));
                 throw new InvalidInputException(e.getMessage());
             }
-
         try {
             ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
         }catch (Exception e){
