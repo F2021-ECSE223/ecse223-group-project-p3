@@ -67,7 +67,7 @@ public class ClimbSafePage implements KeyListener {
     private static String[] bannedStatusList = new String[toAssignmentList.size()];
     private static List<TOBookableItem> bundleListC = TOController.getBundles();
     private static String[] bundleListNamesC = new String[equipmentList.size()];
-    private static JComboBox<String> equipmentListL = null;
+    private static JComboBox<String> equipmentListP = null;
     private static JPanel rightTableB = null;
 
     private static final KeyListener ClimbSafePage = new ClimbSafePage();
@@ -1583,11 +1583,11 @@ public class ClimbSafePage implements KeyListener {
                 equipmentVisualListF.addItem(s);
             }
         }
-        if(equipmentListL != null){
-            equipmentListL.removeAllItems();
+        if(equipmentListP != null){
+            equipmentListP.removeAllItems();
             for (String s :
                     equipmentListNames) {
-                equipmentListL.addItem(s);
+                equipmentListP.addItem(s);
             }
         }
         if(rightTableB != null){
@@ -1655,6 +1655,7 @@ public class ClimbSafePage implements KeyListener {
 
         JComboBox<String> bundleList = new JComboBox<>(bundleListNames);
         JComboBox<String> equipmentList = new JComboBox<>(equipmentListNames);
+        equipmentListP = equipmentList;
         JLabel bundleNameLbl = new JLabel("Bundle Name:", SwingConstants.RIGHT);
         JLabel nameLbl  = new JLabel("Name:", SwingConstants.RIGHT);
         JLabel equipmentNameLbl = new JLabel("Equipment:", SwingConstants.RIGHT);
@@ -1739,6 +1740,7 @@ public class ClimbSafePage implements KeyListener {
         price.add(priceTxt);
 
         rightTable.add(table,SwingConstants.CENTER);
+        rightTableB = rightTable;
         start.add(bundle);
         start.add(name);
         start.add(equipment);
