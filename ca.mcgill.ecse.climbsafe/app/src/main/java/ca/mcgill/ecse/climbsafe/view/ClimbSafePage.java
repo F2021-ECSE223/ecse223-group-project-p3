@@ -662,6 +662,7 @@ public class ClimbSafePage implements KeyListener {
         JComboBox<String> equipmentVisualList = new JComboBox<>(equipmentListNames);
         equipmentVisualList.setPreferredSize(new Dimension(equipmentVisualList.getPreferredSize().width+50, equipmentVisualList.getPreferredSize().height));
         JComboBox<String> equipmentBundleVisualList = new JComboBox<>(bundleListNames);
+        equipmentBundleVisualListF = equipmentBundleVisualList;
         equipmentBundleVisualList.setPreferredSize(new Dimension(equipmentBundleVisualList.getPreferredSize().width+50, equipmentBundleVisualList.getPreferredSize().height));
 
 
@@ -1784,10 +1785,15 @@ public class ClimbSafePage implements KeyListener {
                     new Popup(ex.getMessage(),card5,1);
                 }
                 updateBundleNameList();
+                if (equipmentBundleVisualListF != null){
+                    equipmentBundleVisualListF.removeAllItems();
+                    for (String s : equipmentBundleNameArray) {
+                        bundleList.addItem(s);
+                        equipmentBundleVisualListF.addItem(s);
+                    }}
                 bundleList.removeAllItems();
                 equipmentBundleVisualListF.removeAllItems();
                 for (String s : equipmentBundleNameArray) bundleList.addItem(s);
-                for (String s : equipmentBundleNameArray) equipmentBundleVisualListF.addItem(s);
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
                     table.setValueAt(equipmentListNames[i-1],i,0);
                 }
@@ -1815,6 +1821,12 @@ public class ClimbSafePage implements KeyListener {
                     ex.printStackTrace();
                 }
                 updateBundleNameList();
+                if (equipmentBundleVisualListF != null){
+                    equipmentBundleVisualListF.removeAllItems();
+                    for (String s : equipmentBundleNameArray) {
+                        bundleList.addItem(s);
+                        equipmentBundleVisualListF.addItem(s);
+                    }}
                 bundleList.removeAllItems();
                 for (String s : equipmentBundleNameArray) bundleList.addItem(s);
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
@@ -1836,6 +1848,12 @@ public class ClimbSafePage implements KeyListener {
                     new Popup(ex.getMessage(),card5,1);
                 }
                 updateBundleNameList();
+                if (equipmentBundleVisualListF != null){
+                    equipmentBundleVisualListF.removeAllItems();
+                    for (String s : equipmentBundleNameArray) {
+                        bundleList.addItem(s);
+                        equipmentBundleVisualListF.addItem(s);
+                    }}
                 bundleList.removeAllItems();
                 for (String s : equipmentBundleNameArray) bundleList.addItem(s);
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
@@ -2324,7 +2342,7 @@ public class ClimbSafePage implements KeyListener {
                     if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex())!="Placeholder")
                         AssignmentController.cancelMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
                     updateAssignment();
-                    new Popup("Trip Cancelled Succesfully", card8,0);
+                    new Popup("Trip fled Succesfully", card8,0);
                 } catch (InvalidInputException ex) {
                     new Popup(ex.getMessage(),card8,1);
                 }
