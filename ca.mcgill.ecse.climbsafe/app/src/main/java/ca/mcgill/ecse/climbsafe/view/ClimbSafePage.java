@@ -2,28 +2,28 @@
 package ca.mcgill.ecse.climbsafe.view;
 
 
-        import ca.mcgill.ecse.climbsafe.controller.*;
+import ca.mcgill.ecse.climbsafe.controller.*;
 
 
-        import java.awt.*;
-        import java.awt.event.*;
-        import java.awt.image.BufferedImage;
-        import java.io.IOException;
-        import java.net.MalformedURLException;
-        import java.net.URL;
-        import java.util.ArrayList;
-        import java.util.Arrays;
-        import java.util.List;
-        import java.util.Date;
-        import java.util.logging.Level;
-        import java.util.logging.Logger;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-        import javax.imageio.ImageIO;
-        import javax.swing.*;
-        import javax.swing.border.EmptyBorder;
-        import javax.swing.border.TitledBorder;
-        import javax.swing.event.ListSelectionEvent;
-        import javax.swing.event.ListSelectionListener;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 
 
@@ -38,7 +38,7 @@ public class ClimbSafePage implements KeyListener {
     private static  int[] equipmentBundleQuantityArray;
     private static String[] memberList;
     private static String[] guideList;
-
+    private static JComboBox<String> memberNameVisualList = new JComboBox<>();
     private static String updateErrorMsg = "";
     private static String addErrorMsg = "";
     private static String deleteErrorMsg = "";
@@ -66,13 +66,13 @@ public class ClimbSafePage implements KeyListener {
     private static String[] bannedStatusList = new String[toAssignmentList.size()];
     private static List<TOBookableItem> bundleListC = TOController.getBundles();
     private static String[] bundleListNamesC = new String[equipmentList.size()];
-        
+
     private static final KeyListener ClimbSafePage = new ClimbSafePage();
     private static String cen = "";
     private static String cew = "";
     private static String cep = "";
 
-        private static void updateEquipmentList(){
+    private static void updateEquipmentList(){
         equipmentList = TOController.getEquipment();
         String[] tempList = new String[equipmentList.size()];
         int[] tempList2 = new int[equipmentList.size()];
@@ -162,15 +162,15 @@ public class ClimbSafePage implements KeyListener {
         return imageURL;
     }
 
-       private static void updateMembers() {
+    private static void updateMembers() {
         var TOMembersList = TOController.getMembers();
         memberList = new String[TOMembersList.size()];
         for (int i = 0; i < TOMembersList.size(); i++) {
             memberList[i] = TOMembersList.get(i).getEmail();
         }
     }
-        
-        /**
+
+    /**
      * @author Edward Habelrih
      * updates the guide display list in card3 for the guides
      */
@@ -181,7 +181,7 @@ public class ClimbSafePage implements KeyListener {
             guideList[i] = TOGuideList.get(i).getEmail();
         }
     }
-        
+
     /**
      * @author Abhijeet Praveen
      * updates the assignment display list in card6 for the assignments
@@ -257,12 +257,12 @@ public class ClimbSafePage implements KeyListener {
         }
     }
 
-   public static void addNMCCard(){
+    public static void addNMCCard(){
         java.net.URL imageURL = getPhoto(0);
         BufferedImage hikerBackground = null;
         try {
             if (imageURL != null)
-            hikerBackground = ImageIO.read(imageURL);
+                hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -278,11 +278,11 @@ public class ClimbSafePage implements KeyListener {
                 return size;
             }
         };
-       /**
-        * @author Neel Faucher
-        * Setup NMC page UI, with routing to Update Admin and Setup NMC controllers,
-        * and checks to see whether the user's inputs are valid with appropriate popup messages
-        */
+        /**
+         * @author Neel Faucher
+         * Setup NMC page UI, with routing to Update Admin and Setup NMC controllers,
+         * and checks to see whether the user's inputs are valid with appropriate popup messages
+         */
 
         //TODO: add elements to card1 to create the page
         //If you create any JPanels, be sure to use panelName.setOpaque(false)
@@ -370,7 +370,7 @@ public class ClimbSafePage implements KeyListener {
         card1.add(start6);
         card1.add(end);
 
-       updateClimbSafe.addActionListener(new ActionListener() {
+        updateClimbSafe.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -406,7 +406,7 @@ public class ClimbSafePage implements KeyListener {
                     errorNoWeeks = true;
                     new Popup("Please respect format for number of weeks", card1, 1);
                 }
-                
+
                 if(!errorDate && !errorPrice && !errorNoWeeks){
                     try {
                         ClimbSafeFeatureSet1Controller.setup((java.sql.Date) startDate2, noWeeks, costCS);
@@ -421,42 +421,42 @@ public class ClimbSafePage implements KeyListener {
             }
         });
 
-       updateAdmin.addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(ActionEvent e) {
-               Boolean error = false;
-               Boolean errorEmail = false;
-               Boolean errorPW = false;
-               String email = "";
-               String pw = "";
+        updateAdmin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Boolean error = false;
+                Boolean errorEmail = false;
+                Boolean errorPW = false;
+                String email = "";
+                String pw = "";
 
-               try{
-                   email = adminEmail.getText();
-               }
-               catch (Exception ex){
-                   errorEmail = true;
-                   new Popup("Please respect email format", card1, 1);
-               }
-               try {
-                   pw = String.valueOf(adminPW.getPassword());
-               }
-               catch (Exception ex){
-                   errorPW = true;
-                   new Popup("Please respect password format", card1, 1);
-               }
-               if(!errorEmail && !errorPW){
-                   try {
-                       ClimbSafeFeatureSet1Controller.updateAdmin(email, pw);
-                   } catch (Exception ex) {
-                       error = true;
-                       new Popup(ex.getMessage(), card1, 1);
-                   }
-                   if(!error){
-                       new Popup("Successfully updated admin", card1, 0);
-                   }
-               }
-           }
-       });
+                try{
+                    email = adminEmail.getText();
+                }
+                catch (Exception ex){
+                    errorEmail = true;
+                    new Popup("Please respect email format", card1, 1);
+                }
+                try {
+                    pw = String.valueOf(adminPW.getPassword());
+                }
+                catch (Exception ex){
+                    errorPW = true;
+                    new Popup("Please respect password format", card1, 1);
+                }
+                if(!errorEmail && !errorPW){
+                    try {
+                        ClimbSafeFeatureSet1Controller.updateAdmin(email, pw);
+                    } catch (Exception ex) {
+                        error = true;
+                        new Popup(ex.getMessage(), card1, 1);
+                    }
+                    if(!error){
+                        new Popup("Successfully updated admin", card1, 0);
+                    }
+                }
+            }
+        });
 
         tabbedPane.addTab("Setup NMC", card1);
 
@@ -474,7 +474,7 @@ public class ClimbSafePage implements KeyListener {
         BufferedImage hikerBackground = null;
         try {
             if (imageURL != null)
-            hikerBackground = ImageIO.read(imageURL);
+                hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -839,7 +839,7 @@ public class ClimbSafePage implements KeyListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (equipmentVisualList.getSelectedIndex() !=-1)
-                equipmentQuantity.setText(String.valueOf(memberEquipmentQuantityArray[equipmentVisualList.getSelectedIndex()]));
+                    equipmentQuantity.setText(String.valueOf(memberEquipmentQuantityArray[equipmentVisualList.getSelectedIndex()]));
             }
         });
         equipmentUp.addActionListener(new ActionListener() {
@@ -865,7 +865,7 @@ public class ClimbSafePage implements KeyListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (equipmentBundleVisualList.getSelectedIndex() !=-1)
-                equipmentBundleQuantity.setText(String.valueOf(memberEquipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()]));
+                    equipmentBundleQuantity.setText(String.valueOf(memberEquipmentBundleQuantityArray[equipmentBundleVisualList.getSelectedIndex()]));
             }
         });
         equipmentBundleUp.addActionListener(new ActionListener() {
@@ -966,262 +966,262 @@ public class ClimbSafePage implements KeyListener {
     }
 
 
- /**
+    /**
      * @author Edward Habelrih
      * Register/Update/Delete Guide UI
      */
     public static void addGuideCard(){
-            updateGuideList();
-            java.net.URL imageURL = getPhoto(0);
+        updateGuideList();
+        java.net.URL imageURL = getPhoto(0);
 
-            BufferedImage hikerBackground = null;
-            try {
-                if (imageURL != null)
-                    hikerBackground = ImageIO.read(imageURL);
-            } catch (IOException ex) {
-                Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            BufferedImage finalBackground = hikerBackground;
-            JPanel card3 = new JPanel() {
-                protected void paintComponent(Graphics g) {
-                    super.paintComponent(g);
-                    g.drawImage(finalBackground, 0, 0, getWidth(), getHeight(), this);
-                }
-                public Dimension getPreferredSize() {
-                    Dimension size = super.getPreferredSize();
-                    size.height = 800;
-                    return size;
-                }
-            };
-            //TODO: add elements to card3 to create the page
-            //If you create any JPanels, be sure to use panelName.setOpaque(false)
-            card3.setLayout(new BoxLayout(card3, BoxLayout.Y_AXIS));
-
-            //PANELS
-
-            //Main panels
-            JPanel listandfields = new JPanel();
-            JPanel guideInfo = new JPanel();
-            guideInfo.setLayout(new BoxLayout(guideInfo, BoxLayout.Y_AXIS));
-            JPanel list = new JPanel(); //JCombo box with the list of members
-            JPanel buttons = new JPanel();
-
-
-
-
-            //Sub panels
-            JPanel emails = new JPanel();
-            JPanel names = new JPanel();
-            JPanel passwords = new JPanel();
-            JPanel emergencyContacts = new JPanel();
-            JPanel space = new JPanel();
-            JPanel space2 = new JPanel();
-            JPanel space3 = new JPanel();
-            JPanel space4 = new JPanel();
-            JPanel space5 = new JPanel();
-            JPanel space6 = new JPanel();
-            JPanel space7 = new JPanel();
-            JPanel space8 = new JPanel();
-            JPanel space9 = new JPanel();
-            //Labels + Text fields
-
-            JLabel email = new JLabel("Email: ", SwingConstants.RIGHT);
-            JLabel name = new JLabel    ("Name: ", SwingConstants.RIGHT);
-            JLabel emergencyContact = new JLabel("Emergency contact: ", SwingConstants.RIGHT);
-            JLabel password = new JLabel("Password: ", SwingConstants.RIGHT);
-            JLabel empty = new JLabel("");
-
-            JTextField emailEntry = new JTextField("johndoe@gmail.com");
-            JTextField nameEntry = new JTextField("John Doe");
-            JPasswordField passwordEntry = new JPasswordField("Password: ");
-            JTextField emergencyContactEntry = new JTextField("(xxx) xxx-xxxx");
-
-            //Jcombo Box
-            JComboBox guides = new JComboBox(guideList);
-            guides.setPreferredSize(new Dimension(guides.getPreferredSize().width+50, guides.getPreferredSize().height));
-
-            //Resize Text fields
-            Dimension textDimensions = new Dimension(600, 25);
-            emailEntry.setPreferredSize(textDimensions);
-            nameEntry.setPreferredSize(textDimensions);
-            passwordEntry.setPreferredSize(textDimensions);
-            emergencyContactEntry.setPreferredSize(textDimensions);
-
-            //Resize Labels
-            email.setPreferredSize(emergencyContact.getPreferredSize());
-            name.setPreferredSize(emergencyContact.getPreferredSize());
-            password.setPreferredSize(emergencyContact.getPreferredSize());
-            emergencyContact.setPreferredSize(emergencyContact.getPreferredSize());
-
-            //BUTTONS
-            JButton registerGuide = new JButton("Register Guide"){
-                public Dimension getPreferredSize() {
-                    Dimension size = super.getPreferredSize();
-                    size.height += 30;
-                    size.width += 50;
-                    return size;
-                }
-            };
-            JButton updateGuide = new JButton("Update Guide"){
-                public Dimension getPreferredSize() {
-                    Dimension size = super.getPreferredSize();
-                    size.height += 30;
-                    size.width += 50;
-                    return size;
-                }
-            };
-            JButton deleteGuide = new JButton("Delete Guide"){
-                public Dimension getPreferredSize() {
-                    Dimension size = super.getPreferredSize();
-                    size.height += 30;
-                    size.width += 50;
-                    return size;
-                }
-            };
-
-            //ADD LABELS TO CORRESPONDING PANELS
-            emails.add(email);
-            emails.add(emailEntry);
-            names.add(name);
-            names.add(nameEntry);
-            passwords.add(password);
-            passwords.add(passwordEntry);
-            emergencyContacts.add(emergencyContact);
-            emergencyContacts.add(emergencyContactEntry);
-
-            //spaces
-            space.add(empty);
-            space2.add(empty);
-            space3.add(empty);
-            space4.add(empty);
-            space5.add(empty);
-            space6.add(empty);
-            space7.add(empty);
-            space8.add(empty);
-            space9.add(empty);
-            //Add sub-panels to main panels
-            guideInfo.add(space9);
-            guideInfo.add(space8);
-            guideInfo.add(space7);
-            guideInfo.add(space6);
-            guideInfo.add(space5);
-            guideInfo.add(emails);
-            guideInfo.add(space);
-            guideInfo.add(names);
-            guideInfo.add(space2);
-            guideInfo.add(passwords);
-            guideInfo.add(space3);
-            guideInfo.add(emergencyContacts);
-            guideInfo.add(space4);
-
-            buttons.add(registerGuide);
-            buttons.add(updateGuide);
-            buttons.add(deleteGuide);
-
-
-            list.add(guides);
-
-            listandfields.add(list);
-            listandfields.add(guideInfo);
-            //SET OPACITY FALSE
-            //Main panels
-            guideInfo.setOpaque(false);
-            buttons.setOpaque(false);
-            list.setOpaque(false);
-            listandfields.setOpaque(false);
-            //Sub panels
-            emails.setOpaque(false);
-            names.setOpaque(false);
-            passwords.setOpaque(false);
-            emergencyContacts.setOpaque(false);
-            space.setOpaque(false);
-            space2.setOpaque(false);
-            space3.setOpaque(false);
-            space4.setOpaque(false);
-            space5.setOpaque(false);
-            space6.setOpaque(false);
-            space7.setOpaque(false);
-            space8.setOpaque(false);
-            space9.setOpaque(false);
-            //ADD TO CARD
-            card3.add(listandfields);
-            card3.add(buttons);
-
-            tabbedPane.addTab("Guide", card3);
-
-            //ACTION LISTENERS
-            deleteGuide.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        ClimbSafeFeatureSet1Controller.deleteGuide(emailEntry.getText());
-
-                    } catch (Exception ex) {
-                        new Popup(ex.getMessage(), card3, 1);
-                    }
-                    new Popup("Guide deleted successfully!", card3, 0);
-                    updateGuideList();
-                    if(guides!=null){
-                        guides.removeAllItems();
-                        for(String guide: guideList)
-                            guides.addItem(guide);
-                    }
-                }
-            });
-
-            updateGuide.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        ClimbSafeFeatureSet3Controller.updateGuide(emailEntry.getText(), passwordEntry.getText(), nameEntry.getText(), emergencyContactEntry.getText());
-                        new Popup("Guide updated successfully!", card3, 0);
-                    } catch (Exception ex) {
-                        new Popup(ex.getMessage(),card3,1);
-                    }
-                    updateGuideList();
-                    if(guides!=null){
-                        guides.removeAllItems();
-                        for(String guide: guideList)
-                            guides.addItem(guide);
-                    }
-
-                }
-            });
-
-            registerGuide.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        ClimbSafeFeatureSet3Controller.registerGuide(emailEntry.getText(), String.valueOf(passwordEntry.getPassword()), nameEntry.getText(), emergencyContactEntry.getText());
-                        new Popup("Guide registered successfully!", card3, 0);
-                    } catch (Exception ex) {
-                        new Popup(ex.getMessage(),card3,1);
-                    }
-                    updateGuideList();
-                    if(guides!=null){
-                        guides.removeAllItems();
-                        for(String guide: guideList)
-                            guides.addItem(guide);
-                    }
-                }
-            });
-
-            guides.addActionListener(new ActionListener() {//TODO: finish this
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    TONamedUser guide = TOController.getUserWithEmail((String) guides.getSelectedItem());
-                    if(guide != null){
-                        emailEntry.setText(guide.getEmail());
-                        nameEntry.setText(guide.getName());
-                        passwordEntry.setText(guide.getPassword());
-                        emergencyContactEntry.setText(guide.getEmergencyContact());
-                    }
-                }
-            });
-
-
-
+        BufferedImage hikerBackground = null;
+        try {
+            if (imageURL != null)
+                hikerBackground = ImageIO.read(imageURL);
+        } catch (IOException ex) {
+            Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
         }
+        BufferedImage finalBackground = hikerBackground;
+        JPanel card3 = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(finalBackground, 0, 0, getWidth(), getHeight(), this);
+            }
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height = 800;
+                return size;
+            }
+        };
+        //TODO: add elements to card3 to create the page
+        //If you create any JPanels, be sure to use panelName.setOpaque(false)
+        card3.setLayout(new BoxLayout(card3, BoxLayout.Y_AXIS));
+
+        //PANELS
+
+        //Main panels
+        JPanel listandfields = new JPanel();
+        JPanel guideInfo = new JPanel();
+        guideInfo.setLayout(new BoxLayout(guideInfo, BoxLayout.Y_AXIS));
+        JPanel list = new JPanel(); //JCombo box with the list of members
+        JPanel buttons = new JPanel();
+
+
+
+
+        //Sub panels
+        JPanel emails = new JPanel();
+        JPanel names = new JPanel();
+        JPanel passwords = new JPanel();
+        JPanel emergencyContacts = new JPanel();
+        JPanel space = new JPanel();
+        JPanel space2 = new JPanel();
+        JPanel space3 = new JPanel();
+        JPanel space4 = new JPanel();
+        JPanel space5 = new JPanel();
+        JPanel space6 = new JPanel();
+        JPanel space7 = new JPanel();
+        JPanel space8 = new JPanel();
+        JPanel space9 = new JPanel();
+        //Labels + Text fields
+
+        JLabel email = new JLabel("Email: ", SwingConstants.RIGHT);
+        JLabel name = new JLabel    ("Name: ", SwingConstants.RIGHT);
+        JLabel emergencyContact = new JLabel("Emergency contact: ", SwingConstants.RIGHT);
+        JLabel password = new JLabel("Password: ", SwingConstants.RIGHT);
+        JLabel empty = new JLabel("");
+
+        JTextField emailEntry = new JTextField("johndoe@gmail.com");
+        JTextField nameEntry = new JTextField("John Doe");
+        JPasswordField passwordEntry = new JPasswordField("Password: ");
+        JTextField emergencyContactEntry = new JTextField("(xxx) xxx-xxxx");
+
+        //Jcombo Box
+        JComboBox guides = new JComboBox(guideList);
+        guides.setPreferredSize(new Dimension(guides.getPreferredSize().width+50, guides.getPreferredSize().height));
+
+        //Resize Text fields
+        Dimension textDimensions = new Dimension(600, 25);
+        emailEntry.setPreferredSize(textDimensions);
+        nameEntry.setPreferredSize(textDimensions);
+        passwordEntry.setPreferredSize(textDimensions);
+        emergencyContactEntry.setPreferredSize(textDimensions);
+
+        //Resize Labels
+        email.setPreferredSize(emergencyContact.getPreferredSize());
+        name.setPreferredSize(emergencyContact.getPreferredSize());
+        password.setPreferredSize(emergencyContact.getPreferredSize());
+        emergencyContact.setPreferredSize(emergencyContact.getPreferredSize());
+
+        //BUTTONS
+        JButton registerGuide = new JButton("Register Guide"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 30;
+                size.width += 50;
+                return size;
+            }
+        };
+        JButton updateGuide = new JButton("Update Guide"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 30;
+                size.width += 50;
+                return size;
+            }
+        };
+        JButton deleteGuide = new JButton("Delete Guide"){
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.height += 30;
+                size.width += 50;
+                return size;
+            }
+        };
+
+        //ADD LABELS TO CORRESPONDING PANELS
+        emails.add(email);
+        emails.add(emailEntry);
+        names.add(name);
+        names.add(nameEntry);
+        passwords.add(password);
+        passwords.add(passwordEntry);
+        emergencyContacts.add(emergencyContact);
+        emergencyContacts.add(emergencyContactEntry);
+
+        //spaces
+        space.add(empty);
+        space2.add(empty);
+        space3.add(empty);
+        space4.add(empty);
+        space5.add(empty);
+        space6.add(empty);
+        space7.add(empty);
+        space8.add(empty);
+        space9.add(empty);
+        //Add sub-panels to main panels
+        guideInfo.add(space9);
+        guideInfo.add(space8);
+        guideInfo.add(space7);
+        guideInfo.add(space6);
+        guideInfo.add(space5);
+        guideInfo.add(emails);
+        guideInfo.add(space);
+        guideInfo.add(names);
+        guideInfo.add(space2);
+        guideInfo.add(passwords);
+        guideInfo.add(space3);
+        guideInfo.add(emergencyContacts);
+        guideInfo.add(space4);
+
+        buttons.add(registerGuide);
+        buttons.add(updateGuide);
+        buttons.add(deleteGuide);
+
+
+        list.add(guides);
+
+        listandfields.add(list);
+        listandfields.add(guideInfo);
+        //SET OPACITY FALSE
+        //Main panels
+        guideInfo.setOpaque(false);
+        buttons.setOpaque(false);
+        list.setOpaque(false);
+        listandfields.setOpaque(false);
+        //Sub panels
+        emails.setOpaque(false);
+        names.setOpaque(false);
+        passwords.setOpaque(false);
+        emergencyContacts.setOpaque(false);
+        space.setOpaque(false);
+        space2.setOpaque(false);
+        space3.setOpaque(false);
+        space4.setOpaque(false);
+        space5.setOpaque(false);
+        space6.setOpaque(false);
+        space7.setOpaque(false);
+        space8.setOpaque(false);
+        space9.setOpaque(false);
+        //ADD TO CARD
+        card3.add(listandfields);
+        card3.add(buttons);
+
+        tabbedPane.addTab("Guide", card3);
+
+        //ACTION LISTENERS
+        deleteGuide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ClimbSafeFeatureSet1Controller.deleteGuide(emailEntry.getText());
+
+                } catch (Exception ex) {
+                    new Popup(ex.getMessage(), card3, 1);
+                }
+                new Popup("Guide deleted successfully!", card3, 0);
+                updateGuideList();
+                if(guides!=null){
+                    guides.removeAllItems();
+                    for(String guide: guideList)
+                        guides.addItem(guide);
+                }
+            }
+        });
+
+        updateGuide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ClimbSafeFeatureSet3Controller.updateGuide(emailEntry.getText(), passwordEntry.getText(), nameEntry.getText(), emergencyContactEntry.getText());
+                    new Popup("Guide updated successfully!", card3, 0);
+                } catch (Exception ex) {
+                    new Popup(ex.getMessage(),card3,1);
+                }
+                updateGuideList();
+                if(guides!=null){
+                    guides.removeAllItems();
+                    for(String guide: guideList)
+                        guides.addItem(guide);
+                }
+
+            }
+        });
+
+        registerGuide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ClimbSafeFeatureSet3Controller.registerGuide(emailEntry.getText(), String.valueOf(passwordEntry.getPassword()), nameEntry.getText(), emergencyContactEntry.getText());
+                    new Popup("Guide registered successfully!", card3, 0);
+                } catch (Exception ex) {
+                    new Popup(ex.getMessage(),card3,1);
+                }
+                updateGuideList();
+                if(guides!=null){
+                    guides.removeAllItems();
+                    for(String guide: guideList)
+                        guides.addItem(guide);
+                }
+            }
+        });
+
+        guides.addActionListener(new ActionListener() {//TODO: finish this
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TONamedUser guide = TOController.getUserWithEmail((String) guides.getSelectedItem());
+                if(guide != null){
+                    emailEntry.setText(guide.getEmail());
+                    nameEntry.setText(guide.getName());
+                    passwordEntry.setText(guide.getPassword());
+                    emergencyContactEntry.setText(guide.getEmergencyContact());
+                }
+            }
+        });
+
+
+
+    }
 
 
 
@@ -1235,7 +1235,7 @@ public class ClimbSafePage implements KeyListener {
         BufferedImage hikerBackground = null;
         try {
             if (imageURL != null)
-            hikerBackground = ImageIO.read(imageURL);
+                hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1645,12 +1645,12 @@ public class ClimbSafePage implements KeyListener {
         table.setValueAt("Equipment",0,0);
         table.setValueAt("Quantity",0,1);
 
-            for (int i = 1; i < equipmentListNames.length+1; i++) {
-                table.setValueAt(equipmentListNames[i-1],i,0);
-             }
-            for (int i = 1; i < equipmentListNames.length+1; i++) {
-                 table.setValueAt(0,i,1);
-             }
+        for (int i = 1; i < equipmentListNames.length+1; i++) {
+            table.setValueAt(equipmentListNames[i-1],i,0);
+        }
+        for (int i = 1; i < equipmentListNames.length+1; i++) {
+            table.setValueAt(0,i,1);
+        }
 
 
         JButton quantityDown = new JButton("<html>-</html>");
@@ -1753,7 +1753,7 @@ public class ClimbSafePage implements KeyListener {
                 int num = Integer.parseInt(quantityNumber.getText());
                 quantityNumber.setText(String.valueOf(num));
                 equipmentBundleQuantityArray[equipmentList.getSelectedIndex()] = num;
-              table.setValueAt(equipmentBundleQuantityArray[equipmentList.getSelectedIndex()],equipmentList.getSelectedIndex()+1,1);
+                table.setValueAt(equipmentBundleQuantityArray[equipmentList.getSelectedIndex()],equipmentList.getSelectedIndex()+1,1);
 
             }
         });
@@ -1764,12 +1764,12 @@ public class ClimbSafePage implements KeyListener {
                     List<String> itemNames = new ArrayList<>();
                     List<Integer> itemQuantity = new ArrayList<>();
 
-                for (int i = 1; i < equipmentListNames.length+1; i++) {
-                    if(Integer.parseInt(String.valueOf(table.getValueAt(i,1)))!=0){
-                        itemNames.add(String.valueOf(table.getValueAt(i,0)));
-                        itemQuantity.add(Integer.parseInt(String.valueOf(table.getValueAt(i,1))));
+                    for (int i = 1; i < equipmentListNames.length+1; i++) {
+                        if(Integer.parseInt(String.valueOf(table.getValueAt(i,1)))!=0){
+                            itemNames.add(String.valueOf(table.getValueAt(i,0)));
+                            itemQuantity.add(Integer.parseInt(String.valueOf(table.getValueAt(i,1))));
+                        }
                     }
-                }
                     ClimbSafeFeatureSet5Controller.addEquipmentBundle(nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
                     new Popup("Equipment Bundle has been added",card5,0);
                 }catch(Exception ex){
@@ -1777,7 +1777,7 @@ public class ClimbSafePage implements KeyListener {
                 }
                 updateBundleNameList();
                 bundleList.removeAllItems();
-                equipmentBundleVisualListF.addItem(s);
+                equipmentBundleVisualListF.removeAllItems();
                 for (String s : equipmentBundleNameArray) bundleList.addItem(s);
                 for (String s : equipmentBundleNameArray) equipmentBundleVisualListF.addItem(s);
                 for (int i = 1; i < equipmentListNames.length+1; i++) {
@@ -1818,15 +1818,15 @@ public class ClimbSafePage implements KeyListener {
 
             }
         });
-            cancel.addActionListener(new ActionListener() {
+        cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               try{
-                   ClimbSafeFeatureSet6Controller.deleteEquipmentBundle((String)bundleList.getSelectedItem());
-                   new Popup("Equipment Bundle has been deleted",card5,0);
-               }catch (Exception ex){
-                   new Popup(ex.getMessage(),card5,1);
-               }
+                try{
+                    ClimbSafeFeatureSet6Controller.deleteEquipmentBundle((String)bundleList.getSelectedItem());
+                    new Popup("Equipment Bundle has been deleted",card5,0);
+                }catch (Exception ex){
+                    new Popup(ex.getMessage(),card5,1);
+                }
                 updateBundleNameList();
                 bundleList.removeAllItems();
                 for (String s : equipmentBundleNameArray) bundleList.addItem(s);
@@ -1860,7 +1860,7 @@ public class ClimbSafePage implements KeyListener {
         tabbedPane.addTab("Bundles", card5);
     }
 
-        public static void updateBundleNameList(){
+    public static void updateBundleNameList(){
         List<TOBookableItem> equipmentBundleList = TOController.getBundles();
         if (equipmentBundleList==null){
             equipmentBundleNameArray = new String[1];
@@ -1890,7 +1890,7 @@ public class ClimbSafePage implements KeyListener {
         BufferedImage hikerBackground = null;
         try {
             if (imageURL != null)
-            hikerBackground = ImageIO.read(imageURL);
+                hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2118,6 +2118,11 @@ public class ClimbSafePage implements KeyListener {
                     updateAssignment();
                     displayList.setListData(memberEmailList);
                     displayList.setPreferredSize(new Dimension(displayList.getPreferredSize().width +120,displayList.getPreferredSize().height+80));
+                    memberNameVisualList.removeAllItems();
+                    for (int i = 0; i < toAssignmentList.size(); i++) {
+                        memberNameVisualList.addItem(memberEmailList[i]);
+                    }
+                    memberNameVisualList.setPreferredSize(new Dimension(memberNameVisualList.getPreferredSize().width+80, memberNameVisualList.getPreferredSize().height));
                     new Popup("Assignments Initiated Successfully",card6,0);
                 } catch (Exception ex) {
                     new Popup(ex.getMessage(), card6,1);
@@ -2141,18 +2146,18 @@ public class ClimbSafePage implements KeyListener {
 
 
 
-     /**
-     * @author Sebastien Cantin
-     * Fills in the tab in the UI associated to starting, finishing and cancelling trips
+    /**
+     * @author Sebastien Cantin and Abhijeet Praveen
+     * Fills in the tab in the UI associated to starting, finishing and cancelling trips as well as paying
      */
     private static void addTripCard() {
-        updatePay();
+
         java.net.URL imageURL = getPhoto(1);
 
         BufferedImage hikerBackground = null;
         try {
             if (imageURL != null)
-            hikerBackground = ImageIO.read(imageURL);
+                hikerBackground = ImageIO.read(imageURL);
         } catch (IOException ex) {
             Logger.getLogger(ClimbSafePage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2169,6 +2174,8 @@ public class ClimbSafePage implements KeyListener {
             }
         };
         card8.setLayout(new BoxLayout(card8, BoxLayout.Y_AXIS));
+
+        updateAssignment();
 
         JPanel start = new JPanel(){
             public Dimension getPreferredSize() {
@@ -2200,8 +2207,10 @@ public class ClimbSafePage implements KeyListener {
         JLabel members= new JLabel("Member Names:");
         JLabel code = new JLabel("Authorization Code:");
 
-        JTextField authCode = new JTextField(authCodeList[0]);
-        JComboBox<String> memberNameVisualList = new JComboBox<>(memberNameList);
+        JTextField authCode = new JTextField();
+
+
+
 
         JButton weekDown = new JButton("<html>-</html>");
         JButton weekUp = new JButton("<html>+</html>");
@@ -2268,8 +2277,10 @@ public class ClimbSafePage implements KeyListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     AssignmentController.startAllTrips(Integer.parseInt(weekNumber.getText().split(" ")[2]));
+                    new Popup("Successfully started all trips for " + weekNumber.getText(),card8,0);
+                    updateAssignment();
                 } catch (InvalidInputException ex) {
-                    ex.printStackTrace();
+                    new Popup(ex.getMessage(),card8,1);
                 }
             }
         });
@@ -2277,9 +2288,9 @@ public class ClimbSafePage implements KeyListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (memberNameList.length>0 && authCode != null && memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()) != "Placeholder")
-                        AssignmentController.payMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()), authCode.getText());
-                    new Popup("Succesfully payed for trip", card8, 0);
+                    AssignmentController.payMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()), authCode.getText());
+                    updateAssignment();
+                    new Popup("Succesfully paid for trip", card8, 0);
                 } catch (InvalidInputException ex) {
                     new Popup(ex.getMessage(),card8,1);
                 }
@@ -2290,7 +2301,8 @@ public class ClimbSafePage implements KeyListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex())!="Placeholder")
-                    AssignmentController.finishMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
+                        AssignmentController.finishMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
+                    updateAssignment();
                     new Popup("Succesfully finished trip", card8,0);
                 } catch (InvalidInputException ex) {
                     new Popup(ex.getMessage(),card8,1);
@@ -2302,7 +2314,8 @@ public class ClimbSafePage implements KeyListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex())!="Placeholder")
-                    AssignmentController.cancelMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
+                        AssignmentController.cancelMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
+                    updateAssignment();
                     new Popup("Trip Cancelled Succesfully", card8,0);
                 } catch (InvalidInputException ex) {
                     new Popup(ex.getMessage(),card8,1);
@@ -2312,16 +2325,16 @@ public class ClimbSafePage implements KeyListener {
         refresh.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updatePay();
+                updateAssignment();
                 authCode.setText(authCodeList[0]);
             }
         });
 
         tabbedPane.addTab("Trip Management", card8);
 
-        }
-        
-        @Override
+    }
+
+    @Override
     public void keyTyped(KeyEvent e) {
     }
 
