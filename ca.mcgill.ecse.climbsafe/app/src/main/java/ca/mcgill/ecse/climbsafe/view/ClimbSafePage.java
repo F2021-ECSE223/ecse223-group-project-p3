@@ -941,8 +941,12 @@ public class ClimbSafePage implements KeyListener {
     }
 
 
+ /**
+     * @author Edward Habelrih
+     * Register/Update/Delete Guide UI
+     */
     public static void addGuideCard(){
-
+            updateGuideList();
             java.net.URL imageURL = getPhoto(0);
 
             BufferedImage hikerBackground = null;
@@ -1008,14 +1012,7 @@ public class ClimbSafePage implements KeyListener {
             JTextField emergencyContactEntry = new JTextField("(xxx) xxx-xxxx");
 
             //Jcombo Box
-
-            //Fill guide email list
-            List<TOAssignment> toAssignmentList = ClimbSafeFeatureSet6Controller.getAssignments();
-            guideEmailList = new String[toAssignmentList.size()];
-            for (int i = 0; i < toAssignmentList.size(); i++){
-                guideEmailList[i] = toAssignmentList.get(i).getGuideEmail();
-            }
-            JComboBox guides = new JComboBox(guideEmailList);
+            JComboBox guides = new JComboBox(guideList);
             guides.setPreferredSize(new Dimension(guides.getPreferredSize().width+50, guides.getPreferredSize().height));
 
             //Resize Text fields
@@ -1092,9 +1089,10 @@ public class ClimbSafePage implements KeyListener {
             guideInfo.add(emergencyContacts);
             guideInfo.add(space4);
 
+            buttons.add(registerGuide);
             buttons.add(updateGuide);
             buttons.add(deleteGuide);
-            buttons.add(registerGuide);
+
 
             list.add(guides);
 
@@ -1132,9 +1130,16 @@ public class ClimbSafePage implements KeyListener {
                 public void actionPerformed(ActionEvent e) {
                     try {
                         ClimbSafeFeatureSet1Controller.deleteGuide(emailEntry.getText());
-                        new Popup("Guide deleted successfully!", card3, 0);
+
                     } catch (Exception ex) {
-                        new Popup(ex.getMessage(),card3,1);
+                        new Popup(ex.getMessage(), card3, 1);
+                    }
+                    new Popup("Guide deleted successfully!", card3, 0);
+                    updateGuideList();
+                    if(guides!=null){
+                        guides.removeAllItems();
+                        for(String guide: guideList)
+                            guides.addItem(guide);
                     }
                 }
             });
@@ -1148,6 +1153,13 @@ public class ClimbSafePage implements KeyListener {
                     } catch (Exception ex) {
                         new Popup(ex.getMessage(),card3,1);
                     }
+                    updateGuideList();
+                    if(guides!=null){
+                        guides.removeAllItems();
+                        for(String guide: guideList)
+                            guides.addItem(guide);
+                    }
+
                 }
             });
 
@@ -1160,24 +1172,30 @@ public class ClimbSafePage implements KeyListener {
                     } catch (Exception ex) {
                         new Popup(ex.getMessage(),card3,1);
                     }
+                    updateGuideList();
+                    if(guides!=null){
+                        guides.removeAllItems();
+                        for(String guide: guideList)
+                            guides.addItem(guide);
+                    }
                 }
             });
 
             guides.addActionListener(new ActionListener() {//TODO: finish this
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                   try{
                     TONamedUser guide = TOController.getUserWithEmail((String) guides.getSelectedItem());
-                    emailEntry.setText(guide.getEmail());
-                    nameEntry.setText(guide.getName());
-                    passwordEntry.setText(guide.getPassword());
-                    emergencyContactEntry.setText(guide.getEmergencyContact());
-
-                    } catch (Exception ex){
-                       new Popup(ex.getMessage(),card3,1);
-                   }
+                    if(guide != null){
+                        emailEntry.setText(guide.getEmail());
+                        nameEntry.setText(guide.getName());
+                        passwordEntry.setText(guide.getPassword());
+                        emergencyContactEntry.setText(guide.getEmergencyContact());
+                    }
                 }
             });
+
+
+
         }
 
 
