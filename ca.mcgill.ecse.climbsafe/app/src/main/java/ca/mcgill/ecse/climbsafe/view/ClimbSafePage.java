@@ -2,9 +2,7 @@
 package ca.mcgill.ecse.climbsafe.view;
 
 
-import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
 import ca.mcgill.ecse.climbsafe.controller.*;
-import ca.mcgill.ecse.climbsafe.model.*;
 
 
 import java.awt.*;
@@ -565,7 +563,7 @@ public class ClimbSafePage{
 
         JTextField email = new JTextField("johndoe@email.com");
         JTextField name = new JTextField("John Doe");
-        JTextField emergencyContact = new JTextField("(514)-XXX-XXXX");
+        JTextField emergencyContact = new JTextField("(222) XXX-XXXX");
 
         JPasswordField password = new JPasswordField("Password");
 
@@ -986,8 +984,6 @@ public class ClimbSafePage{
                 return size;
             }
         };
-        //TODO: add elements to card3 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
         card3.setLayout(new BoxLayout(card3, BoxLayout.Y_AXIS));
 
         //PANELS
@@ -1020,31 +1016,31 @@ public class ClimbSafePage{
 
         JLabel email = new JLabel("Email: ", SwingConstants.RIGHT);
         JLabel name = new JLabel    ("Name: ", SwingConstants.RIGHT);
-        JLabel emergencyContact = new JLabel("Emergency contact: ", SwingConstants.RIGHT);
+        JLabel emergencyContact = new JLabel("Emergency Contact: ", SwingConstants.RIGHT);
         JLabel password = new JLabel("Password: ", SwingConstants.RIGHT);
         JLabel empty = new JLabel("");
 
         JTextField emailEntry = new JTextField("johndoe@gmail.com");
         JTextField nameEntry = new JTextField("John Doe");
         JPasswordField passwordEntry = new JPasswordField("Password: ");
-        JTextField emergencyContactEntry = new JTextField("(xxx) xxx-xxxx");
+        JTextField emergencyContactEntry = new JTextField("(222) xxx-xxxx");
 
         //Jcombo Box
         JComboBox guides = new JComboBox(guideList);
         guides.setPreferredSize(new Dimension(guides.getPreferredSize().width+50, guides.getPreferredSize().height));
 
         //Resize Text fields
-        Dimension textDimensions = new Dimension(600, 25);
+        Dimension textDimensions = new Dimension(300, 25);
         emailEntry.setPreferredSize(textDimensions);
         nameEntry.setPreferredSize(textDimensions);
         passwordEntry.setPreferredSize(textDimensions);
         emergencyContactEntry.setPreferredSize(textDimensions);
 
         //Resize Labels
-        email.setPreferredSize(emergencyContact.getPreferredSize());
-        name.setPreferredSize(emergencyContact.getPreferredSize());
-        password.setPreferredSize(emergencyContact.getPreferredSize());
-        emergencyContact.setPreferredSize(emergencyContact.getPreferredSize());
+        email.setPreferredSize(textDimensions);
+        name.setPreferredSize(textDimensions);
+        password.setPreferredSize(textDimensions);
+        emergencyContact.setPreferredSize(textDimensions);
 
         //BUTTONS
         JButton registerGuide = new JButton("Register Guide"){
@@ -2252,10 +2248,10 @@ public class ClimbSafePage{
         JButton weekDown = new JButton("<html>-</html>");
         JButton weekUp = new JButton("<html>+</html>");
         JButton startWeek = new JButton("Start Week");
-        JButton pay = new JButton("Pay Member Trip");
-        JButton finish = new JButton("Finish Member's Trip");
-        JButton cancel = new JButton("Cancel Member's Trip");
-        JButton refresh = new JButton("Refresh Member Names");
+        JButton pay = new JButton("Pay Trip");
+        JButton finish = new JButton("Finish Trip");
+        JButton cancel = new JButton("Cancel Trip");
+
 
 
         start.setOpaque(false);
@@ -2282,7 +2278,6 @@ public class ClimbSafePage{
         finishCancel.add(pay);
         finishCancel.add(finish);
         finishCancel.add(cancel);
-        finishCancel.add(refresh);
         card8.add(start);
         card8.add(middle);
         card8.add(finishCancel);
@@ -2353,7 +2348,7 @@ public class ClimbSafePage{
                     if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex())!="Placeholder")
                         AssignmentController.cancelMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
                     updateAssignment();
-                    new Popup("Trip fled Succesfully", card8,0);
+                    new Popup("Trip Cancelled Successfully", card8,0);
                 } catch (InvalidInputException ex) {
                     new Popup(ex.getMessage(),card8,1);
                 }
