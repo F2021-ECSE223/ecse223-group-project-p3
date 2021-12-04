@@ -132,16 +132,6 @@ public class AssignmentController {
                 a.startWeek(weekNumber);
             }
         }
-        for (Assignment a :
-                assignments) {
-            Boolean canStart = true;
-            //Cannot start a trip which has finished
-            if(a.getAssignmentStatusFullName().equals("Finished"))throw new InvalidInputException("Cannot start a trip which has finished");
-            //Cannot start a trip which has been cancelled
-            if(a.getAssignmentStatusFullName().equals("Cancelled"))throw new InvalidInputException("Cannot start a trip which has been cancelled");
-            //Cannot start the trip due to a ban
-            if(a.getMember().getBanStatusFullName().equals("Banned"))throw new InvalidInputException("Cannot start the trip due to a ban");
-        }
         try {
             ClimbSafePersistence.save(ClimbSafeApplication.getClimbSafe());
         }catch (Exception e){
