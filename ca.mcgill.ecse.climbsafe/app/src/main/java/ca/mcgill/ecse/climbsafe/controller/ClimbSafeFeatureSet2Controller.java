@@ -39,8 +39,7 @@ public class ClimbSafeFeatureSet2Controller {
     if (user instanceof Guide) throw new InvalidInputException("A guide with this email already exists");
     if (user instanceof Member) throw new InvalidInputException("A member with this email already exists");
 
-    System.out.println(itemNames);
-    System.out.println(itemQuantities);
+
     for (String itemName:itemNames){
       BookableItem bookableItem = BookableItem.getWithName(itemName);
       if(bookableItem==null) error = "Requested item not found";

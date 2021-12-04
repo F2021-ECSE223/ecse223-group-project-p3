@@ -4,7 +4,7 @@
 package ca.mcgill.ecse.climbsafe.controller;
 
 // line 4 "../../../../../../model.ump"
-// line 46 "../../../../../../model.ump"
+// line 51 "../../../../../../model.ump"
 public class TOAssignment
 {
 

@@ -3,8 +3,8 @@
 
 package ca.mcgill.ecse.climbsafe.controller;
 
-// line 24 "../../../../../../model.ump"
-// line 51 "../../../../../../model.ump"
+// line 25 "../../../../../../model.ump"
+// line 61 "../../../../../../model.ump"
 public class TOClimbSafe
 {
 

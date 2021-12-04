@@ -2,9 +2,9 @@
 package ca.mcgill.ecse.climbsafe.view;
 
 
-import ca.mcgill.ecse.climbsafe.application.ClimbSafeApplication;
+
 import ca.mcgill.ecse.climbsafe.controller.*;
-import ca.mcgill.ecse.climbsafe.model.*;
+
 
 
 import java.awt.*;
@@ -65,6 +65,7 @@ public class ClimbSafePage{
     private static JComboBox<String> equipmentListP = null;
     private static JPanel rightTableB = null;
     private static JTable etb = null;
+    private static int[] equipmentBundleQuantityArray = new int[equipmentListNames.length];
 
     private static void updateEquipmentList(){
         equipmentList = TOController.getEquipment();
@@ -74,6 +75,7 @@ public class ClimbSafePage{
             tempList[i] = equipmentList.get(i).getName();
         }
         memberEquipmentQuantityArray = tempList2;
+        equipmentBundleQuantityArray = tempList2;
         equipmentListNames = tempList;
         for (TOBookableItem e :
                 equipmentList) {
@@ -565,7 +567,7 @@ public class ClimbSafePage{
 
         JTextField email = new JTextField("johndoe@email.com");
         JTextField name = new JTextField("John Doe");
-        JTextField emergencyContact = new JTextField("(514)-XXX-XXXX");
+        JTextField emergencyContact = new JTextField("(222) XXX-XXXX");
 
         JPasswordField password = new JPasswordField("Password");
 
@@ -885,7 +887,6 @@ public class ClimbSafePage{
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateBundleList();
-                System.out.println(Arrays.toString(equipmentBundleNameArray));
                 updateEquipmentList();
                 try {
                     List<String> itemNames = new ArrayList<>();
@@ -901,7 +902,6 @@ public class ClimbSafePage{
                     updateMembers();
                     members.removeAllItems();
                     for (var m : memberList){
-                        System.out.println(m);
                         members.addItem(m);
                     }
                 } catch (Exception ex) {
@@ -933,7 +933,6 @@ public class ClimbSafePage{
             public void actionPerformed(ActionEvent e) {
                 try {
                     ClimbSafeFeatureSet1Controller.deleteMember(email.getText());
-                    for (var member: TOController.getMembers())System.out.println(member.getEmail());
                     new Popup("Member deleted successfully",card2,0);
                     updateMembers();
                     members.removeAllItems();
@@ -986,8 +985,7 @@ public class ClimbSafePage{
                 return size;
             }
         };
-        //TODO: add elements to card3 to create the page
-        //If you create any JPanels, be sure to use panelName.setOpaque(false)
+
         card3.setLayout(new BoxLayout(card3, BoxLayout.Y_AXIS));
 
         //PANELS
@@ -1027,7 +1025,7 @@ public class ClimbSafePage{
         JTextField emailEntry = new JTextField("johndoe@gmail.com");
         JTextField nameEntry = new JTextField("John Doe");
         JPasswordField passwordEntry = new JPasswordField("Password: ");
-        JTextField emergencyContactEntry = new JTextField("(xxx) xxx-xxxx");
+        JTextField emergencyContactEntry = new JTextField("(222) xxx-xxxx");
 
         //Jcombo Box
         JComboBox guides = new JComboBox(guideList);
@@ -1756,7 +1754,7 @@ public class ClimbSafePage{
         card5.add(bundleInput);
         card5.add(buttons);
 
-        int[] equipmentBundleQuantityArray= new int[equipmentListNames.length];
+        equipmentBundleQuantityArray= new int[equipmentListNames.length];
         String[] equipmentArray= new String[equipmentListNames.length];
         quantityUp.addActionListener(new ActionListener() {
             @Override
@@ -1837,8 +1835,6 @@ public class ClimbSafePage{
                             itemQuantity.add(Integer.parseInt(String.valueOf(etb.getValueAt(i,1))));
                         }
                     }
-                    System.out.println("1"+itemNames);
-                    System.out.println("2"+itemQuantity);
                     ClimbSafeFeatureSet5Controller.updateEquipmentBundle((String)bundleListDropdown.getSelectedItem(),nameTxt.getText(),Integer.parseInt(priceTxt.getText()),itemNames,itemQuantity);
                     new Popup("Successfully updated equipment bundle.", card5, 0);
                 }catch(Exception ex){
@@ -1887,7 +1883,6 @@ public class ClimbSafePage{
                     etb.setValueAt(0,i,1);
                 }
                 updateBundleList();
-                System.out.println(Arrays.toString(equipmentBundleNameArray));
             }
         });
         bundleListDropdown.addActionListener(new ActionListener() {
@@ -2252,10 +2247,10 @@ public class ClimbSafePage{
         JButton weekDown = new JButton("<html>-</html>");
         JButton weekUp = new JButton("<html>+</html>");
         JButton startWeek = new JButton("Start Week");
-        JButton pay = new JButton("Pay Member Trip");
-        JButton finish = new JButton("Finish Member's Trip");
-        JButton cancel = new JButton("Cancel Member's Trip");
-        JButton refresh = new JButton("Refresh Member Names");
+        JButton pay = new JButton("Pay Trip");
+        JButton finish = new JButton("Finish Trip");
+        JButton cancel = new JButton("Cancel Trip");
+
 
 
         start.setOpaque(false);
@@ -2282,7 +2277,6 @@ public class ClimbSafePage{
         finishCancel.add(pay);
         finishCancel.add(finish);
         finishCancel.add(cancel);
-        finishCancel.add(refresh);
         card8.add(start);
         card8.add(middle);
         card8.add(finishCancel);
@@ -2353,7 +2347,7 @@ public class ClimbSafePage{
                     if (memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex())!="Placeholder")
                         AssignmentController.cancelMemberTrip(memberNameVisualList.getItemAt(memberNameVisualList.getSelectedIndex()));
                     updateAssignment();
-                    new Popup("Trip fled Succesfully", card8,0);
+                    new Popup("Trip Cancelled Successfully", card8,0);
                 } catch (InvalidInputException ex) {
                     new Popup(ex.getMessage(),card8,1);
                 }

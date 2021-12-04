@@ -4,8 +4,8 @@
 package ca.mcgill.ecse.climbsafe.controller;
 import java.util.*;
 
-// line 4 "../../../../../../model.ump"
-// line 13 "../../../../../../model.ump"
+// line 19 "../../../../../../model.ump"
+// line 56 "../../../../../../model.ump"
 public class TOBookableItem
 {
 
@@ -25,6 +25,9 @@ public class TOBookableItem
   private int weight;
   private int pricePerWeek;
 
+  //TOBookableItem Associations
+  private List<TOBundleItem> tOBundleItems;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -38,6 +41,7 @@ public class TOBookableItem
     {
       throw new RuntimeException("Cannot create due to duplicate name. See http://manual.umple.org?RE003ViolationofUniqueness.html");
     }
+    tOBundleItems = new ArrayList<TOBundleItem>();
   }
 
   //------------------------
@@ -116,10 +120,115 @@ public class TOBookableItem
   {
     return pricePerWeek;
   }
+  /* Code from template association_GetMany */
+  public TOBundleItem getTOBundleItem(int index)
+  {
+    TOBundleItem aTOBundleItem = tOBundleItems.get(index);
+    return aTOBundleItem;
+  }
+
+  public List<TOBundleItem> getTOBundleItems()
+  {
+    List<TOBundleItem> newTOBundleItems = Collections.unmodifiableList(tOBundleItems);
+    return newTOBundleItems;
+  }
+
+  public int numberOfTOBundleItems()
+  {
+    int number = tOBundleItems.size();
+    return number;
+  }
+
+  public boolean hasTOBundleItems()
+  {
+    boolean has = tOBundleItems.size() > 0;
+    return has;
+  }
+
+  public int indexOfTOBundleItem(TOBundleItem aTOBundleItem)
+  {
+    int index = tOBundleItems.indexOf(aTOBundleItem);
+    return index;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfTOBundleItems()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOptionalOne */
+  public boolean addTOBundleItem(TOBundleItem aTOBundleItem)
+  {
+    boolean wasAdded = false;
+    if (tOBundleItems.contains(aTOBundleItem)) { return false; }
+    TOBookableItem existingTOBookableItem = aTOBundleItem.getTOBookableItem();
+    if (existingTOBookableItem == null)
+    {
+      aTOBundleItem.setTOBookableItem(this);
+    }
+    else if (!this.equals(existingTOBookableItem))
+    {
+      existingTOBookableItem.removeTOBundleItem(aTOBundleItem);
+      addTOBundleItem(aTOBundleItem);
+    }
+    else
+    {
+      tOBundleItems.add(aTOBundleItem);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeTOBundleItem(TOBundleItem aTOBundleItem)
+  {
+    boolean wasRemoved = false;
+    if (tOBundleItems.contains(aTOBundleItem))
+    {
+      tOBundleItems.remove(aTOBundleItem);
+      aTOBundleItem.setTOBookableItem(null);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addTOBundleItemAt(TOBundleItem aTOBundleItem, int index)
+  {  
+    boolean wasAdded = false;
+    if(addTOBundleItem(aTOBundleItem))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTOBundleItems()) { index = numberOfTOBundleItems() - 1; }
+      tOBundleItems.remove(aTOBundleItem);
+      tOBundleItems.add(index, aTOBundleItem);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveTOBundleItemAt(TOBundleItem aTOBundleItem, int index)
+  {
+    boolean wasAdded = false;
+    if(tOBundleItems.contains(aTOBundleItem))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTOBundleItems()) { index = numberOfTOBundleItems() - 1; }
+      tOBundleItems.remove(aTOBundleItem);
+      tOBundleItems.add(index, aTOBundleItem);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addTOBundleItemAt(aTOBundleItem, index);
+    }
+    return wasAdded;
+  }
 
   public void delete()
   {
     tobookableitemsByName.remove(getName());
+    while( !tOBundleItems.isEmpty() )
+    {
+      tOBundleItems.get(0).setTOBookableItem(null);
+    }
   }
 
 

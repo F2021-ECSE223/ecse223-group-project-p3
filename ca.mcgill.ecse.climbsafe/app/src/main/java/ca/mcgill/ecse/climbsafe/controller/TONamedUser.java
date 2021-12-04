@@ -3,8 +3,8 @@
 
 package ca.mcgill.ecse.climbsafe.controller;
 
-// line 27 "../../../../../../model.ump"
-// line 57 "../../../../../../model.ump"
+// line 28 "../../../../../../model.ump"
+// line 66 "../../../../../../model.ump"
 public class TONamedUser
 {
 
