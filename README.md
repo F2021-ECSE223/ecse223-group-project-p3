@@ -1,6 +1,8 @@
 # Welcome to Group 03's ClimbSafe Application
 
+![GitHub watchers](https://img.shields.io/github/watchers/F2021-ECSE223/ecse223-group-project-p3?style=social)
 
+![GitHub Repo stars](https://img.shields.io/github/stars/F2021-ECSE223/ecse223-group-project-p3?style=social)
   
 ## Team Members 
 
