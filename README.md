@@ -14,3 +14,4 @@
 |Romen Poirier Taksev | Computer Engineering|[RomenPoirierTaksev](https://github.com/RomenPoirierTaksev)|
 |Sébastien Cantin    | Computer Engineering |[seb8stien1](https://github.com/seb8stien1)|
   
+More information about the development of this project can be found [here](https://github.com/F2021-ECSE223/ecse223-group-project-p3/wiki)
