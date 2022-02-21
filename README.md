@@ -1,7 +1,7 @@
 # Welcome to Group 03's ClimbSafe Application
 
 ## Team Members 
-| Name| Major| Year |Github|
+| Name| Major| Year |GitHub|
 | :--- |:---:| :---:| :---:|
 |Abhijeet Praveen | Computer Engineering|U2| [abhijeetpraveen](https://github.com/abhijeetpraveen)|
 |Edward Halberih     | Computer Engineering|U2|[edwardhab](https://github.com/edwardhab)|
